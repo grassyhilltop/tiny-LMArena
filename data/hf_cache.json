@@ -495,5 +495,21 @@
   "downloads": 1418,
   "likes": 92,
   "fetched": "2026-11-22"
+ },
+ "mosaicml/mpt-30b": {
+  "missing": true,
+  "fetched": "2026-11-22"
+ },
+ "mosaicml/mpt-7b": {
+  "missing": true,
+  "fetched": "2026-11-22"
+ },
+ "databricks/dolly-v2-12b": {
+  "missing": true,
+  "fetched": "2026-11-22"
+ },
+ "cerebras/Cerebras-GPT-13B": {
+  "missing": true,
+  "fetched": "2026-11-22"
  }
 }
