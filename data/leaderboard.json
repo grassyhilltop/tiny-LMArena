@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-22T00:31:16+00:00",
+ "generated": "2026-11-22T00:32:58+00:00",
  "today": "2026-11-22",
  "epoch_fetched": "2026-11-22",
  "rule": {
@@ -35,7 +35,7 @@
    "hf_repo": "Qwen/Qwen3.8-27B",
    "source_url": "https://x.com/Alibaba_Qwen/status/2088280182356611304",
    "downloads": 6298190,
-   "likes": 20808,
+   "likes": 20809,
    "note": "",
    "rank": 1,
    "rank_ub": 1,
