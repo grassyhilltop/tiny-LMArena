@@ -14,6 +14,7 @@ Sources (all public):
   * Artificial Analysis Intelligence Index: data/aa_snapshot.json (see scripts/aa_snapshot.py)
 """
 import argparse
+import collections
 import csv
 import datetime as dt
 import io
@@ -33,6 +34,9 @@ RAW = os.path.join(DATA, "raw")
 
 EPOCH_ECI = "https://epoch.ai/data/eci_scores.csv"
 EPOCH_MODELS = "https://epoch.ai/data/benchmarked_models.csv"
+# Benchmark difficulty (EDI) and slope on the ECI scale, and the benchmark scores behind the ECI (for back-testing).
+EPOCH_EDI = "https://epoch.ai/data/edi_scores.csv"
+EPOCH_BENCH = "https://epoch.ai/data/processed_data_for_eci.csv"
 HF_API = "https://huggingface.co/api/models/{repo}?expand%5B%5D=safetensors&expand%5B%5D=downloads&expand%5B%5D=likes"
 UA = "tiny-lmarena-updater (no contact)"
 GPU_TIERS = [8, 12, 16, 24, 32]
@@ -106,7 +110,8 @@ def from_year_frac(y):
 
 
 def region_of(country):
-    """US, China or Other (anything else, including multi-country labs and unknown)."""
+    """US if the country names the US but not China, China if China but not the US, otherwise Other
+    (joint US-China work, every other country, unknown)."""
     us, cn = "United States" in country, "China" in country
     if us and not cn:
         return "US"
@@ -187,6 +192,87 @@ def crossing(fit, value):
             "late": from_year_frac(late).isoformat() if late is not None else None}
 
 
+# ---------------------------------------------------------------- estimates for unscored models
+
+def logit(p):
+    p = min(max(p, 0.01), 0.99)
+    return math.log(p / (1 - p))
+
+
+def estimate_unscored(eci_of, watch):
+    """Estimate an ECI for single-GPU models Epoch has not scored yet, from benchmark scores their developers
+    published (config/claims.csv). Only benchmarks that are part of the ECI are used.
+
+    Epoch models a score on benchmark b as sigmoid(slope_b * (ECI - EDI_b)). Developer tables run higher than
+    Epoch's own measurements, so a claimed score is never mapped on its own. Instead, each claim is compared
+    with a reference model that has a known ECI and was scored in the same table:
+        ECI_estimate = ECI_reference + (logit(score_model) - logit(score_reference)) / slope_b
+    Per benchmark, the estimates (all tables and references) are averaged; their uncertainty combines the
+    back-tested error of this anchoring on Epoch's own data with the disagreement between references.
+    Benchmarks are then combined by inverse-variance weighting. Returns (estimates, back-test summary)."""
+    edi_path, bench_path = os.path.join(RAW, "edi_scores.csv"), os.path.join(RAW, "processed_data_for_eci.csv")
+    claims_path = os.path.join(CONFIG, "claims.csv")
+    if not (os.path.exists(edi_path) and os.path.exists(bench_path) and os.path.exists(claims_path)):
+        return [], {}
+    params = {r["benchmark_name"]: (float(r["edi"]), float(r["estimated_slope_scaled"]))
+              for r in csv.DictReader(open(edi_path, encoding="utf-8"))}
+    claims = list(csv.DictReader(open(claims_path, encoding="utf-8")))
+    used = sorted({c["benchmark"] for c in claims if c["benchmark"] in params})
+    # back-test: anchor every Epoch-scored model on every other within 12 ECI, on the same benchmark
+    perf = collections.defaultdict(dict)
+    for r in csv.DictReader(open(bench_path, encoding="utf-8")):
+        if r["benchmark"] in used and r["Model"] in eci_of:
+            perf[r["benchmark"]][r["Model"]] = float(r["performance"])
+    backtest = {}
+    for b in used:
+        slope = params[b][1]
+        errs = [eci_of[r] + (logit(pm) - logit(pr)) / slope - eci_of[m]
+                for m, pm in perf[b].items() for r, pr in perf[b].items()
+                if m != r and abs(eci_of[m] - eci_of[r]) <= 12]
+        if len(errs) >= 20:
+            backtest[b] = {"rmse": round(math.sqrt(sum(e * e for e in errs) / len(errs)), 2), "pairs": len(errs),
+                           "models": len(perf[b]), "edi": round(params[b][0], 2), "slope": round(slope, 4)}
+    targets = collections.OrderedDict()
+    for c in claims:
+        if c["role"] == "target":
+            targets.setdefault(c["hf_repo"], c["model"])
+    watched = {(w["hf_repo"] or "").lower() for w in watch}
+    out = []
+    for repo, name in targets.items():
+        if repo.lower() not in watched:
+            continue  # scored by Epoch now, or no longer tracked
+        per_b = []
+        for b in used:
+            if b not in backtest:
+                continue
+            slope, rows = params[b][1], []
+            for t in [c for c in claims if c["role"] == "target" and c["hf_repo"] == repo and c["benchmark"] == b]:
+                for ref in claims:
+                    if (ref["role"] == "reference" and ref["table"] == t["table"] and ref["benchmark"] == b
+                            and ref["epoch_model"] in eci_of):
+                        s_t, s_r = float(t["score"]) / 100, float(ref["score"]) / 100
+                        rows.append({"table": t["table"], "source": t["source"], "claimed_benchmark": t["claimed_benchmark"],
+                                     "claimed": float(t["score"]), "reference": ref["epoch_model"],
+                                     "reference_claimed": float(ref["score"]), "reference_eci": eci_of[ref["epoch_model"]],
+                                     "estimate": round(eci_of[ref["epoch_model"]] + (logit(s_t) - logit(s_r)) / slope, 2)})
+            if not rows:
+                continue
+            vals = [r["estimate"] for r in rows]
+            mean = sum(vals) / len(vals)
+            spread = math.sqrt(sum((v - mean) ** 2 for v in vals) / (len(vals) - 1)) if len(vals) > 1 else 0.0
+            sigma = math.sqrt(backtest[b]["rmse"] ** 2 + spread ** 2)
+            per_b.append({"benchmark": b, "estimate": round(mean, 2), "sigma": round(sigma, 2),
+                          "spread": round(spread, 2), "n": len(vals), "rows": rows})
+        if not per_b:
+            continue
+        w = [1 / p["sigma"] ** 2 for p in per_b]
+        est = sum(wi * p["estimate"] for wi, p in zip(w, per_b)) / sum(w)
+        sd = 1 / math.sqrt(sum(w))
+        out.append({"name": name, "hf_repo": repo, "eci": round(est, 2), "sd": round(sd, 2),
+                    "lo": round(est - 1.645 * sd, 2), "hi": round(est + 1.645 * sd, 2), "benchmarks": per_b})
+    return out, backtest
+
+
 # ---------------------------------------------------------------- main build
 
 def main():
@@ -209,6 +295,14 @@ def main():
                 sys.exit(f"Epoch download looks wrong ({url}, {len(body)} bytes); keeping old data")
             with open(path, "wb") as f:
                 f.write(body)
+        for url in (EPOCH_EDI, EPOCH_BENCH):  # used only for estimates; never fatal
+            try:
+                body = fetch(url)
+                if len(body) > 1000:
+                    with open(os.path.join(RAW, url.rsplit("/", 1)[1]), "wb") as f:
+                        f.write(body)
+            except Exception as e:
+                print(f"::warning::Could not refresh {url}: {e}", file=sys.stderr)
     eci_rows = load_csv_text(open(raw_eci, encoding="utf-8").read())
     model_rows = load_csv_text(open(raw_models, encoding="utf-8").read())
     for col in ("Model", "eci", "eci_ci_low", "eci_ci_high", "date", "Accessibility group"):
@@ -478,7 +572,7 @@ def main():
             continue  # it has an ECI score now
         watch.append({"name": w["name"], "org": w["org"], "hf_repo": w["hf_repo"], "date": w["release_date"],
                       "params_b": to_float(w["params_b"]), "active_b": to_float(w["active_b"]), "note": w["note"],
-                      "aa_index": None})
+                      "country": w.get("country", ""), "region": region_of(w.get("country", "")), "aa_index": None})
     for x in aa_rows:
         if x["slm_id"] or not x.get("params_b") or x["params_b"] > max_params:
             continue
@@ -486,12 +580,16 @@ def main():
             continue
         watch.append({"name": x["name"], "org": x.get("org", ""), "hf_repo": x.get("hf_repo"), "date": x.get("date"),
                       "params_b": x["params_b"], "active_b": x.get("active_b"), "note": "",
-                      "aa_index": x.get("index")})
+                      "country": "", "region": "Other", "aa_index": x.get("index")})
     for w in watch:
         hit = next((x for x in aa_rows if (x.get("hf_repo") or "").lower() == (w["hf_repo"] or "").lower()), None)
         if hit and w["aa_index"] is None:
             w["aa_index"] = hit.get("index")
     watch.sort(key=lambda w: w["date"] or "", reverse=True)
+    eci_of = {m["model"]: m["eci"] for m in all_models}
+    estimates, backtest = estimate_unscored(eci_of, watch)
+    for w in watch:
+        w["estimate"] = next((e for e in estimates if e["hf_repo"].lower() == (w["hf_repo"] or "").lower()), None)
 
     # 10. Assemble -------------------------------------------------------------------
     eci_updated = None
@@ -515,6 +613,7 @@ def main():
         "aa": {"snapshot_date": aa.get("snapshot_date"), "source": aa.get("source"),
                "frontier": aa.get("frontier"), "models": aa_rows},
         "watchlist": watch,
+        "estimates": {"models": estimates, "backtest": backtest},
         "unclassified": unclassified,
     }
 
@@ -550,7 +649,7 @@ def main():
         hit = next((m for m in sorted(slms, key=lambda m: m["date"]) if m["eci"] >= th["value"]), None)
         if hit:
             note("crossed", f"{th['key']}:{th.get('ref_model')}",
-                 {"type": "threshold", "title": f"Threshold crossed: a single-GPU model reached the {th['short']} ({th['value']:.1f} ECI)",
+                 {"type": "threshold", "title": f"Threshold crossed: a single-GPU model reached {'' if th['key'] == 'frontier' else 'the '}{th['short']} ({th['value']:.1f} ECI)",
                   "detail": f"{hit['name']} scores {hit['eci']:.1f} on the ECI, at or above {th.get('ref_model', '')}."})
     write_json(state_path, ast)
     out["events"] = events

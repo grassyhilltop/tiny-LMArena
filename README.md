@@ -23,6 +23,9 @@ By Joel Sadler, University of Virginia, School of Data Science. This repository 
 * **Awaiting an ECI score**: new single-GPU models Epoch has not scored yet (from `config/watchlist.csv` and the
   Artificial Analysis snapshot).
 * **Second opinion**: the Artificial Analysis Intelligence Index for small open models.
+* **Estimates for unscored models** (off by default, "Show estimates" under the chart): an ECI estimate from benchmark
+  scores developers published, anchored to a model with a known ECI in the same table and converted with Epoch's
+  benchmark slope; drawn as hollow diamonds with a 90% range, never used for ranks, fits, thresholds or alerts.
 * **Filters and views**: models from all labs, US, China or the rest of the world (refits the trend per group);
   a state-of-the-art overlay (best ECI of any model, with its own trend); and a projection horizon out to 2027,
   2028 or 2030, with a hover readout of the projected ECI at any date.
@@ -69,6 +72,9 @@ python3 scripts/update_data.py && python3 scripts/build_page.py
 * `config/models.csv` maps Epoch model names to display names and Hugging Face repos, and fills in sizes Epoch lacks.
   The daily log lists open models with unknown size; add them here.
 * `config/watchlist.csv` lists notable single-GPU models without an ECI score yet. They drop off once Epoch scores them.
+* `config/claims.csv` holds developer-reported scores for those models, each with its source and the reference models
+  (known ECI) reported in the same table. Only ECI benchmarks are used (today Terminal-Bench 2.x and GPQA Diamond);
+  the method and back-test are in `estimate_unscored()` in `scripts/update_data.py` and on the page.
 
 ## Credits
 

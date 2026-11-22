@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-22T01:46:25+00:00",
+ "generated": "2026-11-22T02:43:45+00:00",
  "today": "2026-11-22",
  "epoch_fetched": "2026-11-22",
  "rule": {
@@ -3318,10 +3318,80 @@
    "org": "Nanbeige",
    "hf_repo": "Nanbeige/Nanbeige4.3-33B",
    "date": "2026-10-25",
-   "params_b": 33,
+   "params_b": 33.0,
    "active_b": null,
    "note": "",
-   "aa_index": 20.4
+   "country": "China",
+   "region": "China",
+   "aa_index": 20.4,
+   "estimate": {
+    "name": "Nanbeige4.3-33B",
+    "hf_repo": "Nanbeige/Nanbeige4.3-33B",
+    "eci": 153.65,
+    "sd": 2.94,
+    "lo": 148.81,
+    "hi": 158.48,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 147.62,
+      "sigma": 8.35,
+      "spread": 7.46,
+      "n": 2,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 89.5,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 89.2,
+        "reference_eci": 152.63,
+        "estimate": 152.9
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 89.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 91.3,
+        "reference_eci": 144.12,
+        "estimate": 142.35
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 154.5,
+      "sigma": 3.14,
+      "spread": 1.24,
+      "n": 2,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 80.9,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 73.0,
+        "reference_eci": 152.63,
+        "estimate": 155.38
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 80.9,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 47.2,
+        "reference_eci": 144.12,
+        "estimate": 153.63
+       }
+      ]
+     }
+    ]
+   }
   },
   {
    "name": "Flint",
@@ -3331,49 +3401,1159 @@
    "params_b": 39.8,
    "active_b": 2.5,
    "note": "Coding model. The official int4 build is about 23 GB, so it fits a 32 GB card.",
-   "aa_index": null
+   "country": "United States of America",
+   "region": "US",
+   "aa_index": null,
+   "estimate": {
+    "name": "Flint",
+    "hf_repo": "RecursiveSI/flint",
+    "eci": 147.32,
+    "sd": 2.98,
+    "lo": 142.42,
+    "hi": 152.22,
+    "benchmarks": [
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 147.32,
+      "sigma": 2.98,
+      "spread": 0.71,
+      "n": 4,
+      "rows": [
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Qwen3.5-35B-A3B",
+        "reference_claimed": 38.7,
+        "reference_eci": 144.05,
+        "estimate": 148.07
+       },
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 146.52
+       },
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 73.0,
+        "reference_eci": 152.63,
+        "estimate": 147.75
+       },
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 146.95
+       }
+      ]
+     }
+    ]
+   }
   },
   {
    "name": "K2 Horizon 32B",
    "org": "Institute of Foundation Models",
    "hf_repo": "IFM/K2-Horizon-32B",
    "date": "2026-09-03",
-   "params_b": 32,
+   "params_b": 32.0,
    "active_b": null,
    "note": "",
-   "aa_index": 13.9
+   "country": "United Arab Emirates",
+   "region": "Other",
+   "aa_index": 13.9,
+   "estimate": {
+    "name": "K2 Horizon 32B",
+    "hf_repo": "IFM/K2-Horizon-32B",
+    "eci": 147.17,
+    "sd": 2.29,
+    "lo": 143.4,
+    "hi": 150.94,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 146.81,
+      "sigma": 3.76,
+      "spread": 0.0,
+      "n": 1,
+      "rows": [
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 82.8,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 90.5,
+        "reference_eci": 152.63,
+        "estimate": 146.81
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 147.38,
+      "sigma": 2.89,
+      "spread": 0.0,
+      "n": 1,
+      "rows": [
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 62.6,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 79.8,
+        "reference_eci": 152.63,
+        "estimate": 147.38
+       }
+      ]
+     }
+    ]
+   }
   },
   {
    "name": "K2 Horizon MoVA 36B A4B",
    "org": "Institute of Foundation Models",
    "hf_repo": "IFM/K2-Horizon-MoVA-36B-A4B",
    "date": "2026-09-03",
-   "params_b": 36,
-   "active_b": 4,
+   "params_b": 36.0,
+   "active_b": 4.0,
    "note": "",
-   "aa_index": 13.8
+   "country": "United Arab Emirates",
+   "region": "Other",
+   "aa_index": 13.8,
+   "estimate": {
+    "name": "K2 Horizon MoVA 36B A4B",
+    "hf_repo": "IFM/K2-Horizon-MoVA-36B-A4B",
+    "eci": 145.83,
+    "sd": 2.34,
+    "lo": 141.98,
+    "hi": 149.67,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 142.17,
+      "sigma": 3.92,
+      "spread": 1.1,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.8,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 86.7,
+        "reference_eci": 147.02,
+        "estimate": 143.29
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.8,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 84.1,
+        "reference_eci": 144.07,
+        "estimate": 142.12
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.8,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 141.1
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 147.84,
+      "sigma": 2.91,
+      "spread": 0.37,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 58.6,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 53.9,
+        "reference_eci": 147.02,
+        "estimate": 148.19
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 58.6,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 147.45
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 58.6,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 147.87
+       }
+      ]
+     }
+    ]
+   }
   },
   {
    "name": "K2 Horizon 7B",
    "org": "Institute of Foundation Models",
    "hf_repo": "IFM/K2-Horizon-7B",
    "date": "2026-09-03",
-   "params_b": 7,
+   "params_b": 7.0,
    "active_b": null,
    "note": "",
-   "aa_index": 10.6
+   "country": "United Arab Emirates",
+   "region": "Other",
+   "aa_index": 10.6,
+   "estimate": {
+    "name": "K2 Horizon 7B",
+    "hf_repo": "IFM/K2-Horizon-7B",
+    "eci": 143.59,
+    "sd": 2.89,
+    "lo": 138.84,
+    "hi": 148.34,
+    "benchmarks": [
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 143.59,
+      "sigma": 2.89,
+      "spread": 0.0,
+      "n": 1,
+      "rows": [
+       {
+        "table": "k2-7b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-7B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 44.6,
+        "reference": "Qwen3.5-9B",
+        "reference_claimed": 29.2,
+        "reference_eci": 139.5,
+        "estimate": 143.59
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "G9v3-39A5B",
+   "org": "ai9stars",
+   "hf_repo": "ai9stars/G9v3-39A5B",
+   "date": "2026-08-20",
+   "params_b": 39.0,
+   "active_b": 5.0,
+   "note": "",
+   "country": "",
+   "region": "Other",
+   "aa_index": null,
+   "estimate": {
+    "name": "G9v3-39A5B",
+    "hf_repo": "ai9stars/G9v3-39A5B",
+    "eci": 141.53,
+    "sd": 2.34,
+    "lo": 137.69,
+    "hi": 145.38,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 142.01,
+      "sigma": 3.92,
+      "spread": 1.09,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.5,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 86.7,
+        "reference_eci": 147.02,
+        "estimate": 143.12
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.5,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 84.1,
+        "reference_eci": 144.07,
+        "estimate": 141.96
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 140.94
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 141.27,
+      "sigma": 2.91,
+      "spread": 0.37,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 32.6,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 53.9,
+        "reference_eci": 147.02,
+        "estimate": 141.62
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 32.6,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 140.88
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 32.6,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 141.3
+       }
+      ]
+     }
+    ]
+   }
   },
   {
    "name": "Muse Glimmer",
    "org": "Meta",
    "hf_repo": "meta-models/Muse-Glimmer-30B",
    "date": "2026-08-10",
-   "params_b": 30,
+   "params_b": 30.0,
    "active_b": null,
    "note": "",
-   "aa_index": 6.3
+   "country": "United States of America",
+   "region": "US",
+   "aa_index": 6.3,
+   "estimate": {
+    "name": "Muse Glimmer",
+    "hf_repo": "meta-models/Muse-Glimmer-30B",
+    "eci": 145.71,
+    "sd": 2.77,
+    "lo": 141.15,
+    "hi": 150.26,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 144.22,
+      "sigma": 5.01,
+      "spread": 3.31,
+      "n": 8,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 89.2,
+        "reference_eci": 152.63,
+        "estimate": 148.45
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 91.3,
+        "reference_eci": 144.12,
+        "estimate": 137.9
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 142.68
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen3.6 27B",
+        "reference_claimed": 84.2,
+        "reference_eci": 146.72,
+        "estimate": 146.28
+       },
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 90.5,
+        "reference_eci": 152.63,
+        "estimate": 147.24
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 86.7,
+        "reference_eci": 147.02,
+        "estimate": 144.86
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 84.1,
+        "reference_eci": 144.07,
+        "estimate": 143.69
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 142.68
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 146.36,
+      "sigma": 3.32,
+      "spread": 1.63,
+      "n": 8,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 61.8,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 73.0,
+        "reference_eci": 152.63,
+        "estimate": 149.49
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 61.8,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 47.2,
+        "reference_eci": 144.12,
+        "estimate": 147.75
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 146.16
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Qwen3.6 27B",
+        "reference_claimed": 60.7,
+        "reference_eci": 146.72,
+        "estimate": 144.48
+       },
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 79.8,
+        "reference_eci": 152.63,
+        "estimate": 144.64
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 53.9,
+        "reference_eci": 147.02,
+        "estimate": 146.48
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 145.74
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 146.16
+       }
+      ]
+     }
+    ]
+   }
   }
  ],
+ "estimates": {
+  "models": [
+   {
+    "name": "Flint",
+    "hf_repo": "RecursiveSI/flint",
+    "eci": 147.32,
+    "sd": 2.98,
+    "lo": 142.42,
+    "hi": 152.22,
+    "benchmarks": [
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 147.32,
+      "sigma": 2.98,
+      "spread": 0.71,
+      "n": 4,
+      "rows": [
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Qwen3.5-35B-A3B",
+        "reference_claimed": 38.7,
+        "reference_eci": 144.05,
+        "estimate": 148.07
+       },
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 146.52
+       },
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 73.0,
+        "reference_eci": 152.63,
+        "estimate": 147.75
+       },
+       {
+        "table": "flint",
+        "source": "https://huggingface.co/RecursiveSI/flint",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 54.9,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 146.95
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "Nanbeige4.3-33B",
+    "hf_repo": "Nanbeige/Nanbeige4.3-33B",
+    "eci": 153.65,
+    "sd": 2.94,
+    "lo": 148.81,
+    "hi": 158.48,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 147.62,
+      "sigma": 8.35,
+      "spread": 7.46,
+      "n": 2,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 89.5,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 89.2,
+        "reference_eci": 152.63,
+        "estimate": 152.9
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 89.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 91.3,
+        "reference_eci": 144.12,
+        "estimate": 142.35
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 154.5,
+      "sigma": 3.14,
+      "spread": 1.24,
+      "n": 2,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 80.9,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 73.0,
+        "reference_eci": 152.63,
+        "estimate": 155.38
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 80.9,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 47.2,
+        "reference_eci": 144.12,
+        "estimate": 153.63
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "Muse Glimmer",
+    "hf_repo": "meta-models/Muse-Glimmer-30B",
+    "eci": 145.71,
+    "sd": 2.77,
+    "lo": 141.15,
+    "hi": 150.26,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 144.22,
+      "sigma": 5.01,
+      "spread": 3.31,
+      "n": 8,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 89.2,
+        "reference_eci": 152.63,
+        "estimate": 148.45
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 91.3,
+        "reference_eci": 144.12,
+        "estimate": 137.9
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 142.68
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen3.6 27B",
+        "reference_claimed": 84.2,
+        "reference_eci": 146.72,
+        "estimate": 146.28
+       },
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 90.5,
+        "reference_eci": 152.63,
+        "estimate": 147.24
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 86.7,
+        "reference_eci": 147.02,
+        "estimate": 144.86
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 84.1,
+        "reference_eci": 144.07,
+        "estimate": 143.69
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 83.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 142.68
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 146.36,
+      "sigma": 3.32,
+      "spread": 1.63,
+      "n": 8,
+      "rows": [
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 61.8,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 73.0,
+        "reference_eci": 152.63,
+        "estimate": 149.49
+       },
+       {
+        "table": "nanbeige",
+        "source": "https://huggingface.co/Nanbeige/Nanbeige4.3-33B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 61.8,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 47.2,
+        "reference_eci": 144.12,
+        "estimate": 147.75
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 146.16
+       },
+       {
+        "table": "muse",
+        "source": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Qwen3.6 27B",
+        "reference_claimed": 60.7,
+        "reference_eci": 146.72,
+        "estimate": 144.48
+       },
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 79.8,
+        "reference_eci": 152.63,
+        "estimate": 144.64
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 53.9,
+        "reference_eci": 147.02,
+        "estimate": 146.48
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 145.74
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 51.7,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 146.16
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "K2 Horizon 32B",
+    "hf_repo": "IFM/K2-Horizon-32B",
+    "eci": 147.17,
+    "sd": 2.29,
+    "lo": 143.4,
+    "hi": 150.94,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 146.81,
+      "sigma": 3.76,
+      "spread": 0.0,
+      "n": 1,
+      "rows": [
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 82.8,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 90.5,
+        "reference_eci": 152.63,
+        "estimate": 146.81
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 147.38,
+      "sigma": 2.89,
+      "spread": 0.0,
+      "n": 1,
+      "rows": [
+       {
+        "table": "k2-32b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-32B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 62.6,
+        "reference": "Qwen 3.8 27B",
+        "reference_claimed": 79.8,
+        "reference_eci": 152.63,
+        "estimate": 147.38
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "K2 Horizon MoVA 36B A4B",
+    "hf_repo": "IFM/K2-Horizon-MoVA-36B-A4B",
+    "eci": 145.83,
+    "sd": 2.34,
+    "lo": 141.98,
+    "hi": 149.67,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 142.17,
+      "sigma": 3.92,
+      "spread": 1.1,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.8,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 86.7,
+        "reference_eci": 147.02,
+        "estimate": 143.29
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.8,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 84.1,
+        "reference_eci": 144.07,
+        "estimate": 142.12
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.8,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 141.1
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 147.84,
+      "sigma": 2.91,
+      "spread": 0.37,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 58.6,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 53.9,
+        "reference_eci": 147.02,
+        "estimate": 148.19
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 58.6,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 147.45
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 58.6,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 147.87
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "G9v3-39A5B",
+    "hf_repo": "ai9stars/G9v3-39A5B",
+    "eci": 141.53,
+    "sd": 2.34,
+    "lo": 137.69,
+    "hi": 145.38,
+    "benchmarks": [
+     {
+      "benchmark": "GPQA diamond",
+      "estimate": 142.01,
+      "sigma": 3.92,
+      "spread": 1.09,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.5,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 86.7,
+        "reference_eci": 147.02,
+        "estimate": 143.12
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.5,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 84.1,
+        "reference_eci": 144.07,
+        "estimate": 141.96
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "GPQA Diamond",
+        "claimed": 80.5,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 85.7,
+        "reference_eci": 144.12,
+        "estimate": 140.94
+       }
+      ]
+     },
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 141.27,
+      "sigma": 2.91,
+      "spread": 0.37,
+      "n": 3,
+      "rows": [
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 32.6,
+        "reference": "Nemotron 3 Ultra",
+        "reference_claimed": 53.9,
+        "reference_eci": 147.02,
+        "estimate": 141.62
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 32.6,
+        "reference": "Qwen 3.6 35B-A3B",
+        "reference_claimed": 44.9,
+        "reference_eci": 144.07,
+        "estimate": 140.88
+       },
+       {
+        "table": "k2-mova",
+        "source": "https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 32.6,
+        "reference": "Gemma 4 31B IT",
+        "reference_claimed": 43.4,
+        "reference_eci": 144.12,
+        "estimate": 141.3
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "name": "K2 Horizon 7B",
+    "hf_repo": "IFM/K2-Horizon-7B",
+    "eci": 143.59,
+    "sd": 2.89,
+    "lo": 138.84,
+    "hi": 148.34,
+    "benchmarks": [
+     {
+      "benchmark": "Terminal Bench",
+      "estimate": 143.59,
+      "sigma": 2.89,
+      "spread": 0.0,
+      "n": 1,
+      "rows": [
+       {
+        "table": "k2-7b",
+        "source": "https://huggingface.co/IFM/K2-Horizon-7B",
+        "claimed_benchmark": "Terminal-Bench 2.1",
+        "claimed": 44.6,
+        "reference": "Qwen3.5-9B",
+        "reference_claimed": 29.2,
+        "reference_eci": 139.5,
+        "estimate": 143.59
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "backtest": {
+   "GPQA diamond": {
+    "rmse": 3.76,
+    "pairs": 13066,
+    "models": 178,
+    "edi": 133.9,
+    "slope": 0.1173
+   },
+   "Terminal Bench": {
+    "rmse": 2.89,
+    "pairs": 798,
+    "models": 32,
+    "edi": 149.44,
+    "slope": 0.1635
+   }
+  }
+ },
  "unclassified": [],
  "events": []
 }

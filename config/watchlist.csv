@@ -1,2 +1,8 @@
-name,org,hf_repo,release_date,params_b,active_b,note
-Flint,Recursive,RecursiveSI/flint,2026-10-21,39.8,2.5,"Coding model. The official int4 build is about 23 GB, so it fits a 32 GB card."
+name,org,country,hf_repo,release_date,params_b,active_b,note
+Flint,Recursive,United States of America,RecursiveSI/flint,2026-10-21,39.8,2.5,"Coding model. The official int4 build is about 23 GB, so it fits a 32 GB card."
+Nanbeige4.3-33B,Nanbeige,China,Nanbeige/Nanbeige4.3-33B,2026-10-25,33,,
+K2 Horizon 32B,Institute of Foundation Models,United Arab Emirates,IFM/K2-Horizon-32B,2026-09-03,32,,
+K2 Horizon MoVA 36B A4B,Institute of Foundation Models,United Arab Emirates,IFM/K2-Horizon-MoVA-36B-A4B,2026-09-03,36,4,
+K2 Horizon 7B,Institute of Foundation Models,United Arab Emirates,IFM/K2-Horizon-7B,2026-09-03,7,,
+Muse Glimmer,Meta,United States of America,meta-models/Muse-Glimmer-30B,2026-08-10,30,,
+G9v3-39A5B,ai9stars,,ai9stars/G9v3-39A5B,2026-08-20,39,5,

@@ -19,3 +19,6 @@
   keep the two in step.
 * Repositories `tiny-LMArena` and `SLMArena` hold the same code; only `config/site.json` and the README title differ.
 * Never send the owner's name, email or GitHub handle to external services (User-Agent stays neutral).
+* Estimates for unscored models (`config/claims.csv`, `estimate_unscored()`) are display-only: they must never feed
+  ranks, trend fits, thresholds or alerts, and every claim needs a reference model with a known ECI from the same
+  table, plus a source link. They are shown off by default and always marked as estimates.

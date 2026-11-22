@@ -1,0 +1,40 @@
+table,source,role,model,hf_repo,epoch_model,benchmark,claimed_benchmark,score
+flint,https://huggingface.co/RecursiveSI/flint,target,Flint,RecursiveSI/flint,,Terminal Bench,Terminal-Bench 2.1,54.9
+flint,https://huggingface.co/RecursiveSI/flint,reference,,,Qwen3.5-35B-A3B,Terminal Bench,Terminal-Bench 2.1,38.7
+flint,https://huggingface.co/RecursiveSI/flint,reference,,,Qwen 3.6 35B-A3B,Terminal Bench,Terminal-Bench 2.1,44.9
+flint,https://huggingface.co/RecursiveSI/flint,reference,,,Qwen 3.8 27B,Terminal Bench,Terminal-Bench 2.1,73.0
+flint,https://huggingface.co/RecursiveSI/flint,reference,,,Gemma 4 31B IT,Terminal Bench,Terminal-Bench 2.1,43.4
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,target,Nanbeige4.3-33B,Nanbeige/Nanbeige4.3-33B,,Terminal Bench,Terminal-Bench 2.1,80.9
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,Terminal Bench,Terminal-Bench 2.1,61.8
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,reference,,,Qwen 3.8 27B,Terminal Bench,Terminal-Bench 2.1,73.0
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,reference,,,Gemma 4 31B IT,Terminal Bench,Terminal-Bench 2.1,47.2
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,target,Nanbeige4.3-33B,Nanbeige/Nanbeige4.3-33B,,GPQA diamond,GPQA Diamond,89.5
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,GPQA diamond,GPQA Diamond,83.5
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,reference,,,Qwen 3.8 27B,GPQA diamond,GPQA Diamond,89.2
+nanbeige,https://huggingface.co/Nanbeige/Nanbeige4.3-33B,reference,,,Gemma 4 31B IT,GPQA diamond,GPQA Diamond,91.3
+muse,https://huggingface.co/meta-models/Muse-Glimmer-30B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,Terminal Bench,Terminal-Bench 2.1,51.7
+muse,https://huggingface.co/meta-models/Muse-Glimmer-30B,reference,,,Gemma 4 31B IT,Terminal Bench,Terminal-Bench 2.1,43.4
+muse,https://huggingface.co/meta-models/Muse-Glimmer-30B,reference,,,Qwen3.6 27B,Terminal Bench,Terminal-Bench 2.1,60.7
+muse,https://huggingface.co/meta-models/Muse-Glimmer-30B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,GPQA diamond,GPQA Diamond,83.5
+muse,https://huggingface.co/meta-models/Muse-Glimmer-30B,reference,,,Gemma 4 31B IT,GPQA diamond,GPQA Diamond,85.7
+muse,https://huggingface.co/meta-models/Muse-Glimmer-30B,reference,,,Qwen3.6 27B,GPQA diamond,GPQA Diamond,84.2
+k2-32b,https://huggingface.co/IFM/K2-Horizon-32B,target,K2 Horizon 32B,IFM/K2-Horizon-32B,,Terminal Bench,Terminal-Bench 2.1,62.6
+k2-32b,https://huggingface.co/IFM/K2-Horizon-32B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,Terminal Bench,Terminal-Bench 2.1,51.7
+k2-32b,https://huggingface.co/IFM/K2-Horizon-32B,reference,,,Qwen 3.8 27B,Terminal Bench,Terminal-Bench 2.1,79.8
+k2-32b,https://huggingface.co/IFM/K2-Horizon-32B,target,K2 Horizon 32B,IFM/K2-Horizon-32B,,GPQA diamond,GPQA Diamond,82.8
+k2-32b,https://huggingface.co/IFM/K2-Horizon-32B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,GPQA diamond,GPQA Diamond,83.5
+k2-32b,https://huggingface.co/IFM/K2-Horizon-32B,reference,,,Qwen 3.8 27B,GPQA diamond,GPQA Diamond,90.5
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,target,K2 Horizon MoVA 36B A4B,IFM/K2-Horizon-MoVA-36B-A4B,,Terminal Bench,Terminal-Bench 2.1,58.6
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,target,G9v3-39A5B,ai9stars/G9v3-39A5B,,Terminal Bench,Terminal-Bench 2.1,32.6
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,Terminal Bench,Terminal-Bench 2.1,51.7
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,reference,,,Nemotron 3 Ultra,Terminal Bench,Terminal-Bench 2.1,53.9
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,reference,,,Qwen 3.6 35B-A3B,Terminal Bench,Terminal-Bench 2.1,44.9
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,reference,,,Gemma 4 31B IT,Terminal Bench,Terminal-Bench 2.1,43.4
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,target,K2 Horizon MoVA 36B A4B,IFM/K2-Horizon-MoVA-36B-A4B,,GPQA diamond,GPQA Diamond,80.8
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,target,G9v3-39A5B,ai9stars/G9v3-39A5B,,GPQA diamond,GPQA Diamond,80.5
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,target,Muse Glimmer,meta-models/Muse-Glimmer-30B,,GPQA diamond,GPQA Diamond,83.5
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,reference,,,Nemotron 3 Ultra,GPQA diamond,GPQA Diamond,86.7
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,reference,,,Qwen 3.6 35B-A3B,GPQA diamond,GPQA Diamond,84.1
+k2-mova,https://huggingface.co/IFM/K2-Horizon-MoVA-36B-A4B,reference,,,Gemma 4 31B IT,GPQA diamond,GPQA Diamond,85.7
+k2-7b,https://huggingface.co/IFM/K2-Horizon-7B,target,K2 Horizon 7B,IFM/K2-Horizon-7B,,Terminal Bench,Terminal-Bench 2.1,44.6
+k2-7b,https://huggingface.co/IFM/K2-Horizon-7B,reference,,,Qwen3.5-9B,Terminal Bench,Terminal-Bench 2.1,29.2

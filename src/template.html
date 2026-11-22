@@ -24,6 +24,8 @@
   --green: #2f7d4a;
   --tint-green: rgba(47, 125, 74, 0.065);
   --tint-clay: rgba(194, 87, 58, 0.07);
+  --sota: #1a1a18;
+  --tint-sota: rgba(26, 26, 24, 0.06);
   --gold: #f1d064;
   --silver: #dcdad2;
   --bronze: #dcae86;
@@ -37,7 +39,7 @@
   :root:not([data-theme="light"]) {
     --bg: #1b1a18; --surface: #22211f; --ink: #efede5; --ink-2: #bab8ae; --ink-3: #8c8a80;
     --rule: #363530; --grid: #2d2c28; --slm: #5b8bd3; --slm-soft: #3e5a82; --band: rgba(91, 139, 211, 0.12);
-    --clay: #d4693f; --green: #3f9e5c; --tint-green: rgba(63, 158, 92, 0.09); --tint-clay: rgba(212, 105, 63, 0.09);
+    --clay: #d4693f; --green: #3f9e5c; --tint-green: rgba(63, 158, 92, 0.09); --tint-clay: rgba(212, 105, 63, 0.09); --sota: #efede5; --tint-sota: rgba(239, 237, 229, 0.08);
     --gold: #d9b84a; --silver: #9a988f; --bronze: #bf8a5e; --chip-ink: #161614; --focus: #8fb2ea;
     color-scheme: dark;
   }
@@ -45,7 +47,7 @@
 :root[data-theme="dark"] {
   --bg: #1b1a18; --surface: #22211f; --ink: #efede5; --ink-2: #bab8ae; --ink-3: #8c8a80;
   --rule: #363530; --grid: #2d2c28; --slm: #5b8bd3; --slm-soft: #3e5a82; --band: rgba(91, 139, 211, 0.12);
-  --clay: #d4693f; --green: #3f9e5c; --tint-green: rgba(63, 158, 92, 0.09); --tint-clay: rgba(212, 105, 63, 0.09);
+  --clay: #d4693f; --green: #3f9e5c; --tint-green: rgba(63, 158, 92, 0.09); --tint-clay: rgba(212, 105, 63, 0.09); --sota: #efede5; --tint-sota: rgba(239, 237, 229, 0.08);
   --gold: #d9b84a; --silver: #9a988f; --bronze: #bf8a5e; --chip-ink: #161614; --focus: #8fb2ea;
   color-scheme: dark;
 }
@@ -80,7 +82,7 @@ header.mast { border-bottom: 1px solid var(--rule); }
 .seg button:hover, .tbtn:hover { color: var(--ink); background: var(--bg); }
 .seg button[aria-pressed="true"] { color: var(--ink); background: var(--bg); box-shadow: inset 0 0 0 1px var(--ink-3); }
 .tbtn { border: 1px solid var(--rule); background: var(--surface); padding: 8px 11px; display: inline-flex; align-items: center; gap: 7px; }
-.tbtn i { width: 14px; border-top: 2px solid var(--clay); display: inline-block; }
+.tbtn i { width: 14px; border-top: 2px solid var(--sota); display: inline-block; }
 .tbtn[aria-pressed="true"] { color: var(--ink); border-color: var(--ink-3); background: var(--bg); }
 
 /* top-3 strip */
@@ -121,6 +123,14 @@ details.more[open] > summary { color: var(--ink); border-color: var(--ink-3); }
 .lk-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--slm); }
 .lk-dot.soft { background: var(--slm-soft); }
 .lk-th { width: 20px; border-top: 2px solid var(--green); }
+.lk-est { width: 9px; height: 9px; border: 2px solid var(--slm); background: var(--surface); transform: rotate(45deg); margin: 0 2px; }
+.legend button.est-toggle { font: inherit; color: var(--ink-2); background: var(--surface); border: 1px dashed var(--ink-3); border-radius: 6px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+.legend button.est-toggle:hover { color: var(--ink); border-color: var(--ink); }
+.legend button.est-toggle[aria-pressed="true"] { color: var(--ink); border-style: solid; border-color: var(--ink-3); }
+.est-line { font-size: 13px; color: var(--ink); }
+.est-line b { font-weight: 600; }
+.lk-range { width: 20px; height: 5px; border-radius: 2.5px; background: var(--slm); opacity: .3; }
+.metric[data-k="frontier1y"] .big::after { content: none; }
 .chart { position: relative; width: 100%; }
 .chart svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
 .chart text { fill: var(--ink-2); font-family: var(--sans); }
@@ -299,6 +309,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       <a href="#watchlist">Awaiting scores</a>
       <a href="#gap">Frontier gap</a>
       <a href="#aa">Second opinion</a>
+      <a href="#estimates">Estimates</a>
       <a href="#why-eci">Why ECI</a>
       <a href="#method">Method</a>
       <a href="#subscribe">Email alerts</a>
@@ -326,7 +337,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       <div class="sec-head">
         <span class="eyebrow">Awaiting an ECI score</span>
         <h2>New single-GPU models Epoch has not scored yet</h2>
-        <p class="soft">These fit a 32&nbsp;GB card but have no ECI yet, so they are not ranked. Each one joins the leaderboard once Epoch publishes its score (models Epoch lists without a size are added by hand).</p>
+        <p class="soft">These fit a 32&nbsp;GB card but have no ECI yet, so they are not ranked. Where developers published comparable benchmark scores, we show an <a href="#estimates">estimated ECI</a> (also available on the chart with “Show estimates”). Each one joins the leaderboard once Epoch publishes its score (models Epoch lists without a size are added by hand).</p>
       </div>
       <div class="watch" id="watch"></div>
     </section>
@@ -348,7 +359,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
           <div class="chart-head"><h2 class="chart-title" id="gapB-title">Months behind the frontier at each new record</h2></div>
           <div class="legend" id="gapB-legend"></div>
           <div class="chart" id="gapB"></div>
-          <figcaption class="chart-foot"><span>Lag = release date minus the date any model first reached the same ECI.</span></figcaption>
+          <figcaption class="chart-foot"><span>Lag = release date minus the date any model first reached the same ECI. The open dot uses today's date instead, for the best model today.</span></figcaption>
         </figure>
       </div>
     </section>
@@ -398,10 +409,30 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
         <div class="prose">
           <p><strong>Trend.</strong> A model is <em>best at its release</em> if it beat every earlier single-GPU model on the day it came out. The line is an ordinary least-squares fit of ECI against release date over those models, from the start of the chosen window. The shaded band is the 90% prediction interval for a new best-at-release model.</p>
           <p><strong>Crossing dates.</strong> The projected date is where the line meets the threshold; the range is where the edges of the band meet it. “Crossed” means an actual model scored at or above the threshold.</p>
-          <p><strong>Regions.</strong> “Models from” uses the country of the developer's organization in Epoch's data: US, China, or the rest of the world (other countries and cross-border collaborations). It filters the top 3, the chart, the key numbers, the tables and the gap analysis; the trend is refitted to the best model at each date within the group.</p>
-          <p><strong>State of the art.</strong> “Compare with state of the art” adds the best ECI of any model to date, open or closed, with its own trend. Today that is <span id="sota-name"></span>.</p>
+          <p><strong>Regions.</strong> “Models from” uses the country of the developer's organization, from Epoch's data or our own mapping in config/models.csv where Epoch has none. A lab listed in the US (alone or with partners outside China) counts as US, and likewise for China; everything else, including joint US–China work and labs with no country listed, is the rest of the world. It filters the top 3, the chart, the key numbers, the tables and the gap analysis; the trend is refitted to the best model at each date within the group.</p>
+          <p><strong>State of the art.</strong> The “State of the art” button above the chart adds the best ECI of any model to date, open or closed, with its own trend. Today that is <span id="sota-name"></span>.</p>
           <p><strong>Thresholds.</strong> <em>Self-replication floor</em>: GLM-5.2's current ECI. <em>Frontier one year ago</em>: the best ECI of any model released by this date last year. <em>Today's frontier</em>: the best ECI of any model today.</p>
           <p><strong>Data and updates.</strong> A GitHub Action pulls Epoch's <a href="https://epoch.ai/data/eci_scores.csv" target="_blank" rel="noopener">ECI scores</a> and model metadata every day. Parameter counts come from Epoch, then Hugging Face. The code, data (<a id="dl-json" href="#">JSON</a>, <a id="dl-csv" href="#">CSV</a>, <a id="dl-hist" href="#">daily history</a>) and curated mappings are on <a id="repo-link" href="#">GitHub</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="estimates">
+      <div class="sec-head">
+        <span class="eyebrow">Method</span>
+        <h2>How estimates for unscored models are made</h2>
+        <p class="soft">Estimates are drawn as hollow diamonds with a dashed 90% range and are never used for ranks, trend lines, thresholds or alerts. Each one is replaced by the official score as soon as Epoch publishes it.</p>
+      </div>
+      <div class="cols2">
+        <div class="prose">
+          <p><strong>Only benchmarks that are part of the ECI.</strong> Epoch models a model's score on each benchmark as a logistic curve of its ECI, with a published difficulty and slope per benchmark (<a href="https://epoch.ai/data/edi_scores.csv" target="_blank" rel="noopener">edi_scores.csv</a>). Two such benchmarks show up in model cards: <strong>Terminal-Bench 2.x</strong> and <strong>GPQA Diamond</strong>. SWE-bench Verified, the most common coding claim, is not part of the ECI, so it is not used.</p>
+          <p><strong>Anchored to a model with a known ECI.</strong> Developer tables run well above Epoch's own measurements (Gemma 4 31B scores 70.5% on GPQA Diamond in Epoch's data but 86–91% in other labs' tables), so a claim is never converted on its own. We compare it with a model that already has an ECI and was scored in the same table, and convert the gap with Epoch's slope:</p>
+          <p class="num" style="color:var(--ink)">ECI ≈ ECI<sub>reference</sub> + [logit(score) − logit(score<sub>reference</sub>)] / slope<sub>benchmark</sub></p>
+        </div>
+        <div class="prose">
+          <p><strong>Uncertainty.</strong> Back-tested on Epoch's own data, anchoring one model on another within 12 ECI misses by <span id="bt-tb"></span> ECI on Terminal Bench and <span id="bt-gpqa"></span> on GPQA Diamond (root-mean-square). Each benchmark's error adds the disagreement between reference models; benchmarks are combined by inverse-variance weighting, and the range shown is ±1.645 standard deviations (90%).</p>
+          <p><strong>Caveats.</strong> The scores are self-reported and chosen by the developer, harnesses differ between tables (Flint's card, for one, counts web-retrieved Terminal-Bench answers as failures), and one or two benchmarks say less than Epoch's 50+. Treat an estimate as “where the developer's claims would put it”, not as a measurement.</p>
+          <div class="tbl-wrap" style="border-radius:10px"><table class="t15" style="margin:0;min-width:420px" id="est-table"></table></div>
         </div>
       </div>
     </section>
@@ -473,7 +504,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   function fMon(s) { if (s == null) return "–"; var d = typeof s === "string" ? pd(s) : s; return MON[d.getUTCMonth()] + " " + d.getUTCFullYear(); }
   function f1(v) { return (Math.round(v * 10) / 10).toFixed(1); }
   function yf(d) { var y = d.getUTCFullYear(); var a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return y + (d - a) / (b - a); }
-  function fromYf(v) { var y = Math.floor(v); var a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return new Date(a + (v - y) * (b - a)); }
+  function fromYf(v) { var y = Math.floor(v), a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return new Date(a + Math.round((v - y) * (b - a) / DAY) * DAY); }
   function addMonths(d, n) { return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + n, d.getUTCDate())); }
   function hf(m) { return m.hf_repo ? "https://huggingface.co/" + m.hf_repo : (m.source_url || null); }
   function paramsLabel(m) { return (m.params_b >= 10 ? Math.round(m.params_b) : m.params_b) + "B" + (m.active_b ? " (" + m.active_b + "B active)" : ""); }
@@ -513,14 +544,14 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   }
   function frontierAt(d) { var v = null; D.frontier_steps.forEach(function (s) { if (pd(s.date) <= d) v = s; }); return v; }
   function frontierFirst(value) { for (var i = 0; i < D.frontier_steps.length; i++) if (D.frontier_steps[i].eci >= value) return D.frontier_steps[i]; return null; }
-  function lagOf(m) { var s = m && frontierFirst(m.eci); return s ? { model: s.model, date: s.date, months: (pd(D.today) - pd(s.date)) / DAY / 30.44 } : null; }
+  function lagOf(m) { var s = m && frontierFirst(m.eci); return s ? { model: s.model, eci: s.eci, date: s.date, months: (pd(D.today) - pd(s.date)) / DAY / 30.44 } : null; }
 
   // ---------- state
   var REGIONS = [["all", "All"], ["US", "US"], ["China", "China"], ["Other", "Rest of world"]];
   var REGION_NOUN = { all: "", US: "from US labs", China: "from Chinese labs", Other: "from labs outside the US and China" };
   var HASH_REGION = { us: "US", china: "China", rest: "Other" };
   var state = { threshold: "selfrep", def: "fit32", window: "since2023", view: "2023", horizon: "auto", sota: false, region: "all",
-    vram: 32, recent: "all", q: "", showAll: false, sort: { key: "eci", dir: -1 } };
+    vram: 32, recent: "all", q: "", showAll: false, sort: { key: "eci", dir: -1 }, est: false };
   try { var saved = JSON.parse(localStorage.getItem("slm-state") || "{}"); ["threshold", "vram"].forEach(function (k) { if (saved[k] !== undefined) state[k] = saved[k]; }); } catch (e) {}
   if (window.innerWidth < 620) state.view = "2025";
   var TK = D.thresholds.map(function (t) { return t.key; });
@@ -528,6 +559,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     if (TK.indexOf(p) >= 0) state.threshold = p;
     if (HASH_REGION[p]) state.region = HASH_REGION[p];
     if (p === "sota") state.sota = true;
+    if (p === "est") state.est = true;
   });
   if (TK.indexOf(state.threshold) < 0) state.threshold = TK[0];
   state.vram = GPU.indexOf(+state.vram) < 0 ? 32 : +state.vram;
@@ -540,6 +572,16 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   function thColorRaw(key) { return key === "selfrep" ? css("--green") : css("--clay"); }
   function refLabel(t) { return t.ref_model + (t.ref_params_b ? " (" + Math.round(t.ref_params_b) + "B)" : ""); }
   function noun() { return "single-GPU models" + (REGION_NOUN[state.region] ? " " + REGION_NOUN[state.region] : ""); }
+
+  function estimates() {
+    var E = (D.estimates && D.estimates.models) || [];
+    return E.map(function (e) {
+      var w = D.watchlist.filter(function (x) { return (x.hf_repo || "").toLowerCase() === e.hf_repo.toLowerCase(); })[0];
+      return w ? Object.assign({}, e, { date: w.date, org: w.org, region: w.region || "Other", params_b: w.params_b, active_b: w.active_b }) : null;
+    }).filter(function (e) {
+      return e && e.date && (state.region === "all" || e.region === state.region) && (state.def !== "anthropic" || (e.params_b || 99) <= D.rule.anthropic_max_b);
+    });
+  }
 
   // Everything the forecast needs for the current filters, computed once per change.
   var MODEL = null;
@@ -627,21 +669,23 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     if (s) {
       var big1 = s.kind === "crossed" ? h("span", { cls: "big" }, "Crossed") : h("span", { cls: "big num" }, f1(s.gap), h("small", null, " ECI to go"));
       var why1 = s.kind === "crossed" ? s.crossed.name + " reached " + f1(s.crossed.eci) + " on " + fDate(s.crossed.date) + "."
-        : s.kind === "due" ? "The trend passed it in " + fMon(s.trend.date) + ". Best: " + s.best.name + " (" + f1(s.best.eci) + ")."
-        : s.kind === "ahead" ? "On trend in " + fMon(s.trend.date) + ". Best: " + s.best.name + " (" + f1(s.best.eci) + ")."
-        : "Best: " + s.best.name + " (" + f1(s.best.eci) + ").";
+        : s.kind === "due" ? "The trend passed it in " + fMon(s.trend.date) + (s.trend.early && s.trend.late ? "" : " (90% range unbounded)") + ". Best: " + s.best.name + " (" + f1(s.best.eci) + ")."
+        : s.kind === "ahead" ? "On trend in " + fMon(s.trend.date) + (s.trend.early && s.trend.late ? "" : " (90% range unbounded)") + ". Best: " + s.best.name + " (" + f1(s.best.eci) + ")."
+        : (MODEL.F ? "The trend is not rising. " : "Too few best-at-release models in this group to fit a trend. ") + "Best: " + s.best.name + " (" + f1(s.best.eci) + ").";
       box.appendChild(row("selfrep", "Self-replication floor · " + s.t.ref_model + " · " + f1(s.t.value), big1, why1));
     }
     var L = MODEL.lag;
     if (L && th("frontier1y")) {
       box.appendChild(row("frontier1y", "Lag behind the frontier", h("span", { cls: "big num" }, String(Math.round(L.months)), h("small", null, " months")),
-        MODEL.best.name + " (" + f1(MODEL.best.eci) + ") matches " + L.model + ", the best model in " + fMon(L.date) + "."));
+        "The frontier first passed " + MODEL.best.name + "'s " + f1(MODEL.best.eci) + " in " + fMon(L.date) + ", with " + L.model + " (" + f1(L.eci) + ")." +
+        " On the chart: the frontier one year ago, " + th("frontier1y").ref_model + " (" + f1(th("frontier1y").value) + ")."));
     }
     var s3 = status("frontier");
     if (s3) {
       var big3 = s3.kind === "crossed" ? h("span", { cls: "big" }, "Crossed") : h("span", { cls: "big" }, s3.trend ? fMon(s3.trend.date) : "–");
       var why3 = s3.kind === "crossed" ? s3.crossed.name + " matches today's frontier."
-        : "When the trend reaches " + s3.t.ref_model + " (" + f1(s3.t.value) + ")" + (s3.trend && s3.trend.early && s3.trend.late ? "; 90% range " + fMon(s3.trend.early) + " – " + fMon(s3.trend.late) : "") + ". " + f1(s3.gap) + " ECI to go.";
+        : !s3.trend ? (MODEL.F ? "The trend is not rising, so no date can be projected. " : "Too few best-at-release models in this group to fit a trend. ") + f1(s3.gap) + " ECI to go."
+        : "When the trend reaches " + s3.t.ref_model + " (" + f1(s3.t.value) + ")" + (s3.trend.early && s3.trend.late ? "; 90% range " + fMon(s3.trend.early) + " – " + fMon(s3.trend.late) : "; 90% range unbounded") + ". " + f1(s3.gap) + " ECI to go.";
       box.appendChild(row("frontier", "Today's frontier · " + s3.t.ref_model + " · " + f1(s3.t.value), big3, why3));
     }
   }
@@ -649,12 +693,12 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   // ---------- forecast chart
   function headline() {
     var s = status(state.threshold); if (!s || !MODEL.best) return "";
-    var name = s.t.short + " (" + s.t.ref_model + ", " + f1(s.t.value) + " ECI)";
+    var name = (s.t.key === "frontier" ? "" : "the ") + s.t.short + " (" + s.t.ref_model + ", " + f1(s.t.value) + " ECI)";
     var who = state.region === "all" ? "single-GPU model" : "single-GPU model " + REGION_NOUN[state.region];
-    if (s.kind === "crossed") return "A " + who + " has crossed the " + name + ": " + s.crossed.name + " scores " + f1(s.crossed.eci) + ".";
+    if (s.kind === "crossed") return "A " + who + " has crossed " + name + ": " + s.crossed.name + " scores " + f1(s.crossed.eci) + ".";
     if (s.kind === "flat") return MODEL.F ? "The trend is not rising, so no crossing date can be projected." : "Too few best-at-release models in this group to fit a trend.";
-    var rng = s.trend.early && s.trend.late ? " (90% range " + fMon(s.trend.early) + " – " + fMon(s.trend.late) + ")" : "";
-    if (s.kind === "due") return "The trend passed the " + name + " in " + fMon(s.trend.date) + rng + ", but no model has crossed yet: the best, " + s.best.name + ", is " + f1(s.gap) + " ECI short.";
+    var rng = s.trend.early && s.trend.late ? " (90% range " + fMon(s.trend.early) + " – " + fMon(s.trend.late) + ")" : " (90% range unbounded: only " + MODEL.F.points + " best-at-release models, R² " + MODEL.F.r2.toFixed(2) + ")";
+    if (s.kind === "due") return "The trend passed " + name + " in " + fMon(s.trend.date) + rng + ", but no " + who + " has reached it yet: the best, " + s.best.name + ", is " + f1(s.gap) + " ECI short.";
     return "On trend, a " + who + " reaches " + name + " in " + fMon(s.trend.date) + rng + ". The best today, " + s.best.name + ", is " + f1(s.gap) + " ECI short.";
   }
 
@@ -671,10 +715,11 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     var recs = vis.filter(function (m) { return M0.recIds[m.id]; });
     var fitStart = F && pd(F.start) > x0 ? pd(F.start) : x0;
     var lo = recs.length ? d3.min(recs, function (m) { return m.eci; }) : (vis.length ? d3.min(vis, function (m) { return m.eci; }) : t.value - 20);
-    if (F) lo = Math.min(lo, bandAt(F, fitStart)[0]);
+    if (F) lo = Math.min(lo, Math.max(bandAt(F, fitStart)[0], lo - 10));
     lo -= 3;
     var hi = Math.max(t.value + 5, (vis.length ? d3.max(vis, function (m) { return m.eci; }) : t.value) + 5);
     if (state.horizon !== "auto" && F) hi = Math.max(hi, bandAt(F, x1)[1] + 6);
+    if (state.est) estimates().forEach(function (e) { if (pd(e.date) >= x0) { hi = Math.max(hi, e.hi + 3); lo = Math.min(lo, e.lo - 3); } });
     if (state.sota) {
       hi = Math.max(hi, M0.sota.eci + 8);
       if (state.horizon !== "auto" && M0.FF) hi = Math.max(hi, M0.FF.a + M0.FF.b * yf(x1) + 5);
@@ -685,15 +730,24 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   function renderHero(animate) {
     var t = th(state.threshold), F = MODEL.F;
     var cls = state.def === "anthropic" ? "open models of ≤ " + D.rule.anthropic_max_b + "B parameters (Anthropic's class)" : "open models that run on one 32 GB GPU";
-    $("#hero-title").textContent = "ECI of " + cls + (REGION_NOUN[state.region] ? ", " + REGION_NOUN[state.region] : "") + ", with trend";
+    $("#hero-title").textContent = "ECI of " + cls + (REGION_NOUN[state.region] ? ", " + REGION_NOUN[state.region] : "") + (F ? ", with trend" : "");
     $("#hero-headline").textContent = headline();
     var lg = $("#hero-legend"); lg.textContent = "";
-    lg.appendChild(h("span", null, h("i", { cls: "lk-line" }), "least-squares fit to the best model at each date (dashed: projection)"));
-    lg.appendChild(h("span", null, h("i", { cls: "lk-band" }), "90% prediction interval"));
+    if (F) {
+      lg.appendChild(h("span", null, h("i", { cls: "lk-line" }), "least-squares fit to the best model at each date (dashed: projection)"));
+      lg.appendChild(h("span", null, h("i", { cls: "lk-band" }), "90% prediction interval"));
+    }
     lg.appendChild(h("span", null, h("i", { cls: "lk-dot" }), "best at its release"));
     lg.appendChild(h("span", null, h("i", { cls: "lk-dot soft" }), "other single-GPU models"));
     lg.appendChild(h("span", null, h("i", { cls: "lk-th", style: "border-color:" + thColor(state.threshold) }), t.label));
-    if (state.sota) lg.appendChild(h("span", null, h("i", { cls: "lk-line", style: "border-color:var(--clay)" }), "state of the art, any model (dashed: trend)"));
+    var tsL = MODEL.ths[state.threshold];
+    if (tsL && tsL.trend && !tsL.crossed && tsL.trend.early && tsL.trend.late) lg.appendChild(h("span", null, h("i", { cls: "lk-range" }), "90% range of the crossing date"));
+    if (state.sota) lg.appendChild(h("span", null, h("i", { cls: "lk-line", style: "border-color:var(--sota)" }),
+      "state of the art: " + MODEL.sota.model + " (" + f1(MODEL.sota.eci) + ")" + (MODEL.best ? ", " + f1(MODEL.sota.eci - MODEL.best.eci) + " ECI above the best here" : "") + "; dashed: its trend"));
+    var nE = estimates().length;
+    if (nE) lg.appendChild(h("button", { type: "button", cls: "est-toggle", "aria-pressed": String(state.est), title: "Estimated from developer-reported benchmark scores; not official ECI. See the method below.",
+      onclick: function () { state.est = !state.est; renderHero(true); var b = document.querySelector(".est-toggle"); if (b) b.focus(); } },
+      h("i", { cls: "lk-est" }), state.est ? "estimated ECI for unscored models (from claimed scores; 90% range)" : "Show estimates for " + nE + " unscored model" + (nE > 1 ? "s" : "")));
     $("#hero-fitnote").textContent = F ? "Fit: " + f1(F.b) + " ECI per year, R² " + F.r2.toFixed(2) + ", " + F.points + " best-at-release models since " + fMon(F.start) + "." : "Too few best-at-release models to fit a trend.";
     var target = heroTarget();
     if (!animate || REDUCED || !HERO.cur) { cancelAnimationFrame(HERO.raf); HERO.cur = target; drawHero(target, true); return; }
@@ -725,7 +779,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     box.textContent = "";
     var M = { t: 16, r: narrow ? 10 : 18, b: 30, l: narrow ? 34 : 44 };
     var F = MODEL.F, t = th(state.threshold), ts = MODEL.ths[state.threshold];
-    var C = { slm: css("--slm"), soft: css("--slm-soft"), th: thColorRaw(state.threshold), ink: css("--ink"), ink2: css("--ink-2"), ink3: css("--ink-3"), surface: css("--surface"), band: css("--band"), clay: css("--clay") };
+    var C = { slm: css("--slm"), soft: css("--slm-soft"), th: thColorRaw(state.threshold), ink: css("--ink"), ink2: css("--ink-2"), ink3: css("--ink-3"), surface: css("--surface"), band: css("--band"), clay: css("--clay"), sota: css("--sota") };
     var today = pd(D.today), start = new Date(dom.x0), end = new Date(dom.x1);
     var x = d3.scaleUtc().domain([start, end]).range([M.l, W - M.r]);
     var y = d3.scaleLinear().domain([dom.y0, dom.y1]).range([H - M.b, M.t]);
@@ -750,15 +804,15 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       g.append("line").attr("x1", x(today)).attr("x2", x(end)).attr("y1", y(bandAt(F, today)[1])).attr("y2", y(bandAt(F, end)[1])).attr("stroke", C.slm).attr("stroke-width", 2).attr("stroke-dasharray", "6 5");
     }
     // state of the art (fades with dom.sa)
-    var S = MODEL.sota;
+    var S = MODEL.sota, steps = [];
     if (dom.sa > 0.01) {
       var gs = g.append("g").attr("opacity", dom.sa);
-      var f0 = frontierAt(start), steps = [];
+      var f0 = frontierAt(start);
       if (f0) steps.push({ d: start, v: f0.eci });
       D.frontier_steps.forEach(function (s) { var d = pd(s.date); if (d > start && d <= today) steps.push({ d: d, v: s.eci }); });
       if (steps.length) steps.push({ d: today, v: steps[steps.length - 1].v });
-      gs.append("path").attr("fill", "none").attr("stroke", C.clay).attr("stroke-width", 2).attr("d", d3.line().curve(d3.curveStepAfter).x(function (p) { return x(p.d); }).y(function (p) { return y(p.v); })(steps));
-      if (MODEL.FF) gs.append("line").attr("x1", x(today)).attr("x2", x(end)).attr("y1", y(MODEL.FF.a + MODEL.FF.b * yf(today))).attr("y2", y(MODEL.FF.a + MODEL.FF.b * yf(end))).attr("stroke", C.clay).attr("stroke-width", 2).attr("stroke-dasharray", "6 5");
+      gs.append("path").attr("fill", "none").attr("stroke", C.sota).attr("stroke-width", 2).attr("d", d3.line().curve(d3.curveStepAfter).x(function (p) { return x(p.d); }).y(function (p) { return y(p.v); })(steps));
+      if (MODEL.FF) gs.append("line").attr("x1", x(today)).attr("x2", x(end)).attr("y1", y(MODEL.FF.a + MODEL.FF.b * yf(today))).attr("y2", y(MODEL.FF.a + MODEL.FF.b * yf(end))).attr("stroke", C.sota).attr("stroke-width", 2).attr("stroke-dasharray", "6 5");
     }
     // threshold and today
     g.append("line").attr("x1", M.l).attr("x2", W - M.r).attr("y1", ty).attr("y2", ty).attr("stroke", C.th).attr("stroke-width", 2);
@@ -778,7 +832,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     if (refOn) svg.append("circle").attr("cx", x(rd)).attr("cy", ty).attr("r", 6).attr("fill", C.th).attr("stroke", C.surface).attr("stroke-width", 2);
     // state-of-the-art dot
     var sd = pd(S.date), sotaOn = dom.sa > 0.01 && sd >= start && sd <= end;
-    if (sotaOn) svg.append("circle").attr("cx", x(sd)).attr("cy", y(S.eci)).attr("r", 6.5).attr("fill", C.clay).attr("stroke", C.surface).attr("stroke-width", 2).attr("opacity", dom.sa);
+    if (sotaOn) svg.append("circle").attr("cx", x(sd)).attr("cy", y(S.eci)).attr("r", 6.5).attr("fill", C.sota).attr("stroke", C.surface).attr("stroke-width", 2).attr("opacity", dom.sa);
     // gap marker from the best model to the threshold
     var best = MODEL.best, gapOn = best && !ts.crossed && pd(best.date) >= start && t.value > best.eci;
     if (gapOn) svg.append("line").attr("x1", x(pd(best.date))).attr("x2", x(pd(best.date))).attr("y1", y(best.eci) - 7).attr("y2", ty).attr("stroke", C.clay).attr("stroke-width", 1.5).attr("stroke-dasharray", "3 3");
@@ -789,6 +843,15 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     pts.forEach(function (p) { p.x = x(p.d); p.y = y(p.m.eci); p.r = p.rec ? 6 : 4.5; });
     svg.append("g").selectAll("circle").data(pts).join("circle").attr("cx", function (p) { return p.x; }).attr("cy", function (p) { return p.y; }).attr("r", function (p) { return p.r; })
       .attr("fill", function (p) { return p.rec ? C.slm : C.soft; }).attr("stroke", C.surface).attr("stroke-width", 2);
+    var ests = state.est ? estimates().filter(function (e) { var d = pd(e.date); return d >= start && d <= end; }) : [];
+    var ge = svg.append("g");
+    ests.forEach(function (e) {
+      var ex = x(pd(e.date)), ey = y(e.eci);
+      ge.append("line").attr("x1", ex).attr("x2", ex).attr("y1", y(e.lo)).attr("y2", y(e.hi)).attr("stroke", C.slm).attr("stroke-width", 1.5).attr("stroke-dasharray", "2 2");
+      ge.append("rect").attr("x", ex - 5).attr("y", ey - 5).attr("width", 10).attr("height", 10).attr("transform", "rotate(45 " + ex + " " + ey + ")")
+        .attr("fill", C.surface).attr("stroke", C.slm).attr("stroke-width", 2);
+      pts.push({ m: { name: e.name, eci: e.eci, date: e.date }, d: pd(e.date), est: e, x: ex, y: ey, r: 7, rec: false });
+    });
     var hidden = MODEL.models.filter(function (m) { return pd(m.date) >= start && m.eci < dom.y0; }).length;
     if (full && F) $("#hero-fitnote").textContent = "Fit: " + f1(F.b) + " ECI per year, R² " + F.r2.toFixed(2) + ", " + F.points + " best-at-release models since " + fMon(F.start) + "." + (hidden ? " " + hidden + " weaker models sit below the axis (all are in the table)." : "");
     if (!full) return;
@@ -796,19 +859,19 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     // ----- labels, placed greedily so nothing overlaps
     var labels = [];
     if (rangeBox) labels.push(rangeBox);
-    function free(bx) {
+    function free(bx, overLines) {
       if (bx.x0 < M.l || bx.x1 > W - M.r || bx.y0 < M.t - 2 || bx.y1 > H - M.b) return false;
-      for (var i = 0; i < labels.length; i++) { var o = labels[i]; if (bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0) return false; }
+      for (var i = 0; i < labels.length; i++) { var o = labels[i]; if (overLines && o.line) continue; if (bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0) return false; }
       for (var j = 0; j < pts.length; j++) { var q = pts[j]; if (q.x + q.r > bx.x0 && q.x - q.r < bx.x1 && q.y + q.r > bx.y0 && q.y - q.r < bx.y1) return false; }
       return true;
     }
-    function place(lines, cands, always) {
+    function place(lines, cands, always, overLines) {
       // lines: [{text, font, fill}] stacked 15px apart; cands: [x, y, anchor]
       var w = d3.max(lines, function (l) { return textW(l.text, l.font); }), hgt = 15 * (lines.length - 1);
       for (var i = 0; i < cands.length; i++) {
         var c = cands[i], x0 = c[2] === "end" ? c[0] - w : c[2] === "middle" ? c[0] - w / 2 : c[0];
         var bx = { x0: x0 - 2, x1: x0 + w + 2, y0: c[1] - 12, y1: c[1] + 4 + hgt };
-        if (free(bx) || (always && i === cands.length - 1)) {
+        if (free(bx, overLines) || (always && i === cands.length - 1)) {
           labels.push(bx);
           lines.forEach(function (l, k) { svg.append("text").attr("class", "lbl").attr("x", c[0]).attr("y", c[1] + 15 * k).attr("text-anchor", c[2]).style("font", l.font).style("fill", l.fill).text(l.text); });
           return true;
@@ -819,40 +882,59 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     var F12 = "600 12px Inter, system-ui, sans-serif", F125 = "500 12.5px Inter, system-ui, sans-serif", F11 = "400 11px Inter, system-ui, sans-serif";
     if (refOn) labels.push({ x0: x(rd) - 8, x1: x(rd) + 8, y0: ty - 8, y1: ty + 8 });
     if (sotaOn) labels.push({ x0: x(sd) - 8, x1: x(sd) + 8, y0: y(S.eci) - 8, y1: y(S.eci) + 8 });
+    function block(xa, ya, xb, yb) {
+      var n = Math.max(1, Math.ceil(Math.hypot(xb - xa, yb - ya) / 5));
+      for (var i = 0; i <= n; i++) { var px = xa + (xb - xa) * i / n, py = ya + (yb - ya) * i / n; labels.push({ x0: px - 2, x1: px + 2, y0: py - 2, y1: py + 2, line: true }); }
+    }
+    // the threshold label goes first, then the lines become obstacles for everything else
     var thText = narrow ? f1(t.value) + " · " + t.ref_model : t.label + ": " + f1(t.value) + " (" + t.ref_model + ")";
-    place([{ text: thText, font: F125, fill: C.ink }], [[M.l + 8, ty - 8, "start"], [M.l + 8, ty + 18, "start"]], true);
+    var thC = [[M.l + 8, ty - 8, "start"], [W - M.r - 8, ty - 8, "end"], [W - M.r - 8, ty + 18, "end"], [M.l + 8, ty + 18, "start"]];
+    if (!place([{ text: thText, font: F125, fill: C.ink }], thC)) place([{ text: f1(t.value) + " · " + t.ref_model, font: F125, fill: C.ink }], thC, true);
+    labels.push({ x0: M.l, x1: W - M.r, y0: ty - 2, y1: ty + 2, line: true });
+    if (cd && cd >= start && cd <= end) labels.push({ x0: x(cd) - 2, x1: x(cd) + 2, y0: ty, y1: H - M.b, line: true });
+    if (F) { var fsB = pd(F.start) > start ? pd(F.start) : start; block(x(fsB), y(bandAt(F, fsB)[1]), x(end), y(bandAt(F, end)[1])); }
+    if (dom.sa > 0.5) {
+      for (var si = 0; si + 1 < steps.length; si++) { block(x(steps[si].d), y(steps[si].v), x(steps[si + 1].d), y(steps[si].v)); block(x(steps[si + 1].d), y(steps[si].v), x(steps[si + 1].d), y(steps[si + 1].v)); }
+      if (MODEL.FF) block(x(today), y(MODEL.FF.a + MODEL.FF.b * yf(today)), x(end), y(MODEL.FF.a + MODEL.FF.b * yf(end)));
+    }
+    if (sotaOn && best && pd(best.date) >= start) {
+      // the gap between the best single-GPU model and the state of the art, at today (placed early: it is the point of the toggle)
+      var gx = x(today), gm = (y(best.eci) + y(S.eci)) / 2;
+      svg.append("line").attr("x1", gx).attr("x2", gx).attr("y1", y(best.eci)).attr("y2", y(S.eci)).attr("stroke", C.sota).attr("stroke-width", 2.5).attr("stroke-opacity", 0.35 * dom.sa);
+      labels.push({ x0: gx - 3, x1: gx + 3, y0: y(S.eci), y1: y(best.eci) });
+      place([{ text: "Gap today: " + f1(S.eci - best.eci) + " ECI", font: F12, fill: C.ink }, { text: MODEL.lag ? "≈ " + Math.round(MODEL.lag.months) + " months behind" : "", font: F11, fill: C.ink3 }],
+        [[gx + 8, gm, "start"], [gx - 8, gm, "end"], [gx + 8, y(S.eci) - 22, "start"], [gx + 8, y(best.eci) + 22, "start"], [gx - 8, y(best.eci) + 22, "end"]]);
+    }
     if (sotaOn) place([{ text: "State of the art: " + S.model + " · " + f1(S.eci), font: F12, fill: C.ink }],
-      [[x(sd) - 10, y(S.eci) - 8, "end"], [x(sd) - 10, y(S.eci) + 18, "end"], [x(sd), y(S.eci) - 12, "middle"]]);
+      [[x(sd) - 10, y(S.eci) - 8, "end"], [x(sd) - 10, y(S.eci) + 18, "end"], [x(sd), y(S.eci) - 12, "middle"], [x(sd) + 10, y(S.eci) + 18, "start"]]);
     if (refOn && !narrow && !(sotaOn && t.ref_model === S.model)) place([{ text: refLabel(t), font: F12, fill: C.ink }],
-      [[x(rd) - 10, ty - 9, "end"], [x(rd), ty - 12, "middle"], [x(rd) + 10, ty - 9, "start"], [x(rd) - 10, ty + 18, "end"]]);
+      [[x(rd) - 10, ty - 9, "end"], [x(rd), ty - 12, "middle"], [x(rd) + 10, ty - 9, "start"], [x(rd) - 10, ty + 18, "end"], [x(rd), ty - 26, "middle"], [x(rd) + 10, ty + 18, "start"], [x(rd), ty + 32, "middle"]]);
     if (gapOn && y(best.eci) - ty > 24) {
       var bx0 = x(pd(best.date)), by = y(best.eci), mid = (by + ty) / 2 + 4;
       var gc = by - ty > 30 ? [[bx0 - 8, mid, "end"], [bx0 + 8, mid, "start"]] : [];
       place([{ text: f1(t.value - best.eci) + " ECI to go", font: "600 12.5px Inter, system-ui, sans-serif", fill: C.clay }],
         gc.concat([[bx0 + 10, by + 4, "start"], [bx0 - 10, by + 22, "end"], [bx0 + 10, by + 22, "start"], [bx0 - 10, ty - 9, "end"]]));
     }
-    if (sotaOn && best && pd(best.date) >= start) {
-      // the gap between the best single-GPU model and the state of the art, at today
-      var gx = x(today);
-      svg.append("line").attr("x1", gx).attr("x2", gx).attr("y1", y(best.eci)).attr("y2", y(S.eci)).attr("stroke", C.clay).attr("stroke-width", 2.5).attr("stroke-opacity", 0.55 * dom.sa);
-      labels.push({ x0: gx - 3, x1: gx + 3, y0: y(S.eci), y1: y(best.eci) });
-      place([{ text: "Gap today: " + f1(S.eci - best.eci) + " ECI", font: F12, fill: C.ink }, { text: MODEL.lag ? "≈ " + Math.round(MODEL.lag.months) + " months behind" : "", font: F11, fill: C.ink3 }],
-        [[gx + 8, (y(best.eci) + y(S.eci)) / 2, "start"], [gx - 8, (y(best.eci) + y(S.eci)) / 2, "end"]]);
-    }
     place([{ text: "Today", font: F11, fill: C.ink3 }], [[x(today) + 5, H - M.b - 12, "start"], [x(today) - 5, H - M.b - 12, "end"]]);
     if (cd && cd >= start && cd <= end) {
       var ct = (narrow ? "Crosses: " : "Trend crosses: ") + fMon(ts.trend.date), cx = x(cd);
       var rt = ts.trend.early && ts.trend.late && !narrow ? "90% range " + fMon(ts.trend.early) + " – " + fMon(ts.trend.late) : null;
-      var ys = [H - M.b - 30, H - M.b - 62, ty + 50, ty + 90];
-      var cands = []; ys.forEach(function (yy) { if (yy > ty + 14) cands.push([cx + 7, yy, "start"], [cx - 7, yy, "end"]); });
+      var ys = [H - M.b - 30, H - M.b - 62, ty + 50, ty + 90], away = cx < x(today) ? -1 : 1;
+      var cands = []; ys.forEach(function (yy) { if (yy > ty + 14) cands.push([cx + 7 * away, yy, away < 0 ? "end" : "start"]); });
+      ys.forEach(function (yy) { if (yy > ty + 14) cands.push([cx - 7 * away, yy, away < 0 ? "start" : "end"]); });
       var L1 = [{ text: ct, font: F12, fill: C.ink }];
       if (!(rt && place(L1.concat([{ text: rt, font: F11, fill: C.ink3 }]), cands))) place(L1, cands);
     }
+    pts.filter(function (p) { return p.est; }).sort(function (a, b) { return b.m.eci - a.m.eci; }).forEach(function (p) {
+      place([{ text: p.m.name + " (est.)", font: "italic 500 11.5px Inter, system-ui, sans-serif", fill: C.ink2 }],
+        [[p.x + 10, p.y + 4, "start"], [p.x - 10, p.y + 4, "end"], [p.x, p.y - 12, "middle"], [p.x, p.y + 20, "middle"], [p.x + 10, p.y - 10, "start"], [p.x + 10, p.y + 18, "start"]], false, true);
+    });
     var recs = pts.filter(function (p) { return p.rec; }).sort(function (a, b) { return b.d - a.d; });
     var maxLabels = narrow ? 4 : 40, placed = 0, font = "500 11.5px Inter, system-ui, sans-serif";
     recs.forEach(function (p) {
       if (placed >= maxLabels) return;
-      if (place([{ text: p.m.name, font: font, fill: C.ink }], [[p.x - p.r - 5, p.y + 4, "end"], [p.x, p.y - p.r - 6, "middle"], [p.x + p.r + 5, p.y + 4, "start"], [p.x, p.y + p.r + 15, "middle"]])) placed++;
+      if (place([{ text: p.m.name, font: font, fill: C.ink }], [[p.x - p.r - 5, p.y + 4, "end"], [p.x, p.y - p.r - 6, "middle"], [p.x + p.r + 5, p.y + 4, "start"], [p.x, p.y + p.r + 15, "middle"],
+        [p.x + p.r + 2, p.y - p.r - 3, "start"], [p.x - p.r - 2, p.y - p.r - 3, "end"], [p.x + p.r + 2, p.y + p.r + 12, "start"], [p.x - p.r - 2, p.y + p.r + 12, "end"]])) placed++;
     });
 
     // ----- hover: a point, or the projection at any date
@@ -872,13 +954,24 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     function row(color, strong, rest) { return h("div", { cls: "row num" }, h("i", { style: "border-color:" + color }), h("span", null, h("b", null, strong), rest || "")); }
     function showPoint(p) {
       cross.style("display", "none"); cdot.style("display", "none");
+      if (p.est) {
+        var e = p.est; ring.style("display", null).attr("cx", p.x).attr("cy", p.y); whisk.style("display", "none");
+        tip.textContent = "";
+        tip.appendChild(h("div", null, h("b", null, e.name), " · estimate"));
+        tip.appendChild(h("div", { cls: "tv num" }, "≈ " + f1(e.eci) + " ECI"));
+        tip.appendChild(h("div", { cls: "num" }, "90% range " + f1(e.lo) + "–" + f1(e.hi)));
+        tip.appendChild(h("div", null, fDate(e.date) + " · " + (e.org || "")));
+        e.benchmarks.forEach(function (b) { tip.appendChild(h("div", { cls: "num" }, b.rows[0].claimed_benchmark + ": claimed " + b.rows[0].claimed + "% → " + f1(b.estimate) + " (" + b.n + " comparison" + (b.n > 1 ? "s" : "") + ")")); });
+        tip.appendChild(h("div", { cls: "muted" }, "Not an official Epoch score. Method below."));
+        placeTip(p.x, p.y); return;
+      }
       ring.style("display", null).attr("cx", p.x).attr("cy", p.y);
       if (p.m.lo != null) whisk.style("display", null).attr("x1", p.x).attr("x2", p.x).attr("y1", y(p.m.lo)).attr("y2", y(p.m.hi));
       tip.textContent = "";
       tip.appendChild(h("div", null, h("b", null, p.m.name)));
       tip.appendChild(h("div", { cls: "tv num" }, f1(p.m.eci) + " ECI"));
       if (p.m.lo != null) tip.appendChild(h("div", { cls: "num" }, "Interval " + f1(p.m.lo) + "–" + f1(p.m.hi)));
-      tip.appendChild(h("div", null, fDate(p.m.date) + " · " + p.m.org + (p.m.country ? " (" + p.m.region + ")" : "")));
+      tip.appendChild(h("div", null, fDate(p.m.date) + " · " + p.m.org + (p.m.country ? " (" + (p.m.region === "Other" ? p.m.country : p.m.region) + ")" : "")));
       tip.appendChild(h("div", null, paramsLabel(p.m) + " · " + p.m.vram4_gb + " GB at 4-bit"));
       tip.appendChild(h("div", null, "Rank #" + p.m.rank + " overall" + (p.rec ? " · best at its release" : "")));
       placeTip(p.x, p.y);
@@ -889,19 +982,19 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       cross.style("display", null).attr("x1", px).attr("x2", px);
       tip.textContent = "";
       tip.appendChild(h("div", null, h("b", null, fMon(d)), d > today ? " (projection)" : ""));
-      if (F) {
+      if (F && d >= (pd(F.start) > start ? pd(F.start) : start)) {
         var bnd = bandAt(F, d);
         cdot.style("display", bnd[1] >= dom.y0 && bnd[1] <= dom.y1 ? null : "none").attr("cx", px).attr("cy", y(bnd[1]));
         tip.appendChild(row(C.slm, f1(bnd[1]), " trend, " + noun()));
-        tip.appendChild(h("div", { cls: "num muted", style: "padding-left:21px" }, "90% range " + f1(bnd[0]) + "–" + f1(bnd[2])));
-      }
+        tip.appendChild(h("div", { cls: "num muted", style: "padding-left:21px" }, F.points >= 5 ? "90% range " + f1(bnd[0]) + "–" + f1(bnd[2]) : "90% range too wide to show (" + F.points + " best-at-release models)"));
+      } else cdot.style("display", "none");
       if (d <= today) {
         var bb = MODEL.models.filter(function (m) { return pd(m.date) <= d; })[0];
         if (bb) tip.appendChild(h("div", { cls: "num", style: "padding-left:21px" }, "Best by then: " + bb.name + " (" + f1(bb.eci) + ")"));
       }
       if (dom.sa > 0.5) {
-        if (d <= today) { var fa = frontierAt(d); if (fa) tip.appendChild(row(C.clay, f1(fa.eci), " state of the art (" + fa.model + ")")); }
-        else if (MODEL.FF) tip.appendChild(row(C.clay, f1(MODEL.FF.a + MODEL.FF.b * yf(d)), " state-of-the-art trend"));
+        if (d <= today) { var fa = frontierAt(d); if (fa) tip.appendChild(row(C.sota, f1(fa.eci), " state of the art (" + fa.model + ")")); }
+        else if (MODEL.FF) tip.appendChild(row(C.sota, f1(MODEL.FF.a + MODEL.FF.b * yf(d)), " state-of-the-art trend"));
       }
       tip.appendChild(row(C.th, f1(t.value), " " + t.label.toLowerCase()));
       placeTip(px, M.t + 10);
@@ -929,7 +1022,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
         h("td", { cls: "num soft" }, m.vram4_gb + " GB")));
     });
     tb.appendChild(body);
-    $("#top15-h").textContent = "Top 10 · ECI" + (state.region === "all" ? "" : " · " + REGIONS.filter(function (r) { return r[0] === state.region; })[0][1]);
+    $("#top15-h").textContent = "Top " + Math.min(10, pool().length) + " · ECI" + (state.region === "all" ? "" : " · " + REGIONS.filter(function (r) { return r[0] === state.region; })[0][1]);
   }
 
   // ---------- full leaderboard
@@ -969,6 +1062,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     tb.appendChild(h("thead", null, trh));
     var body = h("tbody");
     var recentCut = addMonths(pd(D.today), -2).toISOString().slice(0, 10);
+    var recR = {}; recordsOf(D.slms.filter(inRegion)).forEach(function (m) { recR[m.id] = true; });
     shown.forEach(function (m) {
       var link = hf(m);
       var W = 120, sx = function (v) { return 4 + (v - lo) / (hi - lo || 1) * (W - 8); };
@@ -980,7 +1074,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       var gpu = h("span", { cls: "gpu", title: "Fits " + m.min_gpu_gb + " GB and up" });
       GPU.forEach(function (g) { gpu.appendChild(h("i", { cls: g >= m.min_gpu_gb ? "on" : null })); });
       var tags = h("span", { style: "display:inline-flex;gap:6px;margin-left:8px;vertical-align:0" });
-      if (m.record.fit32) tags.appendChild(h("span", { cls: "pill rec", title: "Beat every earlier single-GPU model on its release day" }, "record"));
+      if (recR[m.id]) tags.appendChild(h("span", { cls: "pill rec", title: state.region === "all" ? "Beat every earlier single-GPU model on its release day" : "Beat every earlier single-GPU model in this group on its release day" }, "record"));
       if (m.date >= recentCut) tags.appendChild(h("span", { cls: "pill new" }, "new"));
       body.appendChild(h("tr", null,
         h("td", { cls: "num" }, h("span", { cls: "chip " + (m._rank <= 3 ? "r" + m._rank : "rn") }, String(m._rank))),
@@ -1000,7 +1094,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     more.hidden = rows.length <= 25;
     more.textContent = state.showAll ? "Show top 25" : "Show all " + rows.length;
     more.onclick = function () { state.showAll = !state.showAll; renderBoard(); };
-    $("#lb-note").textContent = base.length + " of " + D.slms.length + " scored models" + (REGION_NOUN[state.region] ? " " + REGION_NOUN[state.region] : "") + " fit " + state.vram + " GB at 4-bit" + (state.recent === "12m" ? " and came out in the last 12 months" : "") + (q ? "; " + rows.length + " match “" + state.q.trim() + "”" : "") + ". Interval = Epoch's credible interval for the ECI. 4-bit weights estimated at 0.5 GB per billion parameters. HF downloads = last 30 days.";
+    $("#lb-note").textContent = base.length + " of " + D.slms.filter(inRegion).length + " scored models" + (REGION_NOUN[state.region] ? " " + REGION_NOUN[state.region] : "") + " fit " + state.vram + " GB at 4-bit" + (state.recent === "12m" ? " and came out in the last 12 months" : "") + (q ? "; " + rows.length + " match “" + state.q.trim() + "”" : "") + ". Interval = Epoch's credible interval for the ECI. 4-bit weights estimated at 0.5 GB per billion parameters. HF downloads = last 30 days.";
   }
 
   // ---------- watchlist
@@ -1012,6 +1106,8 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
         h("span", { cls: "eyebrow" }, (w.date ? fDate(w.date) : "") + (w.org ? " · " + w.org : "")),
         h("div", { cls: "wn" }, w.hf_repo ? h("a", { href: "https://huggingface.co/" + w.hf_repo, target: "_blank", rel: "noopener", style: "text-decoration:none" }, w.name) : w.name),
         h("div", { cls: "wm num" }, (w.params_b ? w.params_b + "B" + (w.active_b ? " (" + w.active_b + "B active)" : "") + " · " + f1(w.params_b * D.rule.bytes_per_param_4bit) + " GB at 4-bit" : "")),
+        w.estimate ? h("div", { cls: "est-line num" }, "Estimated ECI ", h("b", null, "≈ " + f1(w.estimate.eci)), " (90% range " + f1(w.estimate.lo) + "–" + f1(w.estimate.hi) + ")") : null,
+        w.estimate && th("selfrep") ? h("div", { cls: "wm" }, (function () { var g = w.estimate.eci - th("selfrep").value; return Math.abs(g) < 0.05 ? "At the self-replication floor, on its claims" : f1(Math.abs(g)) + (g < 0 ? " below" : " above") + " the self-replication floor (" + th("selfrep").ref_model + "), on its claims"; })()) : null,
         w.aa_index != null ? h("div", { cls: "wm" }, "AA Intelligence Index " + f1(w.aa_index)) : h("div", { cls: "wm muted" }, "No independent score yet"),
         w.note ? h("div", { cls: "wm muted" }, w.note) : null));
     });
@@ -1021,10 +1117,10 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   function renderGap() {
     var P = pool(), recs = recordsOf(P).filter(function (m) { return m.date >= "2023-07-01"; }).map(function (m) {
       var fr = frontierFirst(m.eci);
-      return fr ? { name: m.name, date: m.date, eci: m.eci, frontier_model: fr.model, frontier_date: fr.date, lag_months: (pd(m.date) - pd(fr.date)) / DAY / 30.44 } : null;
+      return fr ? { name: m.name, date: m.date, eci: m.eci, frontier_model: fr.model, frontier_eci: fr.eci, frontier_date: fr.date, lag_months: (pd(m.date) - pd(fr.date)) / DAY / 30.44 } : null;
     }).filter(Boolean);
     var bestP = P[0], Lnow = lagOf(bestP);
-    var L = { now: Lnow ? { name: bestP.name, eci: bestP.eci, frontier_model: Lnow.model, frontier_date: Lnow.date, months: Lnow.months } : null };
+    var L = { now: Lnow ? { name: bestP.name, eci: bestP.eci, frontier_model: Lnow.model, frontier_eci: Lnow.eci, frontier_date: Lnow.date, months: Lnow.months } : null };
     var monthly = [], d = pd("2023-07-01"), today = pd(D.today);
     while (d <= today) {
       var e = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)); if (e > today) e = today;
@@ -1047,12 +1143,12 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     $("#gap-lede").textContent = parts.join(" ");
     $("#gapA-title").textContent = "Best ECI to date: any model vs. " + nm;
     $("#gapB-title").textContent = "Months behind the frontier at each new record, " + nm;
-    var C = { slm: css("--slm"), clay: css("--clay"), ink: css("--ink"), ink2: css("--ink-2"), ink3: css("--ink-3"), surface: css("--surface"), tint: css("--tint-clay") };
+    var C = { slm: css("--slm"), clay: css("--sota"), ink: css("--ink"), ink2: css("--ink-2"), ink3: css("--ink-3"), surface: css("--surface"), tint: css("--tint-sota") };
     // A: step lines
     var la = $("#gapA-legend"); la.textContent = "";
-    la.appendChild(h("span", null, h("i", { cls: "lk-line", style: "border-color:var(--clay)" }), "frontier (any model)"));
+    la.appendChild(h("span", null, h("i", { cls: "lk-line", style: "border-color:var(--sota)" }), "frontier (any model)"));
     la.appendChild(h("span", null, h("i", { cls: "lk-line" }), "best " + nm.replace(/models/, "model")));
-    la.appendChild(h("span", null, h("i", { cls: "lk-band", style: "background:var(--tint-clay)" }), "gap"));
+    la.appendChild(h("span", null, h("i", { cls: "lk-band", style: "background:var(--tint-sota);box-shadow:inset 0 0 0 1px var(--rule)" }), "gap"));
     var box = $("#gapA"); box.textContent = "";
     var W = Math.max(280, box.clientWidth), H = Math.round(Math.max(260, Math.min(360, W * 0.62))), M = { t: 14, r: 64, b: 28, l: 38 };
     var rows = monthly.filter(function (r) { return r.s != null && r.frontier != null; }).map(function (r) { return { d: pd(r.date), f: r.frontier, s: r.s }; });
@@ -1115,8 +1211,8 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       var best = null, bd = 1e9; all2.forEach(function (p) { var dd = Math.hypot(x2(p.d) - sx, y2(p.v) - sy); if (dd < bd) { bd = dd; best = p; } });
       if (!best || bd > 30) { tip2.hidden = true; return; }
       tip2.textContent = "";
-      if (best.now) { tip2.appendChild(h("div", null, h("b", null, "Today"))); tip2.appendChild(h("div", { cls: "tv num" }, f1(best.v) + " months")); tip2.appendChild(h("div", null, L.now.name + " matches " + L.now.frontier_model + " (" + fMon(L.now.frontier_date) + ")")); }
-      else { tip2.appendChild(h("div", null, h("b", null, best.r.name))); tip2.appendChild(h("div", { cls: "tv num" }, f1(best.v) + " months")); tip2.appendChild(h("div", null, "Released " + fDate(best.r.date) + ", ECI " + f1(best.r.eci))); tip2.appendChild(h("div", null, "Frontier got there with " + best.r.frontier_model + " (" + fMon(best.r.frontier_date) + ")")); }
+      if (best.now) { tip2.appendChild(h("div", null, h("b", null, "Today"))); tip2.appendChild(h("div", { cls: "tv num" }, f1(best.v) + " months")); tip2.appendChild(h("div", null, L.now.name + " (" + f1(L.now.eci) + "): the frontier first passed this score with " + L.now.frontier_model + " (" + f1(L.now.frontier_eci) + ", " + fMon(L.now.frontier_date) + ")")); }
+      else { tip2.appendChild(h("div", null, h("b", null, best.r.name))); tip2.appendChild(h("div", { cls: "tv num" }, f1(best.v) + " months")); tip2.appendChild(h("div", null, "Released " + fDate(best.r.date) + ", ECI " + f1(best.r.eci))); tip2.appendChild(h("div", null, "Frontier first passed it with " + best.r.frontier_model + " (" + f1(best.r.frontier_eci) + ", " + fMon(best.r.frontier_date) + ")")); }
       tip2.hidden = false;
       var sc = box2.clientWidth / W2, tx = x2(best.d) * sc + 12; if (tx + 230 > box2.clientWidth) tx = x2(best.d) * sc - 12 - tip2.offsetWidth;
       tip2.style.left = Math.max(0, tx) + "px"; tip2.style.top = Math.max(0, y2(best.v) * sc - 20) + "px";
@@ -1158,6 +1254,24 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     var af = fitOf(anth, "2023-07-01"), af24 = fitOf(anth, iso(new Date(pd(D.today) - 730 * DAY)));
     $("#anth-slope").textContent = af ? f1(af.b) + " ECI per year" : "–";
     $("#anth-slope24").textContent = af24 ? f1(af24.b) + " ECI per year" : "–";
+    var BT = (D.estimates && D.estimates.backtest) || {};
+    $("#bt-tb").textContent = BT["Terminal Bench"] ? "±" + f1(BT["Terminal Bench"].rmse) : "–";
+    $("#bt-gpqa").textContent = BT["GPQA diamond"] ? "±" + f1(BT["GPQA diamond"].rmse) : "–";
+    var et = $("#est-table"); et.textContent = "";
+    var EM = (D.estimates && D.estimates.models) || [];
+    if (!EM.length) { $("#estimates").hidden = true; }
+    else {
+      et.appendChild(h("thead", null, h("tr", null, h("th", { scope: "col", style: "text-align:left;padding-left:10px" }, "Model"), h("th", { scope: "col" }, "Est. ECI"), h("th", { scope: "col" }, "90% range"), h("th", { scope: "col", style: "text-align:left;padding-right:10px" }, "Based on"))));
+      var eb = h("tbody");
+      EM.slice().sort(function (a, b) { return b.eci - a.eci; }).forEach(function (e) {
+        var basis = e.benchmarks.map(function (b) { var refs = {}; b.rows.forEach(function (r) { var sm = D.slms.filter(function (m) { return m.model === r.reference; })[0]; refs[sm ? sm.name : r.reference] = 1; }); return b.rows[0].claimed_benchmark + " vs " + Object.keys(refs).join(", "); }).join("; ");
+        var srcs = {}; e.benchmarks.forEach(function (b) { b.rows.forEach(function (r) { srcs[r.source] = r.table; }); });
+        var cell = h("td", { style: "text-align:left;white-space:normal;font-size:12.5px;padding-right:10px" }, basis + ". Sources: ");
+        Object.keys(srcs).forEach(function (u, i) { if (i) cell.appendChild(document.createTextNode(", ")); cell.appendChild(h("a", { href: u, target: "_blank", rel: "noopener" }, u.replace("https://huggingface.co/", ""))); });
+        eb.appendChild(h("tr", null, h("td", { style: "text-align:left;padding-left:10px" }, e.name), h("td", { cls: "num" }, f1(e.eci)), h("td", { cls: "num soft" }, f1(e.lo) + "–" + f1(e.hi)), cell));
+      });
+      et.appendChild(eb);
+    }
     var S = D.frontier_steps[D.frontier_steps.length - 1];
     $("#sota-name").textContent = S.model + ", " + f1(S.eci) + " ECI (" + fMon(S.date) + ")";
     var tiers = $("#gpu-tiers"); tiers.textContent = "";
