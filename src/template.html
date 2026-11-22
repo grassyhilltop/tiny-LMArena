@@ -1,0 +1,1019 @@
+<!--HEAD-->
+<title>__SITE_NAME__</title>
+<meta name="description" content="Leaderboard and forecast of small language models: the most capable open models that run on one 32 GB GPU, ranked by the Epoch Capabilities Index.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: one 1180px column. Podium of three, then a control row that scopes the indicators,
+   the forecast chart and its top-15 table (arena-style two-column grid), then the full table
+   and the explanatory sections. Chart styling follows the Anthropic research chart it extends. */
+:root {
+  --bg: #f6f5f0;
+  --surface: #fdfdfb;
+  --ink: #1a1a18;
+  --ink-2: #56554e;
+  --ink-3: #85847a;
+  --rule: #e2e0d6;
+  --grid: #ebe9e1;
+  --slm: #3567a6;
+  --slm-soft: #a8bfde;
+  --band: rgba(53, 103, 166, 0.11);
+  --clay: #c2573a;
+  --green: #2f7d4a;
+  --tint-green: rgba(47, 125, 74, 0.065);
+  --tint-clay: rgba(194, 87, 58, 0.07);
+  --gold: #f1d064;
+  --silver: #dcdad2;
+  --bronze: #dcae86;
+  --chip-ink: #1a1a18;
+  --focus: #3567a6;
+  --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1a18; --surface: #22211f; --ink: #efede5; --ink-2: #bab8ae; --ink-3: #8c8a80;
+    --rule: #363530; --grid: #2d2c28; --slm: #5b8bd3; --slm-soft: #3e5a82; --band: rgba(91, 139, 211, 0.12);
+    --clay: #d4693f; --green: #3f9e5c; --tint-green: rgba(63, 158, 92, 0.09); --tint-clay: rgba(212, 105, 63, 0.09);
+    --gold: #d9b84a; --silver: #9a988f; --bronze: #bf8a5e; --chip-ink: #161614; --focus: #8fb2ea;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1a18; --surface: #22211f; --ink: #efede5; --ink-2: #bab8ae; --ink-3: #8c8a80;
+  --rule: #363530; --grid: #2d2c28; --slm: #5b8bd3; --slm-soft: #3e5a82; --band: rgba(91, 139, 211, 0.12);
+  --clay: #d4693f; --green: #3f9e5c; --tint-green: rgba(63, 158, 92, 0.09); --tint-clay: rgba(212, 105, 63, 0.09);
+  --gold: #d9b84a; --silver: #9a988f; --bronze: #bf8a5e; --chip-ink: #161614; --focus: #8fb2ea;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration-color: var(--ink-3); text-underline-offset: 2px; }
+a:hover { text-decoration-color: var(--ink); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 0; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--mono); }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font: 500 11px/1.2 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+.muted { color: var(--ink-3); }
+.soft { color: var(--ink-2); }
+
+/* masthead */
+header.mast { border-bottom: 1px solid var(--rule); }
+.mast-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 18px 14px; }
+.brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.brand h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+.brand .tag { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+nav.top { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13.5px; }
+nav.top a { text-decoration: none; color: var(--ink-2); }
+nav.top a:hover { color: var(--ink); }
+.byline { display: flex; gap: 6px 18px; flex-wrap: wrap; align-items: baseline; padding-bottom: 14px; font-size: 13.5px; color: var(--ink-2); }
+.byline .lede { color: var(--ink); max-width: 68ch; }
+
+/* podium */
+.podium { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--rule); }
+.pod { padding: 22px 24px 22px 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pod + .pod { padding-left: 24px; border-left: 1px solid var(--rule); }
+.pod-top { display: flex; align-items: center; gap: 10px; }
+.chip { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 5px; font: 600 12px/1 var(--mono); color: var(--chip-ink); background: var(--silver); flex: none; }
+.chip.r1 { background: var(--gold); } .chip.r2 { background: var(--silver); } .chip.r3 { background: var(--bronze); }
+.chip.rn { background: transparent; color: var(--ink-3); font-weight: 500; }
+.pod-name { font: 400 clamp(26px, 3.2vw, 38px)/1.08 var(--serif); letter-spacing: -0.015em; overflow-wrap: anywhere; }
+.pod-name a { text-decoration: none; }
+.pod-name a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.pod-score { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.pod-score b { font: 600 22px/1 var(--sans); }
+.pod-meta { font-size: 13.5px; color: var(--ink-2); }
+.pod-note { font-size: 12.5px; color: var(--ink-3); }
+
+/* controls */
+.controls { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; padding-block: 16px 4px; }
+.ctl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ctl > span { font: 500 11px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; padding: 2px; background: var(--surface); flex-wrap: wrap; }
+.seg button { font: 500 13px/1 var(--sans); color: var(--ink-2); background: transparent; border: 0; border-radius: 6px; padding: 7px 11px; cursor: pointer; }
+.seg button:hover { color: var(--ink); background: var(--bg); }
+.seg button[aria-pressed="true"] { color: var(--ink); background: var(--bg); box-shadow: inset 0 0 0 1px var(--rule); }
+
+/* indicator readouts */
+.readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 14px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.readout { padding: 16px 20px 16px 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; text-align: left; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; }
+.readout + .readout { padding-left: 20px; border-left: 1px solid var(--rule); }
+.readout .big { font: 600 30px/1.05 var(--sans); letter-spacing: -0.02em; }
+.readout .big small { font-size: 15px; font-weight: 500; color: var(--ink-2); letter-spacing: 0; }
+.readout .why { font-size: 13.5px; color: var(--ink-2); }
+.readout .key { display: flex; align-items: center; gap: 8px; }
+.readout .key i { width: 16px; height: 0; border-top: 2px solid currentColor; display: inline-block; }
+.readout[aria-pressed="true"] .eyebrow { color: var(--ink); }
+.readout:hover .why { color: var(--ink); }
+
+/* chart + top-15 grid */
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; padding-block: 22px 8px; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; }
+.chart-card { padding: 20px 20px 14px; min-width: 0; }
+.chart-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.chart-head h2 { font: 600 18px/1.3 var(--sans); letter-spacing: -0.01em; font-family: var(--sans); }
+.chart-head .headline { font: 400 19px/1.35 var(--serif); color: var(--ink); max-width: 62ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--ink-2); margin: 6px 0 2px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.lk-line { width: 20px; border-top: 2px solid var(--slm); }
+.lk-dash { width: 20px; border-top: 2px dashed var(--slm); }
+.lk-band { width: 20px; height: 10px; background: var(--band); border-radius: 2px; }
+.lk-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--slm); }
+.lk-dot.soft { background: var(--slm-soft); }
+.lk-th { width: 20px; border-top: 2px solid var(--green); }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart text { fill: var(--ink-2); font-family: var(--sans); }
+.axis text { font: 400 11.5px var(--sans); fill: var(--ink-3); }
+.axis path, .axis line { stroke: var(--rule); }
+.gridline { stroke: var(--grid); stroke-width: 1; shape-rendering: crispEdges; }
+.chart-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 4px 18px rgba(0,0,0,0.08); padding: 9px 11px; font-size: 12.5px; line-height: 1.45; color: var(--ink-2); min-width: 180px; max-width: 260px; z-index: 5; }
+.tip b { color: var(--ink); font-weight: 600; }
+.tip .tv { font: 600 15px/1.2 var(--sans); color: var(--ink); }
+.tip .row { display: flex; align-items: center; gap: 7px; }
+.tip .row i { width: 14px; border-top: 2px solid; display: inline-block; }
+
+.top15 { padding: 16px 16px 12px; }
+.top15 h3 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+table { border-collapse: collapse; width: 100%; }
+.t15 { margin-top: 10px; font-size: 13.5px; }
+.t15 th { font: 500 10.5px/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); text-align: right; padding: 0 0 8px; font-weight: 500; }
+.t15 th:nth-child(2) { text-align: left; }
+.t15 td { padding: 6px 0; border-top: 1px solid var(--rule); text-align: right; white-space: nowrap; }
+.t15 td:nth-child(1) { width: 30px; text-align: left; }
+.t15 th + th, .t15 td + td { padding-left: 10px; }
+.t15 td:nth-child(2) { text-align: left; white-space: normal; padding-right: 8px; }
+.t15 tr.hl td { background: var(--band); }
+.t15 a { text-decoration: none; }
+.t15 a:hover { text-decoration: underline; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: 500 13.5px/1 var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; cursor: pointer; text-decoration: none; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.block { width: 100%; margin-top: 12px; }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* sections */
+section.block { padding-block: 44px 8px; }
+section.block > .sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; max-width: 72ch; }
+.sec-head h2 { font-size: clamp(24px, 2.6vw, 30px); }
+.prose { max-width: 68ch; display: flex; flex-direction: column; gap: 14px; color: var(--ink-2); }
+.prose strong { color: var(--ink); font-weight: 600; }
+.cols2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+
+/* full leaderboard */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 12px; background: var(--surface); }
+.lb { font-size: 13.5px; min-width: 980px; }
+.lb td.l { white-space: normal; min-width: 190px; }
+.lb th { font: 500 10.5px/1.2 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); text-align: right; padding: 12px 10px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.lb th button { font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.lb th button:hover { color: var(--ink); }
+.lb th[aria-sort="descending"] button::after { content: " ↓"; }
+.lb th[aria-sort="ascending"] button::after { content: " ↑"; }
+.lb th.l, .lb td.l { text-align: left; }
+.lb td { padding: 8px 10px; border-top: 1px solid var(--rule); text-align: right; white-space: nowrap; vertical-align: middle; }
+.lb tr:first-child td { border-top: 0; }
+.lb .mname { display: flex; flex-direction: column; gap: 1px; }
+.lb .mname a { font-weight: 500; color: var(--ink); text-decoration: none; }
+.lb .mname a:hover { text-decoration: underline; }
+.lb .org { font-size: 12px; color: var(--ink-3); }
+.pill { display: inline-block; font: 500 10px/1 var(--mono); letter-spacing: 0.04em; padding: 2px 5px; border-radius: 4px; border: 1px solid var(--rule); color: var(--ink-2); }
+.pill.rec { border-color: var(--slm); color: var(--slm); }
+.pill.new { border-color: var(--clay); color: var(--clay); }
+.gpu { display: inline-flex; gap: 3px; }
+.gpu i { width: 8px; height: 8px; border-radius: 2px; background: var(--grid); display: inline-block; }
+.gpu i.on { background: var(--slm); }
+.tbl-note { font-size: 12.5px; color: var(--ink-3); margin-top: 10px; max-width: 90ch; }
+
+/* watchlist, AA bars */
+.watch { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.wcard { padding: 14px 16px; display: flex; flex-direction: column; gap: 6px; }
+.wcard .wn { font: 400 20px/1.2 var(--serif); }
+.wcard .wm { font-size: 13px; color: var(--ink-2); }
+.bars { display: flex; flex-direction: column; gap: 10px; }
+.bar-row { display: grid; grid-template-columns: minmax(120px, 210px) minmax(0, 1fr); gap: 14px; align-items: center; }
+.bar-name { font-size: 13.5px; min-width: 0; }
+.bar-name .org { display: block; font-size: 12px; color: var(--ink-3); }
+.bar-track { position: relative; height: 22px; }
+.bar { position: absolute; left: 0; top: 2px; height: 18px; border-radius: 0 4px 4px 0; background: var(--slm); }
+.bar.noeci { background: var(--slm-soft); }
+.bar-val { position: absolute; top: 2px; font: 500 12.5px/18px var(--sans); color: var(--ink); padding-left: 6px; white-space: nowrap; }
+.ref-line { position: absolute; top: -6px; bottom: -6px; border-left: 2px dashed var(--clay); }
+.aa-wrap { position: relative; padding: 20px; }
+
+/* subscribe */
+.sub { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; padding: 24px; align-items: start; }
+.sub form { display: flex; gap: 8px; flex-wrap: wrap; }
+.sub input[type=email] { flex: 1 1 220px; min-width: 0; font: 400 15px/1 var(--sans); padding: 11px 12px; border: 1px solid var(--rule); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.sub ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; display: flex; flex-direction: column; gap: 6px; }
+
+footer.foot { border-top: 1px solid var(--rule); margin-top: 48px; padding-block: 26px 40px; font-size: 13px; color: var(--ink-2); }
+footer .credits { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; font-weight: 500; }
+
+@media (max-width: 980px) {
+  .stage { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 760px) {
+  .podium, .readouts { grid-template-columns: minmax(0, 1fr); }
+  .pod, .pod + .pod { padding: 16px 0; border-left: 0; }
+  .pod + .pod { border-top: 1px solid var(--rule); }
+  .readout, .readout + .readout { padding: 14px 0; border-left: 0; }
+  .readout + .readout { border-top: 1px solid var(--rule); }
+  .cols2, .sub { grid-template-columns: minmax(0, 1fr); }
+  nav.top { display: none; }
+  .chart-card { padding: 14px 12px 10px; }
+  .bar-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .seg button, .btn { transition: background-color .15s, border-color .15s, color .15s; }
+}
+</style>
+<!--BODY-->
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-row">
+      <div class="brand">
+        <h1>__SITE_NAME__</h1>
+        <span class="tag">Single-GPU language model leaderboard</span>
+      </div>
+      <nav class="top" aria-label="Sections">
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#gap">Frontier gap</a>
+        <a href="#watchlist">Awaiting scores</a>
+        <a href="#why-eci">Why ECI</a>
+        <a href="#method">Method</a>
+        <a href="#subscribe">Alerts</a>
+      </nav>
+    </div>
+    <div class="byline">
+      <span class="lede">The most capable open models that run on one 32&nbsp;GB GPU, ranked by the Epoch Capabilities Index (ECI), with a forecast of when they reach key capability bars.</span>
+      <span>By <strong>Joel Sadler</strong>, University of Virginia, School of Data Science</span>
+      <span class="muted" id="updated"></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="podium" id="podium" aria-label="Top three small language models"></section>
+
+    <div class="controls" role="group" aria-label="Chart settings">
+      <div class="ctl"><span>Threshold</span><div class="seg" id="ctl-threshold"></div></div>
+      <div class="ctl"><span>Models</span><div class="seg" id="ctl-def"></div></div>
+      <div class="ctl"><span>Trend fit</span><div class="seg" id="ctl-window"></div></div>
+      <div class="ctl"><span>From</span><div class="seg" id="ctl-view"></div></div>
+    </div>
+
+    <div class="readouts" id="readouts"></div>
+
+    <div class="stage">
+      <figure class="card chart-card" style="margin:0" id="forecast">
+        <div class="chart-head">
+          <h2 id="hero-title">Capability of models that run on one 32 GB GPU</h2>
+          <p class="headline" id="hero-headline"></p>
+        </div>
+        <div class="legend" id="hero-legend"></div>
+        <div class="chart" id="hero-chart"></div>
+        <figcaption class="chart-foot">
+          <span id="hero-fitnote"></span>
+          <span>Data: <a href="https://epoch.ai/eci" target="_blank" rel="noopener">Epoch AI</a> (CC BY 4.0). Chart after <a href="https://www.anthropic.com/research/self-replicating-ai" target="_blank" rel="noopener">Anthropic (Zhou &amp; Freeman, 2026)</a>.</span>
+        </figcaption>
+      </figure>
+      <aside class="card top15" aria-labelledby="top15-h">
+        <h3 id="top15-h">Top 15 · ECI</h3>
+        <table class="t15" id="t15"></table>
+        <a class="btn block" href="#leaderboard">View full leaderboard</a>
+      </aside>
+    </div>
+
+    <section class="block" id="leaderboard">
+      <div class="sec-head">
+        <span class="eyebrow">Leaderboard</span>
+        <h2>Every scored model that fits your GPU</h2>
+        <p class="soft">Ranked by ECI. Pick your card's memory to see what runs on it at 4-bit. Rank (UB) counts only models that are better with no overlap in Epoch's intervals, so tied models share a rank.</p>
+      </div>
+      <div class="controls" style="padding-top:0" role="group" aria-label="Leaderboard filters">
+        <div class="ctl"><span>GPU memory</span><div class="seg" id="ctl-vram"></div></div>
+        <div class="ctl"><span>Released</span><div class="seg" id="ctl-recent"></div></div>
+        <div class="ctl"><label for="q" class="eyebrow">Search</label><input id="q" type="search" placeholder="Model or lab" style="font:400 13.5px var(--sans);padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);width:170px"></div>
+      </div>
+      <div class="tbl-wrap"><table class="lb" id="lb"></table></div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px">
+        <button class="btn" id="lb-more" type="button"></button>
+        <span class="tbl-note" id="lb-note" style="margin:0"></span>
+      </div>
+    </section>
+
+    <section class="block" id="watchlist">
+      <div class="sec-head">
+        <span class="eyebrow">Awaiting an ECI score</span>
+        <h2>New single-GPU models Epoch has not scored yet</h2>
+        <p class="soft">These fit a 32&nbsp;GB card but have no ECI yet, so they are not ranked. Each one joins the leaderboard automatically once Epoch publishes its score.</p>
+      </div>
+      <div class="watch" id="watch"></div>
+    </section>
+
+    <section class="block" id="gap">
+      <div class="sec-head">
+        <span class="eyebrow">Frontier gap</span>
+        <h2>How far behind the frontier are single-GPU models?</h2>
+        <p class="soft" id="gap-lede"></p>
+      </div>
+      <div class="cols2">
+        <figure class="card chart-card" style="margin:0">
+          <div class="chart-head"><h2>Best ECI to date: any model vs. single-GPU models</h2></div>
+          <div class="legend" id="gapA-legend"></div>
+          <div class="chart" id="gapA"></div>
+          <figcaption class="chart-foot"><span>Frontier = best ECI of any model released by that date, open or closed.</span></figcaption>
+        </figure>
+        <figure class="card chart-card" style="margin:0">
+          <div class="chart-head"><h2>Months behind the frontier, at each new SLM record</h2></div>
+          <div class="legend" id="gapB-legend"></div>
+          <div class="chart" id="gapB"></div>
+          <figcaption class="chart-foot"><span>Lag = release date minus the date any model first reached the same ECI.</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="block" id="aa">
+      <div class="sec-head">
+        <span class="eyebrow">Second opinion</span>
+        <h2>Artificial Analysis Intelligence Index</h2>
+        <p class="soft" id="aa-lede"></p>
+      </div>
+      <div class="card aa-wrap"><div class="legend" id="aa-legend" style="margin:0 0 14px"></div><div class="bars" id="aa-bars"></div><div class="chart-foot" style="margin-top:14px" id="aa-foot"></div></div>
+    </section>
+
+    <section class="block" id="why-eci">
+      <div class="sec-head">
+        <span class="eyebrow">Why ECI</span>
+        <h2>One scale for every model since 2023</h2>
+      </div>
+      <div class="cols2">
+        <div class="prose">
+          <p>The <a href="https://epoch.ai/eci" target="_blank" rel="noopener"><strong>Epoch Capabilities Index</strong></a>, built by Epoch AI, combines results from more than 50 benchmarks into a single scale of general capability. It stitches benchmarks together wherever models were tested on more than one, which sets each benchmark's difficulty. A model scores higher when it does better on harder benchmarks. Because old and new benchmarks are linked, a 2023 model and a 2026 model sit on the same scale even after individual benchmarks saturate. The <a href="https://epoch.ai/data/eci-documentation" target="_blank" rel="noopener">methodology</a> is public, and every score comes with an uncertainty interval.</p>
+          <p>That makes it the right yardstick for a long-run trend. A single benchmark can be saturated, leaked into training data or tuned for. A composite that weights many benchmarks by difficulty is much harder to game, and it lets us compare like with like across years.</p>
+          <p>It is also the index forecasters already use. Anthropic's Frontier Red Team, in <a href="https://www.anthropic.com/research/self-replicating-ai" target="_blank" rel="noopener">“AI models may be capable of self-replicating without access to a datacenter”</a> by <strong>William Zhou</strong> and <strong>Daniel Freeman</strong> (12 October 2026), plotted open models of about 30B parameters or fewer on the ECI. They took GLM-5.2 as the capability floor for end-to-end replication and projected when small models reach it. The hero chart on this page extends their figure and updates it every day.</p>
+        </div>
+        <div class="prose">
+          <p><strong>Think in thresholds and trend lines.</strong> Pick a capability bar that matters, draw the trend of the best models in a class, and read off when the trend crosses the bar, with an honest range. When new models arrive, the forecast updates. Labs, policymakers and builders can then plan for a capability before it shows up.</p>
+          <p><strong>Two caveats.</strong> The ECI is a general index, so it is only a rough proxy for any one skill such as replication or coding; Anthropic makes the same point. And Epoch re-estimates scores as it adds benchmarks: GLM-5.2 was at <span class="num" id="glm-then"></span> when Anthropic wrote the post and is at <span class="num" id="glm-now"></span> today. This page therefore tracks each threshold by its reference model, not a frozen number.</p>
+          <p><strong>Why single-GPU models.</strong> <span id="author-note">My research focuses on small language models. My hypothesis is that capable models will increasingly run offline: air-gapped on a single GPU, at the edge, as domain experts that keep data private. This page is a helper visualization that snapshots how fast this class of model improves and how far it trails the frontier. — Joel Sadler</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="method">
+      <div class="sec-head">
+        <span class="eyebrow">Method</span>
+        <h2>What counts as a single-GPU model, and how the forecast works</h2>
+      </div>
+      <div class="cols2">
+        <div class="prose">
+          <p><strong>Definition.</strong> A model qualifies if its weights are open and, quantized to 4 bits, fill at most 75% of a 32&nbsp;GB GPU (an RTX 5090 or a 32&nbsp;GB MacBook Pro), leaving the rest for context. At half a byte per parameter that is <strong>at most 48B total parameters</strong>; mixture-of-experts models count all experts. Any quantization is allowed in practice; 4-bit is the reference because quality holds up there and quantization-aware releases target it. So Flint (39.8B) counts, and a 120B model squeezed to 2 bits does not. It must also have an ECI score.</p>
+          <table class="t15" style="max-width:420px" aria-label="GPU memory and largest model">
+            <thead><tr><th style="text-align:left">GPU memory</th><th>Largest model</th><th>4-bit weights</th></tr></thead>
+            <tbody id="gpu-tiers"></tbody>
+          </table>
+          <p><strong>Anthropic's class.</strong> The “Models” switch reproduces the narrower ~30B class from Anthropic's chart (≤ <span id="anth-max"></span>B), so you can compare with their numbers. Their published fit was 13.7 ECI per year; with today's re-estimated scores the same class gives <span id="anth-slope"></span>.</p>
+        </div>
+        <div class="prose">
+          <p><strong>Trend.</strong> A model is <em>best at its release</em> if it beat every earlier single-GPU model on the day it came out. The line is an ordinary least-squares fit of ECI against release date over those models, from the start of the chosen window. The shaded band is the 90% prediction interval for a new best-at-release model.</p>
+          <p><strong>Crossing dates.</strong> The projected date is where the line meets the threshold; the range is where the edges of the band meet it. “Crossed” means an actual model scored at or above the threshold.</p>
+          <p><strong>Thresholds.</strong> <em>Self-replication floor</em>: GLM-5.2's current ECI. <em>Frontier one year ago</em>: the best ECI of any model released by this date last year. <em>Today's frontier</em>: the best ECI of any model today.</p>
+          <p><strong>Data and updates.</strong> A GitHub Action pulls Epoch's <a href="https://epoch.ai/data/eci_scores.csv" target="_blank" rel="noopener">ECI scores</a> and model metadata every day. Parameter counts come from Epoch, then Hugging Face. The code, data (<a id="dl-json" href="#">JSON</a>, <a id="dl-csv" href="#">CSV</a>, <a id="dl-hist" href="#">daily history</a>) and curated mappings are on <a id="repo-link" href="#">GitHub</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="subscribe">
+      <div class="sec-head">
+        <span class="eyebrow">Alerts</span>
+        <h2>Get told when a threshold falls</h2>
+      </div>
+      <div class="card sub">
+        <div class="prose" style="gap:10px">
+          <p>One short email when a single-GPU model crosses a tracked threshold, takes the #1 spot or enters the top 3. Nothing else.</p>
+          <div id="sub-form-slot"></div>
+          <p class="muted" style="font-size:12.5px" id="sub-fine"></p>
+        </div>
+        <div>
+          <p class="eyebrow" style="margin-bottom:10px">Other ways to follow</p>
+          <ul id="sub-alt"></ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="credits">
+      <div><h4>Data</h4><a href="https://epoch.ai/eci" target="_blank" rel="noopener">Epoch AI, Epoch Capabilities Index</a>, CC BY 4.0. Model metadata from <a href="https://huggingface.co" target="_blank" rel="noopener">Hugging Face</a>. Intelligence Index from <a href="https://artificialanalysis.ai" target="_blank" rel="noopener">Artificial Analysis</a>.</div>
+      <div><h4>Research</h4>William Zhou and Daniel Freeman, Anthropic Frontier Red Team, <a href="https://www.anthropic.com/research/self-replicating-ai" target="_blank" rel="noopener">“AI models may be capable of self-replicating without access to a datacenter”</a>, 12 October 2026. The forecast chart follows their figure.</div>
+      <div><h4>Inspiration</h4>Leaderboard layout and the Rank (UB) convention from <a href="https://arena.ai/leaderboard" target="_blank" rel="noopener">LMArena</a>. Not affiliated with Epoch AI, Anthropic, Artificial Analysis or LMArena.</div>
+      <div><h4>Author</h4>Joel Sadler, University of Virginia, School of Data Science. Code and data on <a id="repo-link-2" href="#">GitHub</a>.</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script id="lb-data" type="application/json">/*__DATA__*/</script>
+<script>
+(function () {
+  "use strict";
+  var D = JSON.parse(document.getElementById("lb-data").textContent);
+  var SITE = D.site || {};
+  var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var GPU = [8, 12, 16, 24, 32];
+  var isPages = /github\.io$/.test(location.hostname) || location.protocol === "file:" || location.hostname === "localhost";
+
+  // ---------- helpers
+  function $(s) { return document.querySelector(s); }
+  function h(tag, attrs) {
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === "text") e.textContent = attrs[k];
+      else if (k === "cls") e.className = attrs[k];
+      else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] !== null && attrs[k] !== undefined && attrs[k] !== false) e.setAttribute(k, attrs[k]);
+    }
+    for (var i = 2; i < arguments.length; i++) {
+      var c = arguments[i];
+      if (c === null || c === undefined || c === false) continue;
+      e.appendChild(typeof c === "string" || typeof c === "number" ? document.createTextNode(String(c)) : c);
+    }
+    return e;
+  }
+  function pd(s) { return new Date(s + "T00:00:00Z"); }
+  function fDate(s) { var d = pd(s); return MON[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
+  function fMon(s) { var d = typeof s === "string" ? pd(s) : s; return MON[d.getUTCMonth()] + " " + d.getUTCFullYear(); }
+  function f1(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+  function yf(d) { var y = d.getUTCFullYear(); var a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return y + (d - a) / (b - a); }
+  function fromYf(v) { var y = Math.floor(v); var a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return new Date(a + (v - y) * (b - a)); }
+  function addMonths(d, n) { return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + n, d.getUTCDate())); }
+  function hf(m) { return m.hf_repo ? "https://huggingface.co/" + m.hf_repo : (m.source_url || null); }
+  function paramsLabel(m) { return (m.params_b >= 10 ? Math.round(m.params_b) : m.params_b) + "B" + (m.active_b ? " (" + m.active_b + "B active)" : ""); }
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function compact(n) { if (n == null) return "–"; if (n >= 1e6) return (n / 1e6).toFixed(1) + "M"; if (n >= 1e3) return Math.round(n / 1e3) + "K"; return String(n); }
+  var measureCtx = document.createElement("canvas").getContext("2d");
+  function textW(s, font) { measureCtx.font = font || "500 11.5px Inter, system-ui, sans-serif"; return measureCtx.measureText(s).width; }
+
+  // ---------- state
+  var state = { threshold: "selfrep", def: "fit32", window: "since2023", view: "2023", vram: 32, recent: "all", q: "", showAll: false, sort: { key: "eci", dir: -1 }, hl: null };
+  try { var saved = JSON.parse(localStorage.getItem("slm-state") || "{}"); ["threshold", "def", "window", "view", "vram"].forEach(function (k) { if (saved[k] !== undefined) state[k] = saved[k]; }); } catch (e) {}
+  try { if (window.innerWidth < 620 && !JSON.parse(localStorage.getItem("slm-state") || "{}").view) state.view = "2025"; } catch (e) { if (window.innerWidth < 620) state.view = "2025"; }
+  if (["selfrep", "frontier1y", "frontier"].indexOf(location.hash.slice(1)) >= 0) state.threshold = location.hash.slice(1);
+  function save() { try { localStorage.setItem("slm-state", JSON.stringify({ threshold: state.threshold, def: state.def, window: state.window, view: state.view, vram: state.vram })); } catch (e) {} }
+
+  function slms() { return state.def === "anthropic" ? D.slms.filter(function (m) { return m.anthropic_class; }) : D.slms; }
+  function fit() { return D.fits[state.def + "|" + state.window] || D.fits["fit32|since2023"]; }
+  function th(key) { return D.thresholds.filter(function (t) { return t.key === key; })[0]; }
+  function thColor(key) { return key === "selfrep" ? "var(--green)" : "var(--clay)"; }
+  function thColorRaw(key) { return key === "selfrep" ? css("--green") : css("--clay"); }
+  function refLabel(t) { return t.ref_model + (t.ref_params_b ? " (" + Math.round(t.ref_params_b) + "B)" : ""); }
+
+  function status(key) {
+    var t = th(key), F = fit(), ft = F.thresholds[key];
+    var s = { t: t, ft: ft, best: F.best };
+    if (ft.crossed_by) s.kind = "crossed";
+    else if (!ft.trend) s.kind = "flat";
+    else s.kind = ft.trend.date <= D.today ? "due" : "ahead";
+    return s;
+  }
+
+  // ---------- segmented controls
+  function seg(id, opts, key, after) {
+    var box = document.getElementById(id); box.textContent = "";
+    opts.forEach(function (o) {
+      box.appendChild(h("button", { type: "button", "aria-pressed": String(state[key] === o[0]), onclick: function () {
+        state[key] = o[0]; save(); seg(id, opts, key, after); after();
+      } }, o[1]));
+    });
+  }
+  function renderControls() {
+    seg("ctl-threshold", [["selfrep", "Self-replication floor"], ["frontier1y", "Frontier 1 yr ago"], ["frontier", "Today's frontier"]], "threshold", renderForecast);
+    seg("ctl-def", [["fit32", "Fits 32 GB (≤ " + D.rule.max_params_b + "B)"], ["anthropic", "Anthropic class (≤ " + D.rule.anthropic_max_b + "B)"]], "def", renderForecast);
+    seg("ctl-window", [["since2023", "Since Jul 2023"], ["last24", "Last 24 months"]], "window", renderForecast);
+    seg("ctl-view", [["2023", "2023"], ["2025", "2025"]], "view", renderForecast);
+  }
+
+  // ---------- masthead + podium
+  function renderTop() {
+    $("#updated").textContent = "Updated " + fDate(D.today) + " · scores from Epoch AI, refreshed daily";
+    var pod = $("#podium"); pod.textContent = "";
+    var top = D.slms.slice(0, 3);
+    top.forEach(function (m, i) {
+      var next = D.slms[i + 1];
+      var tied = D.slms.filter(function (o) { return o !== m && o.rank_ub === m.rank_ub; }).length;
+      var note = i === 0 ? "+" + f1(m.eci - next.eci) + " ECI ahead of #2" : (tied ? "Statistically tied with " + tied + " other model" + (tied > 1 ? "s" : "") + " (overlapping intervals)" : "+" + f1(m.eci - next.eci) + " ECI ahead of #" + (i + 2));
+      var link = hf(m);
+      pod.appendChild(h("div", { cls: "pod" },
+        h("div", { cls: "pod-top" }, h("span", { cls: "chip r" + (i + 1), "aria-label": "Rank " + (i + 1) }, String(i + 1)), h("span", { cls: "eyebrow" }, i === 0 ? "Top single-GPU model" : "Rank " + (i + 1))),
+        h("div", { cls: "pod-name" }, link ? h("a", { href: link, target: "_blank", rel: "noopener" }, m.name) : m.name),
+        h("div", { cls: "pod-score" }, h("b", { cls: "num" }, f1(m.eci)), h("span", { cls: "soft" }, "ECI"), h("span", { cls: "muted num", style: "font-size:13px" }, "(" + f1(m.lo) + "–" + f1(m.hi) + ")")),
+        h("div", { cls: "pod-meta" }, m.org + " · " + paramsLabel(m) + " · " + m.vram4_gb + " GB at 4-bit · " + fDate(m.date)),
+        h("div", { cls: "pod-note" }, note)));
+    });
+  }
+
+  // ---------- readouts
+  function renderReadouts() {
+    var box = $("#readouts"); box.textContent = "";
+    var F = fit();
+    function tile(key, eyebrow, big, why) {
+      return h("button", { type: "button", cls: "readout", "aria-pressed": String(state.threshold === key), onclick: function () { state.threshold = key; save(); renderControls(); renderForecast(); } },
+        h("span", { cls: "key eyebrow", style: "color:" + (state.threshold === key ? "var(--ink)" : "") }, h("i", { style: "color:" + thColor(key) }), eyebrow), big, h("span", { cls: "why" }, why));
+    }
+    // 1. self-replication floor
+    var s = status("selfrep"), t = s.t;
+    var big1 = s.kind === "crossed" ? h("span", { cls: "big" }, "Crossed") : h("span", { cls: "big num" }, f1(s.ft.gap), h("small", null, " ECI to go"));
+    var why1 = s.kind === "crossed" ? s.ft.crossed_by.name + " reached " + f1(s.ft.crossed_by.eci) + " on " + fDate(s.ft.crossed_by.date) + "."
+      : "Best: " + s.best.name + " at " + f1(s.best.eci) + ". " + (s.kind === "due" ? "The trend line passed this floor in " + fMon(s.ft.trend.date) + ", so the next strong release is likely to cross." : "On trend: " + fMon(s.ft.trend.date) + ".");
+    box.appendChild(tile("selfrep", "Self-replication floor · " + t.ref_model + " · " + f1(t.value), big1, why1));
+    // 2. lag
+    var L = D.lag[state.def].now;
+    var big2 = h("span", { cls: "big num" }, String(Math.round(L.months)), h("small", null, " months behind"));
+    box.appendChild(tile("frontier1y", "Lag behind the frontier", big2, L.name + " (" + f1(L.eci) + ") matches " + L.frontier_model + ", the best model in " + fMon(L.frontier_date) + "."));
+    // 3. today's frontier
+    var s3 = status("frontier"), t3 = s3.t;
+    var big3 = s3.kind === "crossed" ? h("span", { cls: "big" }, "Crossed") : h("span", { cls: "big" }, s3.ft.trend ? fMon(s3.ft.trend.date) : "–");
+    var why3 = s3.kind === "crossed" ? s3.ft.crossed_by.name + " matches today's frontier." : "When the trend reaches " + t3.ref_model + " (" + f1(t3.value) + ")" + (s3.ft.trend && s3.ft.trend.early ? "; 90% range " + fMon(s3.ft.trend.early) + " – " + fMon(s3.ft.trend.late) : "") + ". " + f1(s3.ft.gap) + " ECI to go.";
+    box.appendChild(tile("frontier", "Today's frontier · " + t3.ref_model + " · " + f1(t3.value), big3, why3));
+  }
+
+  // ---------- hero chart
+  function headline() {
+    var s = status(state.threshold), t = s.t, ft = s.ft;
+    var name = t.short + " (" + t.ref_model + ", " + f1(t.value) + " ECI)";
+    if (s.kind === "crossed") return "A single-GPU model has crossed the " + name + ": " + ft.crossed_by.name + " scores " + f1(ft.crossed_by.eci) + ".";
+    if (s.kind === "flat") return "The trend is not rising, so no crossing date can be projected.";
+    var rng = ft.trend.early && ft.trend.late ? " (90% range " + fMon(ft.trend.early) + " – " + fMon(ft.trend.late) + ")" : "";
+    if (s.kind === "due") return "The single-GPU trend passed the " + name + " in " + fMon(ft.trend.date) + rng + ". No model has crossed yet: the best, " + s.best.name + ", is " + f1(ft.gap) + " ECI short.";
+    return "On trend, a single-GPU model reaches " + name + " in " + fMon(ft.trend.date) + rng + ". The best today is " + f1(ft.gap) + " ECI short.";
+  }
+
+  var heroPts = null;
+  function renderForecast() {
+    renderReadouts();
+    var F = fit(), t = th(state.threshold), ft = F.thresholds[state.threshold];
+    $("#hero-title").textContent = state.def === "anthropic" ? "Capability of open models in Anthropic's ~30B class" : "Capability of open models that run on one 32 GB GPU";
+    $("#hero-headline").textContent = headline();
+    $("#hero-fitnote").textContent = "Fit: " + f1(F.slope_per_year) + " ECI per year, R² " + F.r2.toFixed(2) + ", " + F.points + " best-at-release models since " + fMon(F.start) + ".";
+    var lg = $("#hero-legend"); lg.textContent = "";
+    lg.appendChild(h("span", null, h("i", { cls: "lk-line" }), "least-squares fit to the best model at each date (dashed: projection)"));
+    lg.appendChild(h("span", null, h("i", { cls: "lk-band" }), "90% prediction interval"));
+    lg.appendChild(h("span", null, h("i", { cls: "lk-dot" }), "best at its release"));
+    lg.appendChild(h("span", null, h("i", { cls: "lk-dot soft" }), "other single-GPU models"));
+    lg.appendChild(h("span", null, h("i", { cls: "lk-th", style: "border-color:" + thColor(state.threshold) }), t.label));
+    drawHero();
+    renderTop15();
+  }
+
+  function drawHero() {
+    var box = $("#hero-chart"); box.textContent = "";
+    var W = Math.max(300, box.clientWidth), narrow = W < 560;
+    var H = Math.round(Math.max(330, Math.min(520, W * 0.6)));
+    var M = { t: 22, r: narrow ? 10 : 18, b: 30, l: narrow ? 34 : 42 };
+    var F = fit(), t = th(state.threshold), ft = F.thresholds[state.threshold];
+    var C = { slm: css("--slm"), soft: css("--slm-soft"), th: thColorRaw(state.threshold), ink: css("--ink"), ink2: css("--ink-2"), ink3: css("--ink-3"), surface: css("--surface"), band: css("--band"), grid: css("--grid"), clay: css("--clay") };
+    var today = pd(D.today);
+    var start = pd(state.view === "2025" ? "2025-01-01" : "2023-07-01");
+    var end = addMonths(today, 12);
+    if (ft.trend && !ft.crossed_by) { var tgt = addMonths(pd(ft.trend.late || ft.trend.date), 3); if (tgt > end) end = tgt; }
+    var cap = addMonths(today, 42); if (end > cap) end = cap;
+    var pts = slms().filter(function (m) { return pd(m.date) >= start; }).map(function (m) { return { m: m, d: pd(m.date), rec: m.record[state.def] }; });
+    var x = d3.scaleUtc().domain([start, end]).range([M.l, W - M.r]);
+    function band(d) { var v = yf(d); var c = F.a + F.b * v; var hw = F.t * F.s * Math.sqrt(1 + 1 / F.n + Math.pow(v - F.xm, 2) / F.sxx); return [c - hw, c, c + hw]; }
+    var fitStart = pd(F.start) > start ? pd(F.start) : start;
+    var recMin = d3.min(pts.filter(function (p) { return p.rec; }), function (p) { return p.m.eci; });
+    var lo = Math.min(recMin == null ? band(fitStart)[0] : recMin, band(fitStart)[0]) - 3;
+    var hiddenLow = pts.filter(function (p) { return p.m.eci < lo; }).length;
+    pts = pts.filter(function (p) { return p.m.eci >= lo; });
+    var hi = Math.max(t.value, d3.max(pts, function (p) { return p.m.eci; }));
+    var y = d3.scaleLinear().domain([lo, hi + 5]).nice().range([H - M.b, M.t]);
+    $("#hero-fitnote").textContent = "Fit: " + f1(F.slope_per_year) + " ECI per year, R² " + F.r2.toFixed(2) + ", " + F.points + " best-at-release models since " + fMon(F.start) + "." + (hiddenLow ? " " + hiddenLow + " weaker models below the axis are not drawn; all are in the table." : "");
+    var svg = d3.select(box).append("svg").attr("viewBox", "0 0 " + W + " " + H).attr("role", "img")
+      .attr("aria-label", "Scatter of single-GPU models by release date and ECI, with trend line and " + t.label + ". " + headline());
+    var clipId = "clip-hero";
+    svg.append("clipPath").attr("id", clipId).append("rect").attr("x", M.l).attr("y", M.t).attr("width", W - M.l - M.r).attr("height", H - M.t - M.b);
+    // zone above threshold
+    svg.append("rect").attr("x", M.l).attr("y", M.t).attr("width", W - M.l - M.r).attr("height", Math.max(0, y(t.value) - M.t)).attr("fill", state.threshold === "selfrep" ? css("--tint-green") : css("--tint-clay"));
+    // grid
+    var yt = y.ticks(6);
+    svg.append("g").selectAll("line").data(yt).join("line").attr("class", "gridline").attr("x1", M.l).attr("x2", W - M.r).attr("y1", function (v) { return Math.round(y(v)) + 0.5; }).attr("y2", function (v) { return Math.round(y(v)) + 0.5; });
+    var xt = x.ticks(narrow ? 4 : 8);
+    svg.append("g").selectAll("line").data(xt).join("line").attr("class", "gridline").attr("y1", M.t).attr("y2", H - M.b).attr("x1", function (v) { return Math.round(x(v)) + 0.5; }).attr("x2", function (v) { return Math.round(x(v)) + 0.5; });
+    svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (H - M.b) + ")").call(d3.axisBottom(x).tickValues(xt).tickSize(0).tickPadding(10).tickFormat(function (d) { return fMon(d); })).call(function (g) { g.select(".domain").remove(); });
+    svg.append("g").attr("class", "axis").attr("transform", "translate(" + M.l + ",0)").call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(8)).call(function (g) { g.select(".domain").remove(); });
+    if (!narrow) svg.append("text").attr("transform", "rotate(-90)").attr("x", -(M.t + (H - M.t - M.b) / 2)).attr("y", 11).attr("text-anchor", "middle").style("font-size", "11.5px").style("fill", C.ink3).text("Epoch Capabilities Index");
+    var g = svg.append("g").attr("clip-path", "url(#" + clipId + ")");
+    // prediction band + trend
+    var samples = d3.range(0, 121).map(function (i) { return new Date(+fitStart + (end - fitStart) * i / 120); });
+    g.append("path").attr("fill", C.band).attr("d", d3.area().x(function (d) { return x(d); }).y0(function (d) { return y(band(d)[0]); }).y1(function (d) { return y(band(d)[2]); })(samples));
+    g.append("line").attr("x1", x(fitStart)).attr("x2", x(today)).attr("y1", y(band(fitStart)[1])).attr("y2", y(band(today)[1])).attr("stroke", C.slm).attr("stroke-width", 2).attr("stroke-linecap", "round");
+    g.append("line").attr("x1", x(today)).attr("x2", x(end)).attr("y1", y(band(today)[1])).attr("y2", y(band(end)[1])).attr("stroke", C.slm).attr("stroke-width", 2).attr("stroke-dasharray", "6 5");
+    // threshold line
+    g.append("line").attr("x1", M.l).attr("x2", W - M.r).attr("y1", y(t.value)).attr("y2", y(t.value)).attr("stroke", C.th).attr("stroke-width", 2);
+    var labels = [];
+    function free(bx) {
+      if (bx.x0 < M.l || bx.x1 > W - M.r || bx.y0 < M.t - 2 || bx.y1 > H - M.b) return false;
+      for (var i = 0; i < labels.length; i++) { var o = labels[i]; if (bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0) return false; }
+      for (var j = 0; j < pts0.length; j++) { var q = pts0[j]; var r = q.rec ? 6.5 : 4.5; if (q.px + r > bx.x0 && q.px - r < bx.x1 && q.py + r > bx.y0 && q.py - r < bx.y1) return false; }
+      return true;
+    }
+    // place text at the first candidate (x, y, anchor) whose box is free; returns true if placed
+    function place(text, font, cands, fill, always) {
+      var w = textW(text, font);
+      for (var i = 0; i < cands.length; i++) {
+        var c = cands[i], x0 = c[2] === "end" ? c[0] - w : c[2] === "middle" ? c[0] - w / 2 : c[0];
+        var bx = { x0: x0 - 2, x1: x0 + w + 2, y0: c[1] - 12, y1: c[1] + 4 };
+        if (free(bx) || (always && i === cands.length - 1)) {
+          labels.push(bx);
+          svg.append("text").attr("x", c[0]).attr("y", c[1]).attr("text-anchor", c[2]).style("font", font).style("fill", fill).text(text);
+          return true;
+        }
+      }
+      return false;
+    }
+    var pts0 = slms().filter(function (m) { return pd(m.date) >= start && m.eci >= lo; }).map(function (m) { return { px: x(pd(m.date)), py: y(m.eci), rec: m.record[state.def] }; });
+    var F12 = "600 12px Inter, system-ui, sans-serif", F125 = "500 12.5px Inter, system-ui, sans-serif";
+    var ty = y(t.value);
+    // threshold line label (always shown)
+    var thText = narrow ? f1(t.value) + " · " + t.ref_model : t.label + ": " + f1(t.value) + " (" + t.ref_model + ")";
+    place(thText, F125, [[M.l + 8, ty - 8, "start"], [M.l + 8, ty + 17, "start"]], C.ink, true);
+    // reference model dot
+    var rd = pd(t.ref_date);
+    if (rd >= start && rd <= end) {
+      svg.append("circle").attr("cx", x(rd)).attr("cy", ty).attr("r", 6.5).attr("fill", C.th).attr("stroke", C.surface).attr("stroke-width", 2);
+      labels.push({ x0: x(rd) - 8, x1: x(rd) + 8, y0: ty - 8, y1: ty + 8 });
+      if (!narrow) place(refLabel(t), F12, [[x(rd), ty - 12, "middle"], [x(rd) - 10, ty - 10, "end"], [x(rd) + 10, ty - 10, "start"]], C.ink);
+    }
+    // today marker
+    g.append("line").attr("x1", x(today)).attr("x2", x(today)).attr("y1", M.t).attr("y2", H - M.b).attr("stroke", C.ink3).attr("stroke-width", 1).attr("stroke-dasharray", "2 3");
+    place("Today", "400 11px Inter, system-ui, sans-serif", [[x(today) + 5, M.t + 12, "start"], [x(today) - 5, M.t + 12, "end"], [x(today) + 5, H - M.b - 10, "start"]], C.ink3);
+    // gap marker from the best model up to the threshold
+    var best = slms().slice().sort(function (a, b) { return b.eci - a.eci; })[0];
+    if (!ft.crossed_by && pd(best.date) >= start && t.value > best.eci) {
+      var bx = x(pd(best.date)), by = y(best.eci);
+      svg.append("line").attr("x1", bx).attr("x2", bx).attr("y1", by - 7).attr("y2", ty).attr("stroke", C.clay).attr("stroke-width", 1.5).attr("stroke-dasharray", "3 3");
+      var gt = f1(t.value - best.eci) + " ECI to go", mid = (by + ty) / 2 + 4;
+      var cands = by - ty > 30 ? [[bx - 8, mid, "end"], [bx + 8, mid, "start"]] : [];
+      cands = cands.concat([[bx - 8, by + 22, "end"], [bx + 10, by + 20, "start"], [bx - 10, ty - 8, "end"], [bx - 8, by + 38, "end"]]);
+      place(gt, F125.replace("500", "600"), cands, C.clay);
+    }
+    // projected crossing
+    if (ft.trend && !ft.crossed_by) {
+      var cd = pd(ft.trend.date);
+      if (cd >= start && cd <= end) {
+        if (ft.trend.early && ft.trend.late) {
+          var e0 = Math.max(x(pd(ft.trend.early)), M.l), e1 = Math.min(x(pd(ft.trend.late)), W - M.r);
+          svg.append("rect").attr("x", e0).attr("width", Math.max(0, e1 - e0)).attr("y", H - M.b - 5).attr("height", 5).attr("rx", 2.5).attr("fill", C.slm).attr("fill-opacity", 0.3);
+        }
+        g.append("line").attr("x1", x(cd)).attr("x2", x(cd)).attr("y1", ty).attr("y2", H - M.b).attr("stroke", C.slm).attr("stroke-width", 1.5).attr("stroke-dasharray", "5 4");
+        var ct = (narrow ? "Crosses: " : "Trend crosses: ") + fMon(ft.trend.date), cx = x(cd);
+        var ys = [44, 80, 120, 160, 200].map(function (d) { return ty + d; }).filter(function (yy) { return yy < H - M.b - 24; }).concat([H - M.b - 34, H - M.b - 70]);
+        var cands2 = [];
+        ys.forEach(function (yy) { cands2.push([cx + 6, yy, "start"], [cx - 6, yy, "end"]); });
+        var cw = textW(ct, F12), rt = ft.trend.early ? "90% range " + fMon(ft.trend.early) + " – " + fMon(ft.trend.late) : null;
+        var done = false;
+        [true, false].forEach(function (withRange) {
+          if (done) return;
+          var useR = withRange && rt && !narrow;
+          for (var k = 0; k < cands2.length; k++) {
+            var c = cands2[k], wmax = Math.max(cw, useR ? textW(rt, "400 11px Inter, system-ui, sans-serif") : 0);
+            var x0 = c[2] === "end" ? c[0] - wmax : c[0];
+            var bx2 = { x0: x0 - 2, x1: x0 + wmax + 2, y0: c[1] - 12, y1: c[1] + (useR ? 19 : 4) };
+            if (free(bx2)) {
+              labels.push(bx2); done = true;
+              svg.append("text").attr("x", c[0]).attr("y", c[1]).attr("text-anchor", c[2]).style("font", F12).style("fill", C.ink).text(ct);
+              if (useR) svg.append("text").attr("x", c[0]).attr("y", c[1] + 15).attr("text-anchor", c[2]).style("font-size", "11px").style("fill", C.ink3).text(rt);
+              break;
+            }
+          }
+        });
+      }
+    }
+    // points
+    var gp = svg.append("g");
+    pts.sort(function (a, b) { return (a.rec === b.rec) ? 0 : a.rec ? 1 : -1; });
+    pts.forEach(function (p) { p.x = x(p.d); p.y = y(p.m.eci); p.r = p.rec ? 6.5 : 4.5; });
+    gp.selectAll("circle").data(pts).join("circle").attr("cx", function (p) { return p.x; }).attr("cy", function (p) { return p.y; }).attr("r", function (p) { return p.r; })
+      .attr("fill", function (p) { return p.rec ? C.slm : C.soft; }).attr("stroke", C.surface).attr("stroke-width", 2);
+    var ring = svg.append("circle").attr("r", 10).attr("fill", "none").attr("stroke", C.ink).attr("stroke-width", 1.5).style("display", "none");
+    var whisk = svg.append("line").attr("stroke", C.ink2).attr("stroke-width", 1.5).style("display", "none");
+    // labels for best-at-release models, greedy placement
+    var font = "500 11.5px Inter, system-ui, sans-serif";
+    var recs = pts.filter(function (p) { return p.rec; }).sort(function (a, b) { return b.d - a.d; });
+    var maxLabels = narrow ? 4 : 40;
+    function hits(bx) {
+      if (bx.x0 < M.l || bx.x1 > W - M.r || bx.y0 < M.t || bx.y1 > H - M.b) return true;
+      for (var i = 0; i < labels.length; i++) { var o = labels[i]; if (bx.x0 < o.x1 && bx.x1 > o.x0 && bx.y0 < o.y1 && bx.y1 > o.y0) return true; }
+      for (var j = 0; j < pts.length; j++) { var q = pts[j]; if (q.x + q.r > bx.x0 && q.x - q.r < bx.x1 && q.y + q.r > bx.y0 && q.y - q.r < bx.y1) return true; }
+      return false;
+    }
+    var placed = 0;
+    recs.forEach(function (p) {
+      if (placed >= maxLabels) return;
+      var w = textW(p.m.name, font);
+      var c = [
+        { x: p.x - p.r - 5, y: p.y + 4, a: "end", bx: { x0: p.x - p.r - 7 - w, x1: p.x - p.r - 3, y0: p.y - 9, y1: p.y + 6 } },
+        { x: p.x, y: p.y - p.r - 6, a: "middle", bx: { x0: p.x - w / 2 - 2, x1: p.x + w / 2 + 2, y0: p.y - p.r - 19, y1: p.y - p.r - 3 } },
+        { x: p.x + p.r + 5, y: p.y + 4, a: "start", bx: { x0: p.x + p.r + 3, x1: p.x + p.r + 7 + w, y0: p.y - 9, y1: p.y + 6 } },
+        { x: p.x, y: p.y + p.r + 15, a: "middle", bx: { x0: p.x - w / 2 - 2, x1: p.x + w / 2 + 2, y0: p.y + p.r + 2, y1: p.y + p.r + 19 } }
+      ];
+      for (var i = 0; i < c.length; i++) {
+        if (!hits(c[i].bx)) {
+          labels.push(c[i].bx); placed++;
+          svg.append("text").attr("x", c[i].x).attr("y", c[i].y).attr("text-anchor", c[i].a).style("font", font).style("fill", C.ink).text(p.m.name);
+          return;
+        }
+      }
+    });
+    // hover
+    var tip = h("div", { cls: "tip", role: "status" }); tip.hidden = true; box.appendChild(tip);
+    var del = d3.Delaunay.from(pts, function (p) { return p.x; }, function (p) { return p.y; });
+    function show(p) {
+      ring.style("display", null).attr("cx", p.x).attr("cy", p.y);
+      if (p.m.lo != null) whisk.style("display", null).attr("x1", p.x).attr("x2", p.x).attr("y1", y(p.m.lo)).attr("y2", y(p.m.hi));
+      tip.textContent = "";
+      tip.appendChild(h("div", null, h("b", null, p.m.name)));
+      tip.appendChild(h("div", { cls: "tv num" }, f1(p.m.eci) + " ECI"));
+      tip.appendChild(h("div", { cls: "num" }, "Interval " + f1(p.m.lo) + "–" + f1(p.m.hi)));
+      tip.appendChild(h("div", null, fDate(p.m.date) + " · " + p.m.org));
+      tip.appendChild(h("div", null, paramsLabel(p.m) + " · " + p.m.vram4_gb + " GB at 4-bit"));
+      tip.appendChild(h("div", null, "Rank #" + p.m.rank + (p.rec ? " · best at its release" : "")));
+      tip.hidden = false;
+      var tx = p.x + 14, ty = p.y - 10;
+      var bw = box.clientWidth, scale = bw / W;
+      tx *= scale; ty *= scale;
+      if (tx + 250 > bw) tx = p.x * scale - 14 - tip.offsetWidth;
+      tip.style.left = Math.max(0, tx) + "px"; tip.style.top = Math.max(0, ty) + "px";
+    }
+    function hide() { tip.hidden = true; ring.style("display", "none"); whisk.style("display", "none"); }
+    svg.on("pointermove", function (ev) {
+      var r = svg.node().getBoundingClientRect(); var sx = (ev.clientX - r.left) * W / r.width, sy = (ev.clientY - r.top) * H / r.height;
+      var i = del.find(sx, sy); var p = pts[i];
+      if (p && Math.hypot(p.x - sx, p.y - sy) < 28) show(p); else hide();
+    }).on("pointerleave", hide);
+    heroPts = { pts: pts, show: show, hide: hide };
+  }
+
+  function renderTop15() {
+    var tb = $("#t15"); tb.textContent = "";
+    tb.appendChild(h("thead", null, h("tr", null, h("th", { scope: "col" }, "#"), h("th", { scope: "col" }, "Model"), h("th", { scope: "col" }, "ECI"), h("th", { scope: "col" }, "Params"), h("th", { scope: "col" }, "4-bit"))));
+    var body = h("tbody");
+    D.slms.slice(0, 15).forEach(function (m, i) {
+      var link = hf(m);
+      var tr = h("tr", { onmouseenter: function () { if (!heroPts) return; var p = heroPts.pts.filter(function (q) { return q.m.id === m.id; })[0]; if (p) heroPts.show(p); }, onmouseleave: function () { if (heroPts) heroPts.hide(); } },
+        h("td", null, h("span", { cls: "chip " + (i < 3 ? "r" + (i + 1) : "rn") }, String(m.rank))),
+        h("td", null, link ? h("a", { href: link, target: "_blank", rel: "noopener" }, m.name) : m.name),
+        h("td", { cls: "num" }, f1(m.eci)),
+        h("td", { cls: "num soft" }, Math.round(m.params_b) + "B"),
+        h("td", { cls: "num soft" }, m.vram4_gb + " GB"));
+      body.appendChild(tr);
+    });
+    tb.appendChild(body);
+  }
+
+  // ---------- full leaderboard
+  var COLS = [
+    { key: "rank", label: "Rank", l: false, sort: function (m) { return m._rank; } },
+    { key: "name", label: "Model", l: true, sort: function (m) { return m.name.toLowerCase(); } },
+    { key: "eci", label: "ECI", sort: function (m) { return m.eci; } },
+    { key: "ci", label: "Interval", sort: function (m) { return m.hi - m.lo; } },
+    { key: "ub", label: "Rank (UB)", sort: function (m) { return m._ub; } },
+    { key: "params", label: "Params", sort: function (m) { return m.params_b; } },
+    { key: "vram", label: "4-bit weights", sort: function (m) { return m.vram4_gb; } },
+    { key: "gpu", label: "Smallest GPU", sort: function (m) { return m.min_gpu_gb; } },
+    { key: "date", label: "Released", sort: function (m) { return m.date; } },
+    { key: "dl", label: "HF downloads", sort: function (m) { return m.downloads || 0; } }
+  ];
+  function renderBoard() {
+    seg("ctl-vram", GPU.map(function (g) { return [g, g + " GB"]; }), "vram", renderBoard);
+    seg("ctl-recent", [["all", "All time"], ["12m", "Last 12 months"]], "recent", renderBoard);
+    var cut = addMonths(pd(D.today), -12).toISOString().slice(0, 10);
+    var q = state.q.trim().toLowerCase();
+    var rows = D.slms.filter(function (m) {
+      return m.min_gpu_gb && m.min_gpu_gb <= state.vram && (state.recent === "all" || m.date >= cut) && (!q || (m.name + " " + m.org).toLowerCase().indexOf(q) >= 0);
+    });
+    rows.sort(function (a, b) { return b.eci - a.eci; });
+    rows.forEach(function (m, i) { m._rank = i > 0 && rows[i - 1].eci === m.eci ? rows[i - 1]._rank : i + 1; });
+    rows.forEach(function (m) { m._ub = 1 + rows.filter(function (o) { return o.lo > m.hi; }).length; });
+    var col = COLS.filter(function (c) { return c.key === state.sort.key; })[0] || COLS[3];
+    rows.sort(function (a, b) { var x = col.sort(a), y = col.sort(b); return (x < y ? -1 : x > y ? 1 : 0) * state.sort.dir; });
+    var shown = state.showAll ? rows : rows.slice(0, 25);
+    var lo = d3.min(shown, function (m) { return m.lo; }), hi = d3.max(shown, function (m) { return m.hi; });
+    var tb = $("#lb"); tb.textContent = "";
+    var trh = h("tr");
+    COLS.forEach(function (c) {
+      var sorted = state.sort.key === c.key;
+      trh.appendChild(h("th", { scope: "col", cls: c.l ? "l" : null, "aria-sort": sorted ? (state.sort.dir < 0 ? "descending" : "ascending") : null },
+        h("button", { type: "button", onclick: function () { if (state.sort.key === c.key) state.sort.dir *= -1; else { state.sort.key = c.key; state.sort.dir = (c.key === "name" || c.key === "rank" || c.key === "ub" || c.key === "vram" || c.key === "params" || c.key === "gpu") ? 1 : -1; } renderBoard(); } }, c.label)));
+    });
+    tb.appendChild(h("thead", null, trh));
+    var body = h("tbody");
+    var recentCut = addMonths(pd(D.today), -2).toISOString().slice(0, 10);
+    shown.forEach(function (m) {
+      var link = hf(m);
+      var W = 120, sx = function (v) { return 4 + (v - lo) / (hi - lo || 1) * (W - 8); };
+      var ns = "http://www.w3.org/2000/svg";
+      var svg = document.createElementNS(ns, "svg"); svg.setAttribute("width", W); svg.setAttribute("height", 14); svg.setAttribute("aria-hidden", "true");
+      var ln = document.createElementNS(ns, "line"); ln.setAttribute("x1", sx(m.lo)); ln.setAttribute("x2", sx(m.hi)); ln.setAttribute("y1", 7); ln.setAttribute("y2", 7); ln.setAttribute("stroke", "var(--ink-3)"); ln.setAttribute("stroke-width", 1.5);
+      var dt = document.createElementNS(ns, "circle"); dt.setAttribute("cx", sx(m.eci)); dt.setAttribute("cy", 7); dt.setAttribute("r", 3.5); dt.setAttribute("fill", "var(--slm)");
+      svg.appendChild(ln); svg.appendChild(dt);
+      var gpu = h("span", { cls: "gpu", title: "Fits " + m.min_gpu_gb + " GB and up" });
+      GPU.forEach(function (g) { gpu.appendChild(h("i", { cls: g >= m.min_gpu_gb ? "on" : null })); });
+      var tags = h("span", { style: "display:inline-flex;gap:6px;margin-left:8px;vertical-align:0" });
+      if (m.record.fit32) tags.appendChild(h("span", { cls: "pill rec", title: "Beat every earlier single-GPU model on its release day" }, "record"));
+      if (m.date >= recentCut) tags.appendChild(h("span", { cls: "pill new" }, "new"));
+      body.appendChild(h("tr", null,
+        h("td", { cls: "num" }, h("span", { cls: "chip " + (m._rank <= 3 ? "r" + m._rank : "rn") }, String(m._rank))),
+        h("td", { cls: "l" }, h("div", { cls: "mname" }, h("span", null, link ? h("a", { href: link, target: "_blank", rel: "noopener" }, m.name) : m.name), h("span", { cls: "org" }, m.org, tags))),
+        h("td", { cls: "num", style: "font-weight:600" }, f1(m.eci)),
+        h("td", { title: f1(m.lo) + "–" + f1(m.hi) }, svg),
+        h("td", { cls: "num soft" }, String(m._ub)),
+        h("td", { cls: "num" }, paramsLabel(m)),
+        h("td", { cls: "num" }, m.vram4_gb + " GB"),
+        h("td", null, gpu, h("span", { cls: "num soft", style: "margin-left:8px" }, m.min_gpu_gb + " GB")),
+        h("td", { cls: "num soft" }, fDate(m.date)),
+        h("td", { cls: "num soft" }, compact(m.downloads))));
+    });
+    tb.appendChild(body);
+    var more = $("#lb-more");
+    more.hidden = rows.length <= 25;
+    more.textContent = state.showAll ? "Show top 25" : "Show all " + rows.length;
+    more.onclick = function () { state.showAll = !state.showAll; renderBoard(); };
+    $("#lb-note").textContent = rows.length + " of " + D.slms.length + " scored models fit " + state.vram + " GB at 4-bit" + (state.recent === "12m" ? " and came out in the last 12 months" : "") + ". Interval = Epoch's uncertainty range for the ECI. HF downloads = last 30 days.";
+  }
+
+  // ---------- watchlist
+  function renderWatch() {
+    var box = $("#watch"); box.textContent = "";
+    if (!D.watchlist.length) { box.appendChild(h("p", { cls: "soft" }, "Every notable single-GPU model we track has an ECI score.")); return; }
+    D.watchlist.forEach(function (w) {
+      box.appendChild(h("div", { cls: "card wcard" },
+        h("span", { cls: "eyebrow" }, (w.date ? fDate(w.date) : "") + (w.org ? " · " + w.org : "")),
+        h("div", { cls: "wn" }, w.hf_repo ? h("a", { href: "https://huggingface.co/" + w.hf_repo, target: "_blank", rel: "noopener", style: "text-decoration:none" }, w.name) : w.name),
+        h("div", { cls: "wm num" }, (w.params_b ? w.params_b + "B" + (w.active_b ? " (" + w.active_b + "B active)" : "") + " · " + f1(w.params_b * D.rule.bytes_per_param_4bit) + " GB at 4-bit" : "")),
+        w.aa_index != null ? h("div", { cls: "wm" }, "AA Intelligence Index " + f1(w.aa_index)) : h("div", { cls: "wm muted" }, "No independent score yet"),
+        w.note ? h("div", { cls: "wm muted" }, w.note) : null));
+    });
+  }
+
+  // ---------- frontier gap
+  function renderGap() {
+    var dk = state.def === "anthropic" ? "anthropic" : "fit32";
+    var L = D.lag[dk], recs = L.records.filter(function (r) { return r.date >= "2023-07-01"; });
+    var avg = d3.mean(recs, function (r) { return r.lag_months; });
+    var F = D.fits[dk + "|since2023"], FF = D.frontier_fit;
+    var lastM = D.monthly[D.monthly.length - 1];
+    var dS = F.slope_per_year - FF.slope_per_year;
+    var pace = Math.abs(dS) < 1 ? ", the same pace, so the gap is holding steady rather than closing" : dS > 0 ? ", so single-GPU models are closing the gap" : ", so the frontier is pulling away";
+    $("#gap-lede").textContent = "Since mid-2023 the frontier has gained " + f1(FF.slope_per_year) + " ECI per year and the best single-GPU models " + f1(F.slope_per_year) + pace + ". The gap is about " + Math.round(lastM.frontier - lastM[dk]) + " ECI points today. Each new single-GPU record has arrived " + Math.round(d3.min(recs, function (r) { return r.lag_months; })) + " to " + Math.round(d3.max(recs, function (r) { return r.lag_months; })) + " months after the frontier first reached the same score (average " + Math.round(avg) + "). Today the best, " + L.now.name + ", is " + Math.round(L.now.months) + " months behind.";
+    var C = { slm: css("--slm"), clay: css("--clay"), ink: css("--ink"), ink2: css("--ink-2"), ink3: css("--ink-3"), surface: css("--surface"), tint: css("--tint-clay") };
+    // A: step lines
+    var la = $("#gapA-legend"); la.textContent = "";
+    la.appendChild(h("span", null, h("i", { cls: "lk-line", style: "border-color:var(--clay)" }), "frontier (any model)"));
+    la.appendChild(h("span", null, h("i", { cls: "lk-line" }), "best single-GPU model"));
+    la.appendChild(h("span", null, h("i", { cls: "lk-band", style: "background:var(--tint-clay)" }), "gap"));
+    var box = $("#gapA"); box.textContent = "";
+    var W = Math.max(280, box.clientWidth), H = Math.round(Math.max(260, Math.min(360, W * 0.62))), M = { t: 14, r: 64, b: 28, l: 38 };
+    var rows = D.monthly.filter(function (r) { return r.date >= "2023-07-01" && r[dk] != null && r.frontier != null; }).map(function (r) { return { d: pd(r.date), f: r.frontier, s: r[dk] }; });
+    var x = d3.scaleUtc().domain(d3.extent(rows, function (r) { return r.d; })).range([M.l, W - M.r]);
+    var y = d3.scaleLinear().domain([d3.min(rows, function (r) { return r.s; }) - 4, d3.max(rows, function (r) { return r.f; }) + 4]).nice().range([H - M.b, M.t]);
+    var svg = d3.select(box).append("svg").attr("viewBox", "0 0 " + W + " " + H).attr("role", "img").attr("aria-label", "Best ECI to date for any model and for single-GPU models, monthly");
+    var yt = y.ticks(5), xt = x.ticks(W < 420 ? 3 : 5);
+    svg.append("g").selectAll("line").data(yt).join("line").attr("class", "gridline").attr("x1", M.l).attr("x2", W - M.r).attr("y1", function (v) { return Math.round(y(v)) + 0.5; }).attr("y2", function (v) { return Math.round(y(v)) + 0.5; });
+    svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (H - M.b) + ")").call(d3.axisBottom(x).tickValues(xt).tickSize(0).tickPadding(9).tickFormat(function (d) { return fMon(d); })).call(function (g) { g.select(".domain").remove(); });
+    svg.append("g").attr("class", "axis").attr("transform", "translate(" + M.l + ",0)").call(d3.axisLeft(y).tickValues(yt).tickSize(0).tickPadding(8)).call(function (g) { g.select(".domain").remove(); });
+    svg.append("path").attr("fill", C.tint).attr("d", d3.area().curve(d3.curveStepAfter).x(function (r) { return x(r.d); }).y0(function (r) { return y(r.s); }).y1(function (r) { return y(r.f); })(rows));
+    svg.append("path").attr("fill", "none").attr("stroke", C.clay).attr("stroke-width", 2).attr("d", d3.line().curve(d3.curveStepAfter).x(function (r) { return x(r.d); }).y(function (r) { return y(r.f); })(rows));
+    svg.append("path").attr("fill", "none").attr("stroke", C.slm).attr("stroke-width", 2).attr("d", d3.line().curve(d3.curveStepAfter).x(function (r) { return x(r.d); }).y(function (r) { return y(r.s); })(rows));
+    var last = rows[rows.length - 1];
+    svg.append("text").attr("x", W - M.r + 6).attr("y", y(last.f) + 4).style("font", "600 12px Inter, system-ui, sans-serif").style("fill", C.ink).text(f1(last.f));
+    svg.append("text").attr("x", W - M.r + 6).attr("y", y(last.s) + 4).style("font", "600 12px Inter, system-ui, sans-serif").style("fill", C.ink).text(f1(last.s));
+    var cross = svg.append("line").attr("y1", M.t).attr("y2", H - M.b).attr("stroke", C.ink3).attr("stroke-width", 1).style("display", "none");
+    var tip = h("div", { cls: "tip" }); tip.hidden = true; box.appendChild(tip);
+    svg.on("pointermove", function (ev) {
+      var r = svg.node().getBoundingClientRect(); var sx = (ev.clientX - r.left) * W / r.width;
+      var d = x.invert(sx); var i = d3.bisector(function (q) { return q.d; }).right(rows, d) - 1; var p = rows[Math.max(0, Math.min(rows.length - 1, i))];
+      cross.style("display", null).attr("x1", x(p.d)).attr("x2", x(p.d));
+      tip.textContent = "";
+      tip.appendChild(h("div", null, h("b", null, fMon(p.d))));
+      tip.appendChild(h("div", { cls: "row num" }, h("i", { style: "border-color:" + C.clay }), h("b", null, f1(p.f)), " frontier"));
+      tip.appendChild(h("div", { cls: "row num" }, h("i", { style: "border-color:" + C.slm }), h("b", null, f1(p.s)), " single-GPU"));
+      tip.appendChild(h("div", { cls: "num" }, "Gap " + f1(p.f - p.s) + " ECI"));
+      tip.hidden = false;
+      var sc = box.clientWidth / W, tx = x(p.d) * sc + 12; if (tx + 190 > box.clientWidth) tx = x(p.d) * sc - 12 - tip.offsetWidth;
+      tip.style.left = tx + "px"; tip.style.top = "10px";
+    }).on("pointerleave", function () { tip.hidden = true; cross.style("display", "none"); });
+
+    // B: lag at each record
+    var lb = $("#gapB-legend"); lb.textContent = "";
+    lb.appendChild(h("span", null, h("i", { cls: "lk-dot" }), "new single-GPU record, at release"));
+    lb.appendChild(h("span", null, h("i", { cls: "lk-dot", style: "background:transparent;box-shadow:inset 0 0 0 2px var(--slm)" }), "best model, today"));
+    var box2 = $("#gapB"); box2.textContent = "";
+    var W2 = Math.max(280, box2.clientWidth), H2 = H, M2 = { t: 14, r: 16, b: 28, l: 38 };
+    var pts = recs.map(function (r) { return { d: pd(r.date), v: r.lag_months, r: r }; });
+    var nowPt = { d: pd(D.today), v: L.now.months, now: true };
+    var x2 = d3.scaleUtc().domain([pd("2023-07-01"), addMonths(pd(D.today), 2)]).range([M2.l, W2 - M2.r]);
+    var y2 = d3.scaleLinear().domain([0, Math.max(24, d3.max(pts, function (p) { return p.v; }) + 2, nowPt.v + 2)]).nice().range([H2 - M2.b, M2.t]);
+    var s2 = d3.select(box2).append("svg").attr("viewBox", "0 0 " + W2 + " " + H2).attr("role", "img").attr("aria-label", "Months behind the frontier at each new single-GPU record");
+    var yt2 = y2.ticks(5), xt2 = x2.ticks(W2 < 420 ? 3 : 5);
+    s2.append("g").selectAll("line").data(yt2).join("line").attr("class", "gridline").attr("x1", M2.l).attr("x2", W2 - M2.r).attr("y1", function (v) { return Math.round(y2(v)) + 0.5; }).attr("y2", function (v) { return Math.round(y2(v)) + 0.5; });
+    s2.append("g").attr("class", "axis").attr("transform", "translate(0," + (H2 - M2.b) + ")").call(d3.axisBottom(x2).tickValues(xt2).tickSize(0).tickPadding(9).tickFormat(function (d) { return fMon(d); })).call(function (g) { g.select(".domain").remove(); });
+    s2.append("g").attr("class", "axis").attr("transform", "translate(" + M2.l + ",0)").call(d3.axisLeft(y2).tickValues(yt2).tickSize(0).tickPadding(8).tickFormat(function (v) { return v + " mo"; })).call(function (g) { g.select(".domain").remove(); });
+    s2.append("path").attr("fill", "none").attr("stroke", C.slm).attr("stroke-width", 1.5).attr("stroke-opacity", 0.45).attr("d", d3.line().x(function (p) { return x2(p.d); }).y(function (p) { return y2(p.v); })(pts));
+    s2.append("g").selectAll("circle").data(pts).join("circle").attr("cx", function (p) { return x2(p.d); }).attr("cy", function (p) { return y2(p.v); }).attr("r", 5).attr("fill", C.slm).attr("stroke", C.surface).attr("stroke-width", 2);
+    s2.append("circle").attr("cx", x2(nowPt.d)).attr("cy", y2(nowPt.v)).attr("r", 5).attr("fill", C.surface).attr("stroke", C.slm).attr("stroke-width", 2);
+    s2.append("text").attr("x", x2(nowPt.d)).attr("y", y2(nowPt.v) - 12).attr("text-anchor", "end").style("font", "600 12px Inter, system-ui, sans-serif").style("fill", C.ink).text("Today: " + Math.round(nowPt.v) + " mo");
+    var tip2 = h("div", { cls: "tip" }); tip2.hidden = true; box2.appendChild(tip2);
+    var all2 = pts.concat([nowPt]);
+    s2.on("pointermove", function (ev) {
+      var r = s2.node().getBoundingClientRect(); var sx = (ev.clientX - r.left) * W2 / r.width, sy = (ev.clientY - r.top) * H2 / r.height;
+      var best = null, bd = 1e9; all2.forEach(function (p) { var dd = Math.hypot(x2(p.d) - sx, y2(p.v) - sy); if (dd < bd) { bd = dd; best = p; } });
+      if (!best || bd > 30) { tip2.hidden = true; return; }
+      tip2.textContent = "";
+      if (best.now) { tip2.appendChild(h("div", null, h("b", null, "Today"))); tip2.appendChild(h("div", { cls: "tv num" }, f1(best.v) + " months")); tip2.appendChild(h("div", null, L.now.name + " matches " + L.now.frontier_model + " (" + fMon(L.now.frontier_date) + ")")); }
+      else { tip2.appendChild(h("div", null, h("b", null, best.r.name))); tip2.appendChild(h("div", { cls: "tv num" }, f1(best.v) + " months")); tip2.appendChild(h("div", null, "Released " + fDate(best.r.date) + ", ECI " + f1(best.r.eci))); tip2.appendChild(h("div", null, "Frontier got there with " + best.r.frontier_model + " (" + fMon(best.r.frontier_date) + ")")); }
+      tip2.hidden = false;
+      var sc = box2.clientWidth / W2, tx = x2(best.d) * sc + 12; if (tx + 230 > box2.clientWidth) tx = x2(best.d) * sc - 12 - tip2.offsetWidth;
+      tip2.style.left = Math.max(0, tx) + "px"; tip2.style.top = Math.max(0, y2(best.v) * sc - 20) + "px";
+    }).on("pointerleave", function () { tip2.hidden = true; });
+  }
+
+  // ---------- Artificial Analysis
+  function renderAA() {
+    var A = D.aa || {}, rows = (A.models || []).slice().sort(function (a, b) { return b.index - a.index; });
+    var box = $("#aa-bars"); box.textContent = "";
+    if (!rows.length || !A.frontier) { $("#aa").hidden = true; return; }
+    $("#aa-lede").textContent = "Artificial Analysis runs its own evaluations within days of a release, so it often scores new models before Epoch does. Its index uses a different scale; the dashed line marks today's best model of any size, " + A.frontier.name.replace(/\s*\(.*\)$/, "") + " at " + f1(A.frontier.index) + ". We use the ECI for the long-run trend because it puts every model since 2023 on one scale.";
+    var lg = $("#aa-legend"); lg.textContent = "";
+    lg.appendChild(h("span", null, h("i", { cls: "lk-band", style: "background:var(--slm);height:10px" }), "on the ECI leaderboard"));
+    lg.appendChild(h("span", null, h("i", { cls: "lk-band", style: "background:var(--slm-soft);height:10px" }), "awaiting an ECI score"));
+    lg.appendChild(h("span", null, h("i", { style: "width:0;height:14px;border-left:2px dashed var(--clay);display:inline-block" }), "frontier, any size (" + f1(A.frontier.index) + ")"));
+    var max = Math.max(A.frontier.index, rows[0].index) * 1.08;
+    rows.forEach(function (r) {
+      var pct = r.index / max * 100;
+      var track = h("div", { cls: "bar-track" },
+        h("div", { cls: "bar" + (r.slm_id ? "" : " noeci"), style: "width:" + pct + "%" }),
+        h("div", { cls: "bar-val num", style: "left:" + pct + "%" }, f1(r.index)),
+        h("div", { cls: "ref-line", style: "left:" + (A.frontier.index / max * 100) + "%" }));
+      box.appendChild(h("div", { cls: "bar-row" },
+        h("div", { cls: "bar-name" }, h("a", { href: r.url, target: "_blank", rel: "noopener", style: "text-decoration:none" }, r.name), h("span", { cls: "org" }, (r.org || "") + (r.params_b ? " · " + r.params_b + "B" : "") + (r.eci ? " · ECI " + f1(r.eci) : " · no ECI yet"))),
+        track));
+    });
+    $("#aa-foot").textContent = "";
+    $("#aa-foot").appendChild(h("span", null, "Source: ", h("a", { href: "https://artificialanalysis.ai/models/open-source/small", target: "_blank", rel: "noopener" }, "Artificial Analysis"), ", highest-scoring setting of each model. Snapshot " + (A.snapshot_date ? fDate(A.snapshot_date) : "") + "."));
+  }
+
+  // ---------- misc text, links, subscribe
+  function renderMisc() {
+    var sel = th("selfrep");
+    $("#glm-then").textContent = sel && sel.anthropic_value ? f1(sel.anthropic_value) : "–";
+    $("#glm-now").textContent = sel ? f1(sel.value) : "–";
+    $("#anth-max").textContent = D.rule.anthropic_max_b;
+    var af = D.fits["anthropic|since2023"]; $("#anth-slope").textContent = af ? f1(af.slope_per_year) + " ECI per year" : "–";
+    var tiers = $("#gpu-tiers"); tiers.textContent = "";
+    GPU.forEach(function (g) { var p = g * D.rule.weights_share / D.rule.bytes_per_param_4bit; tiers.appendChild(h("tr", null, h("td", { style: "text-align:left" }, g + " GB"), h("td", { cls: "num" }, "≤ " + p + "B"), h("td", { cls: "num soft" }, "≤ " + (p * D.rule.bytes_per_param_4bit) + " GB"))); });
+    var repo = "https://github.com/" + (SITE.repo || "");
+    ["#repo-link", "#repo-link-2"].forEach(function (s) { $(s).href = repo; $(s).target = "_blank"; $(s).rel = "noopener"; });
+    var raw = repo + "/blob/main/data/";
+    $("#dl-json").href = raw + "leaderboard.json"; $("#dl-csv").href = raw + "slm_leaderboard.csv"; $("#dl-hist").href = raw + "history.csv";
+    ["#dl-json", "#dl-csv", "#dl-hist"].forEach(function (s) { $(s).target = "_blank"; $(s).rel = "noopener"; });
+    // subscribe
+    var slot = $("#sub-form-slot"); slot.textContent = "";
+    var nl = SITE.newsletter || {};
+    if (!isPages) {
+      slot.appendChild(h("a", { cls: "btn primary", href: (SITE.site_url || repo) + "#subscribe", target: "_blank", rel: "noopener" }, "Sign up on the live site"));
+      $("#sub-fine").textContent = "This copy is a snapshot. The live site updates daily and hosts the sign-up form.";
+    } else if (nl.provider === "buttondown" && nl.username) {
+      var f = h("form", { action: "https://buttondown.com/api/emails/embed-subscribe/" + encodeURIComponent(nl.username), method: "post", target: "_blank" },
+        h("label", { for: "bd-email", cls: "eyebrow", style: "flex-basis:100%" }, "Email address"),
+        h("input", { type: "email", name: "email", id: "bd-email", required: "required", placeholder: "you@example.com", autocomplete: "email" }),
+        h("input", { type: "hidden", name: "embed", value: "1" }),
+        h("button", { cls: "btn primary", type: "submit" }, "Subscribe"));
+      slot.appendChild(f);
+      $("#sub-fine").textContent = "Handled by Buttondown. You will get a confirmation email; unsubscribe from any message.";
+    } else {
+      slot.appendChild(h("p", { cls: "soft" }, "The email list opens soon. Until then, use one of the options on the right; they announce the same events."));
+    }
+    var alt = $("#sub-alt"); alt.textContent = "";
+    alt.appendChild(h("li", null, "On GitHub, ", h("a", { href: repo, target: "_blank", rel: "noopener" }, "watch this repository"), ": Watch → Custom → Releases. Each alert is published as a release."));
+    alt.appendChild(h("li", null, h("a", { href: repo + "/releases.atom", target: "_blank", rel: "noopener" }, "RSS / Atom feed"), " of the same alerts."));
+    alt.appendChild(h("li", null, h("a", { href: repo + "/blob/main/data/history.csv", target: "_blank", rel: "noopener" }, "Daily history"), " of the top 10, for your own analysis."));
+  }
+
+  function renderAll() { renderControls(); renderTop(); renderForecast(); renderBoard(); renderWatch(); renderGap(); renderAA(); renderMisc(); }
+  if (window.d3) renderAll(); else window.addEventListener("load", function () { if (window.d3) renderAll(); });
+  $("#q").addEventListener("input", function (e) { state.q = e.target.value; renderBoard(); });
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { drawHero(); renderGap(); }, 150); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { drawHero(); renderGap(); });
+})();
+</script>

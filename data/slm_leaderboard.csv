@@ -1,0 +1,72 @@
+rank,rank_ub,model,eci,eci_ci_low,eci_ci_high,release_date,organization,params_b,active_b,vram_4bit_gb,smallest_gpu_gb,hugging_face,params_source
+1,1,Qwen3.8-27B,152.63,150.65,154.67,2026-08-14,Alibaba,27.0,,13.5,24,https://huggingface.co/Qwen/Qwen3.8-27B,Epoch AI
+2,2,Qwen3.6-27B,146.72,144.63,148.91,2026-04-22,Alibaba,27.0,,13.5,24,https://huggingface.co/Qwen/Qwen3.6-27B,Epoch AI
+3,2,Gemma 4 31B,144.12,141.72,146.6,2026-04-02,Google DeepMind,31.0,,15.5,24,https://huggingface.co/google/gemma-4-31B-it,Epoch AI
+4,2,Qwen3.6-35B-A3B,144.07,142.18,145.89,2026-04-14,Alibaba,35.0,3.0,17.5,24,https://huggingface.co/Qwen/Qwen3.6-35B-A3B,Epoch AI
+5,2,Qwen3.5-35B-A3B,144.05,141.51,146.63,2026-02-24,Alibaba,35.0,3.0,17.5,24,https://huggingface.co/Qwen/Qwen3.5-35B-A3B,Epoch AI
+6,3,Gemma 4 26B-A4B,141.56,139.11,143.94,2026-04-02,Google DeepMind,25.2,3.8,12.6,24,https://huggingface.co/google/gemma-4-26B-A4B-it,Epoch AI
+7,5,Qwen3.5-9B,139.5,137.31,141.66,2026-02-24,Alibaba,9.0,,4.5,8,https://huggingface.co/Qwen/Qwen3.5-9B,Epoch AI
+8,6,Qwen3-30B-A3B-Thinking-2507,138.32,135.75,140.81,2025-07-30,Alibaba,30.5,3.3,15.3,24,https://huggingface.co/Qwen/Qwen3-30B-A3B-Thinking-2507,Hugging Face safetensors
+9,6,Qwen3-32B,136.85,134.39,139.13,2025-04-29,Alibaba,32.8,,16.4,24,https://huggingface.co/Qwen/Qwen3-32B,Epoch AI
+10,7,QwQ-32B,136.44,133.66,139.1,2025-03-05,Alibaba,32.5,,16.2,24,https://huggingface.co/Qwen/QwQ-32B,Epoch AI
+11,7,Qwen3-14B,136.06,133.32,138.65,2025-04-29,Alibaba,14.8,,7.4,12,https://huggingface.co/Qwen/Qwen3-14B,Epoch AI
+12,8,gpt-oss-20b,134.89,132.32,137.28,2025-08-05,OpenAI,20.9,3.6,10.5,16,https://huggingface.co/openai/gpt-oss-20b,Epoch AI
+13,7,Qwen3-30B-A3B-Instruct-2507,134.87,131.91,137.66,2025-07-29,Alibaba,30.5,3.3,15.3,24,https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507,Hugging Face safetensors
+14,8,Qwen3-30B-A3B,134.16,131.29,136.71,2025-04-29,Alibaba,30.0,3.3,15.0,24,https://huggingface.co/Qwen/Qwen3-30B-A3B,Epoch AI
+15,9,Qwen3-8B,132.07,128.93,134.94,2025-04-28,Alibaba,8.2,,4.1,8,https://huggingface.co/Qwen/Qwen3-8B,Epoch AI
+16,13,Phi-4,129.24,126.07,132.03,2024-12-12,Microsoft Research,14.0,,7.0,12,https://huggingface.co/microsoft/phi-4,Epoch AI
+17,15,Gemma 3 27B,127.56,124.43,130.41,2025-03-12,Google DeepMind,27.0,,13.5,24,https://huggingface.co/google/gemma-3-27b-it,Epoch AI
+18,16,Qwen2.5-Coder-32B,118.73,109.52,127.83,2024-09-18,Alibaba,32.8,,16.4,24,https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct,Hugging Face safetensors
+19,18,Gemma 2 27B,118.64,114.2,122.36,2024-06-24,Google DeepMind,27.0,,13.5,24,https://huggingface.co/google/gemma-2-27b-it,Epoch AI
+20,18,Phi-3-small,116.3,110.5,121.86,2024-04-23,Microsoft,7.4,,3.7,8,https://huggingface.co/microsoft/Phi-3-small-8k-instruct,Epoch AI
+21,18,Phi-3-medium,114.07,109.18,118.52,2024-04-23,Microsoft,14.0,,7.0,12,https://huggingface.co/microsoft/Phi-3-medium-4k-instruct,Epoch AI
+22,18,Mistral NeMo 12B,113.87,108.58,118.38,2024-07-18,Mistral AI,12.0,,6.0,8,https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407,Epoch AI
+23,18,Qwen2.5-Coder-14B,113.74,105.15,122.27,2024-09-18,,14.8,,7.4,12,https://huggingface.co/Qwen/Qwen2.5-Coder-14B-Instruct,Hugging Face safetensors
+24,18,Mixtral 8x7B,113.19,108.12,117.55,2023-12-11,Mistral AI,46.7,12.9,23.4,32,https://huggingface.co/mistralai/Mixtral-8x7B-v0.1,Epoch AI
+25,18,Gemma 2 9B,112.42,106.76,117.34,2024-06-24,Google DeepMind,9.0,,4.5,8,https://huggingface.co/google/gemma-2-9b-it,Epoch AI
+26,18,Llama 3.1 8B,110.9,105.08,115.88,2024-07-23,Meta AI,8.0,,4.0,8,https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct,Epoch AI
+27,18,Phi-3-mini,110.45,104.04,116.07,2024-04-23,Microsoft,3.8,,1.9,8,https://huggingface.co/microsoft/Phi-3-mini-4k-instruct,Epoch AI
+28,19,Llama 3 8B,109.12,103.42,113.98,2024-04-18,Meta AI,8.0,,4.0,8,https://huggingface.co/meta-llama/Meta-Llama-3-8B,Epoch AI
+29,18,Qwen2.5-Coder-7B,107.42,97.72,116.06,2024-09-18,Alibaba,7.6,,3.8,8,https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct,Epoch AI
+30,20,Gemma 7B,103.15,95.41,109.71,2024-02-21,Google DeepMind,8.5,,4.3,8,https://huggingface.co/google/gemma-7b,Epoch AI
+31,22,Mistral 7B,102.72,94.94,109.11,2023-09-27,Mistral AI,7.2,,3.6,8,https://huggingface.co/mistralai/Mistral-7B-v0.1,Hugging Face safetensors
+32,19,Yi-9B,102.18,91.31,111.83,2024-03-01,,8.8,,4.4,8,https://huggingface.co/01-ai/Yi-9B,Hugging Face safetensors
+33,21,Qwen-14B,101.76,93.15,109.32,2023-09-24,Alibaba,14.0,,7.0,12,https://huggingface.co/Qwen/Qwen-14B,Epoch AI
+34,23,DeepSeek-Coder-V2-Lite,99.41,88.84,108.43,2024-06-13,,15.7,2.4,7.9,12,https://huggingface.co/deepseek-ai/DeepSeek-Coder-V2-Lite-Base,Hugging Face safetensors
+35,22,Falcon 2 11B,99.24,88.36,108.96,2024-05-09,Technology Innovation Institute,11.0,,5.5,8,https://huggingface.co/tiiuae/falcon-11B,Epoch AI
+36,24,InternLM-20B,98.9,89.1,107.47,2023-09-18,,20.0,,10.0,16,https://huggingface.co/internlm/internlm-20b,curated
+37,22,Qwen2.5-Coder-3B,96.75,82.92,109.11,2024-09-18,,3.1,,1.5,8,https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct,Hugging Face safetensors
+38,27,LLaMA-33B,96.51,87.42,104.47,2023-02-24,Meta AI,32.5,,16.2,24,,Epoch AI
+39,27,Llama 2 13B,96.48,87.39,104.24,2023-07-18,Meta AI,13.0,,6.5,12,https://huggingface.co/meta-llama/Llama-2-13b-hf,Epoch AI
+40,27,Phi-2,96.21,86.86,104.25,2023-12-12,Microsoft,2.7,,1.4,8,https://huggingface.co/microsoft/phi-2,Epoch AI
+41,25,StarCoder2-15B,96.09,84.04,105.97,2024-02-20,"Hugging Face,ServiceNow,Nvidia,BigCode",15.0,,7.5,12,https://huggingface.co/bigcode/starcoder2-15b,Epoch AI
+42,29,Yi-6B,94.27,84.08,103.19,2023-11-22,01.AI,6.0,,3.0,8,https://huggingface.co/01-ai/Yi-6B,Epoch AI
+43,29,Baichuan2-13B,91.75,80.78,100.92,2023-09-06,Baichuan,13.0,,6.5,12,https://huggingface.co/baichuan-inc/Baichuan2-13B-Base,Epoch AI
+44,29,Falcon-40B,90.67,79.95,99.95,2023-05-25,Technology Innovation Institute,40.0,,20.0,32,https://huggingface.co/tiiuae/falcon-40b,Epoch AI
+45,29,Qwen-7B,89.14,77.89,98.74,2023-09-28,Alibaba,7.0,,3.5,8,https://huggingface.co/Qwen/Qwen-7B,Epoch AI
+46,29,Qwen2.5-Coder-1.5B,89.12,76.04,100.07,2024-09-18,Alibaba,1.5,,0.8,8,https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct,Epoch AI
+47,30,LLaMA-13B,85.23,73.38,95.44,2023-02-24,Meta AI,13.0,,6.5,12,,Epoch AI
+48,31,MPT-30B,85.19,73.29,95.33,2023-06-22,MosaicML,30.0,,15.0,24,,Epoch AI
+49,32,InternLM-7B,84.56,72.54,94.82,2023-07-05,,7.0,,3.5,8,https://huggingface.co/internlm/internlm-7b,curated
+50,32,Baichuan2-7B,83.6,70.51,94.45,2023-09-20,Baichuan,7.0,,3.5,8,https://huggingface.co/baichuan-inc/Baichuan2-7B-Base,Epoch AI
+51,32,INTELLECT-1,83.35,70.76,94.04,2024-11-29,"Prime Intellect,Hugging Face,Arcee AI",10.0,,5.0,8,https://huggingface.co/PrimeIntellect/INTELLECT-1,Epoch AI
+52,32,Llama 2 7B,83.23,70.64,93.8,2023-07-18,Meta AI,7.0,,3.5,8,https://huggingface.co/meta-llama/Llama-2-7b-hf,Epoch AI
+53,35,LLaMA-7B,77.28,63.43,88.9,2023-02-24,Meta AI,6.7,,3.4,8,,Epoch AI
+54,34,DeepSeek Coder 33B,76.3,60.39,89.54,2023-11-02,"DeepSeek,Peking University",33.0,,16.5,24,https://huggingface.co/deepseek-ai/deepseek-coder-33b-base,Epoch AI
+55,36,Vicuna-13B v1.1,76.11,60.8,88.61,2023-04-12,,13.0,,6.5,12,https://huggingface.co/lmsys/vicuna-13b-v1.1,curated
+56,37,Gemma 2B,75.71,61.05,87.59,2024-02-21,Google DeepMind,2.5,,1.3,8,https://huggingface.co/google/gemma-2b,Epoch AI
+57,36,CodeQwen1.5-7B,74.81,57.5,88.58,2024-04-15,,7.2,,3.6,8,https://huggingface.co/Qwen/CodeQwen1.5-7B,Hugging Face safetensors
+58,40,ChatGLM2-6B,73.74,58.37,86.79,2023-06-24,,6.2,,3.1,8,https://huggingface.co/zai-org/chatglm2-6b,curated
+59,40,MPT-7B,73.39,58.17,86.19,2023-05-05,MosaicML,7.0,,3.5,8,,Epoch AI
+60,40,Falcon-7B,73.09,58.18,85.44,2023-04-24,Technology Innovation Institute,7.0,,3.5,8,https://huggingface.co/tiiuae/falcon-7b,Epoch AI
+61,40,StarCoder2-7B,72.4,54.87,86.59,2024-02-20,"Hugging Face,ServiceNow,Nvidia,BigCode",7.0,,3.5,8,https://huggingface.co/bigcode/starcoder2-7b,Epoch AI
+62,40,XGen-7B,70.29,54.26,84.19,2023-06-27,Salesforce,6.7,,3.4,8,https://huggingface.co/Salesforce/xgen-7b-8k-base,Epoch AI
+63,43,Phi-1.5,68.37,50.54,82.89,2023-09-11,Microsoft,1.3,,0.7,8,https://huggingface.co/microsoft/phi-1_5,Epoch AI
+64,42,Qwen2.5-Coder-0.5B,68.08,48.35,83.88,2024-09-18,,0.5,,0.2,8,https://huggingface.co/Qwen/Qwen2.5-Coder-0.5B-Instruct,Hugging Face safetensors
+65,43,DeepSeek Coder 6.7B,67.45,49.15,82.16,2023-11-02,"DeepSeek,Peking University",6.7,,3.4,8,https://huggingface.co/deepseek-ai/deepseek-coder-6.7b-base,Epoch AI
+66,43,StarCoder2-3B,66.64,47.86,81.65,2024-02-22,"Hugging Face,ServiceNow,Nvidia,BigCode",3.0,,1.5,8,https://huggingface.co/bigcode/starcoder2-3b,Epoch AI
+67,45,OpenLLaMA 7B,64.37,46.03,79.52,2023-06-07,,7.0,,3.5,8,https://huggingface.co/openlm-research/open_llama_7b,curated
+68,47,Qwen-1.8B,59.62,40.23,75.72,2023-11-30,,1.8,,0.9,8,https://huggingface.co/Qwen/Qwen-1_8B,Hugging Face safetensors
+69,47,RedPajama-INCITE-7B,57.7,37.89,74.36,2023-05-04,,6.9,,3.5,8,https://huggingface.co/togethercomputer/RedPajama-INCITE-7B-Base,curated
+70,49,Dolly 2.0 12B,55.52,34.51,72.61,2023-04-11,Databricks,12.0,,6.0,8,,Epoch AI
+71,53,Cerebras-GPT-13B,48.88,26.25,67.1,2023-03-20,Cerebras Systems,13.0,,6.5,12,,Epoch AI

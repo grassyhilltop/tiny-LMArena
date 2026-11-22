@@ -1,0 +1,82 @@
+epoch_model,display_name,hf_repo,params_b,active_b,open_weights,note
+LLaMA-33B,LLaMA-33B,,,,,Original LLaMA weights were released by request only; no official Hugging Face repo
+LLaMA-13B,LLaMA-13B,,,,,
+LLaMA-7B,LLaMA-7B,,,,,
+Cerebras-GPT-13B,Cerebras-GPT-13B,cerebras/Cerebras-GPT-13B,,,,
+Dolly 2.0-12b,Dolly 2.0 12B,databricks/dolly-v2-12b,,,,
+Falcon-7B,Falcon-7B,tiiuae/falcon-7b,,,,
+MPT-7B,MPT-7B,mosaicml/mpt-7b,,,,
+Falcon-40B,Falcon-40B,tiiuae/falcon-40b,,,,
+MPT-30B,MPT-30B,mosaicml/mpt-30b,,,,
+XGen-7B,XGen-7B,Salesforce/xgen-7b-8k-base,,,,
+Llama 2-13B,Llama 2 13B,meta-llama/Llama-2-13b-hf,,,,
+Llama 2-7B,Llama 2 7B,meta-llama/Llama-2-7b-hf,,,,
+Baichuan2-13B,Baichuan2-13B,baichuan-inc/Baichuan2-13B-Base,,,,
+Phi-1.5,Phi-1.5,microsoft/phi-1_5,,,,
+Baichuan 2-7B,Baichuan2-7B,baichuan-inc/Baichuan2-7B-Base,,,,
+Qwen-14B,Qwen-14B,Qwen/Qwen-14B,,,,
+Mistral 7B v0.1,Mistral 7B,mistralai/Mistral-7B-v0.1,,,,
+Qwen-7B,Qwen-7B,Qwen/Qwen-7B,,,,
+DeepSeek Coder 33B,DeepSeek Coder 33B,deepseek-ai/deepseek-coder-33b-base,,,,
+DeepSeek Coder 6.7B,DeepSeek Coder 6.7B,deepseek-ai/deepseek-coder-6.7b-base,,,,
+Yi 6B,Yi-6B,01-ai/Yi-6B,,,,
+Mixtral 8x7B,Mixtral 8x7B,mistralai/Mixtral-8x7B-v0.1,,12.9,,
+Phi-2,Phi-2,microsoft/phi-2,,,,
+StarCoder 2 15B,StarCoder2-15B,bigcode/starcoder2-15b,,,,
+StarCoder 2 7B,StarCoder2-7B,bigcode/starcoder2-7b,,,,
+Gemma 7B,Gemma 7B,google/gemma-7b,,,,
+Gemma 2B,Gemma 2B,google/gemma-2b,,,,
+StarCoder 2 3B,StarCoder2-3B,bigcode/starcoder2-3b,,,,
+Llama 3-8B,Llama 3 8B,meta-llama/Meta-Llama-3-8B,,,,
+phi-3-small 7.4B,Phi-3-small,microsoft/Phi-3-small-8k-instruct,,,,
+phi-3-medium 14B,Phi-3-medium,microsoft/Phi-3-medium-4k-instruct,,,,
+phi-3-mini 3.8B,Phi-3-mini,microsoft/Phi-3-mini-4k-instruct,,,,
+Falcon 2 11B,Falcon 2 11B,tiiuae/falcon-11B,,,,
+Gemma 2 27B,Gemma 2 27B,google/gemma-2-27b-it,,,,
+Gemma 2 9B,Gemma 2 9B,google/gemma-2-9b-it,,,,
+Mistral NeMo,Mistral NeMo 12B,mistralai/Mistral-Nemo-Instruct-2407,,,,
+Llama 3.1-8B,Llama 3.1 8B,meta-llama/Llama-3.1-8B-Instruct,,,,
+Qwen2.5-Coder-32B,Qwen2.5-Coder-32B,Qwen/Qwen2.5-Coder-32B-Instruct,,,,
+Qwen2.5-Coder (7B),Qwen2.5-Coder-7B,Qwen/Qwen2.5-Coder-7B-Instruct,,,,
+Qwen2.5-Coder (1.5B),Qwen2.5-Coder-1.5B,Qwen/Qwen2.5-Coder-1.5B-Instruct,,,,
+Phi-4,Phi-4,microsoft/phi-4,,,,
+QwQ-32B,QwQ-32B,Qwen/QwQ-32B,,,,
+Gemma 3 27B,Gemma 3 27B,google/gemma-3-27b-it,,,,
+Qwen3-8B,Qwen3-8B,Qwen/Qwen3-8B,,,,
+Qwen3-32B,Qwen3-32B,Qwen/Qwen3-32B,,,,
+Qwen3-14B,Qwen3-14B,Qwen/Qwen3-14B,,,,
+Qwen3-30B-A3B,Qwen3-30B-A3B,Qwen/Qwen3-30B-A3B,,3.3,,
+Qwen3-30B-A3B-Thinking (Jul 2025),Qwen3-30B-A3B-Thinking-2507,Qwen/Qwen3-30B-A3B-Thinking-2507,,3.3,,
+Qwen3-30B-A3B-Instruct (Jul 2025),Qwen3-30B-A3B-Instruct-2507,Qwen/Qwen3-30B-A3B-Instruct-2507,,3.3,,
+gpt-oss-20b,gpt-oss-20b,openai/gpt-oss-20b,,3.6,,
+Qwen3.5-35B-A3B,Qwen3.5-35B-A3B,Qwen/Qwen3.5-35B-A3B,,3,,
+Qwen3.5-9B,Qwen3.5-9B,Qwen/Qwen3.5-9B,,,,
+Gemma 4 31B IT,Gemma 4 31B,google/gemma-4-31B-it,,,,
+Gemma 4 26B A4B,Gemma 4 26B-A4B,google/gemma-4-26B-A4B-it,,3.8,,
+Qwen 3.6 35B-A3B,Qwen3.6-35B-A3B,Qwen/Qwen3.6-35B-A3B,,3,,
+Qwen3.6 27B,Qwen3.6-27B,Qwen/Qwen3.6-27B,,,,
+Qwen 3.8 27B,Qwen3.8-27B,Qwen/Qwen3.8-27B,,,,
+Qwen2.5-Coder-14B,Qwen2.5-Coder-14B,Qwen/Qwen2.5-Coder-14B-Instruct,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+Yi-9B,Yi-9B,01-ai/Yi-9B,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+DeepSeek-Coder-V2-Lite-Base,DeepSeek-Coder-V2-Lite,deepseek-ai/DeepSeek-Coder-V2-Lite-Base,,2.4,yes,Epoch lists access as Unknown; weights are on Hugging Face
+internlm-20b,InternLM-20B,internlm/internlm-20b,20,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+Qwen2.5-Coder-3B,Qwen2.5-Coder-3B,Qwen/Qwen2.5-Coder-3B-Instruct,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+internlm-7b,InternLM-7B,internlm/internlm-7b,7,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+INTELLECT-1,INTELLECT-1,PrimeIntellect/INTELLECT-1,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+vicuna-13b-v1.1,Vicuna-13B v1.1,lmsys/vicuna-13b-v1.1,13,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+CodeQwen1.5-7B,CodeQwen1.5-7B,Qwen/CodeQwen1.5-7B,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+chatglm2-6b,ChatGLM2-6B,THUDM/chatglm2-6b,6.2,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+Qwen2.5-Coder-0.5B,Qwen2.5-Coder-0.5B,Qwen/Qwen2.5-Coder-0.5B-Instruct,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+open_llama_7b,OpenLLaMA 7B,openlm-research/open_llama_7b,7,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+Qwen-1_8B,Qwen-1.8B,Qwen/Qwen-1_8B,,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+RedPajama-INCITE-7B-Base,RedPajama-INCITE-7B,togethercomputer/RedPajama-INCITE-7B-Base,6.9,,yes,Epoch lists access as Unknown; weights are on Hugging Face
+Qwen 3.5 Flash (hosted 35B-A3B),,,,,no,Hosted API endpoint; the open release is listed separately as Qwen3.5-35B-A3B
+Qwen 3.6 Flash,,,,,no,Hosted API endpoint
+DeepSeek V4.1 Flash 1017,DeepSeek V4.1 Flash,deepseek-ai/DeepSeek-V4.1-Flash-1017,,,,
+Mistral Large 4 Preview,Mistral Large 4 Preview,,1000,,,Mistral Large 4 ships as a 1T-A52B MoE (mistralai/Mistral-Large-4-1T-A52B)
+DeepSeek-V3.2,DeepSeek-V3.2,deepseek-ai/DeepSeek-V3.2,,,,
+Qwen3-235B-A22B-Thinking (Jul 2025),,Qwen/Qwen3-235B-A22B-Thinking-2507,,,,
+Qwen3-235B-A22B-Instruct (Jul 2025),,Qwen/Qwen3-235B-A22B-Instruct-2507,,,,
+Kimi K2 (Jul 2025),,moonshotai/Kimi-K2-Instruct,,,,
+Mistral Large 2 (Jul 2024),,mistralai/Mistral-Large-Instruct-2407,,,,
+"DeepSeek-V2 (MoE-236B, May 2024)",,deepseek-ai/DeepSeek-V2,,,,

@@ -1,0 +1,5 @@
+data/raw/
+data/events_pending.json
+dist/
+__pycache__/
+*.tmp

@@ -1,0 +1,88 @@
+{
+ "snapshot_date": "2026-11-22",
+ "source": "Artificial Analysis website (manual snapshot)",
+ "frontier": {
+  "name": "Claude Fable 5.2 (Max, Default Fallback)",
+  "index": 64.6,
+  "url": "https://artificialanalysis.ai/models/claude-fable-5-2"
+ },
+ "models": [
+  {
+   "name": "Nanbeige4.3-33B",
+   "variant": "Nanbeige4.3-33B",
+   "org": "Nanbeige",
+   "date": "2026-10-25",
+   "params_b": 33,
+   "active_b": null,
+   "index": 20.4,
+   "hf_repo": "Nanbeige/Nanbeige4.3-33B",
+   "url": "https://artificialanalysis.ai/models/nanbeige4-3-33b"
+  },
+  {
+   "name": "Qwen3.8 27B",
+   "variant": "Qwen3.8 27B (Xhigh)",
+   "org": "Alibaba",
+   "date": "2026-08-14",
+   "params_b": 27,
+   "active_b": null,
+   "index": 20.1,
+   "hf_repo": "Qwen/Qwen3.8-27B",
+   "url": "https://artificialanalysis.ai/models/qwen3-8-27b"
+  },
+  {
+   "name": "K2 Horizon 32B",
+   "variant": "K2 Horizon 32B",
+   "org": "Institute of Foundation Models",
+   "date": "2026-09-03",
+   "params_b": 32,
+   "active_b": null,
+   "index": 13.9,
+   "hf_repo": "IFM/K2-Horizon-32B",
+   "url": "https://artificialanalysis.ai/models/k2-horizon-32b"
+  },
+  {
+   "name": "K2 Horizon MoVA 36B A4B",
+   "variant": "K2 Horizon MoVA 36B A4B",
+   "org": "Institute of Foundation Models",
+   "date": "2026-09-03",
+   "params_b": 36,
+   "active_b": 4,
+   "index": 13.8,
+   "hf_repo": "IFM/K2-Horizon-MoVA-36B-A4B",
+   "url": "https://artificialanalysis.ai/models/k2-horizon-mova-36b-a4b"
+  },
+  {
+   "name": "K2 Horizon 7B",
+   "variant": "K2 Horizon 7B",
+   "org": "Institute of Foundation Models",
+   "date": "2026-09-03",
+   "params_b": 7,
+   "active_b": null,
+   "index": 10.6,
+   "hf_repo": "IFM/K2-Horizon-7B",
+   "url": "https://artificialanalysis.ai/models/k2-horizon-7b"
+  },
+  {
+   "name": "Muse Glimmer",
+   "variant": "Muse Glimmer (High)",
+   "org": "Meta",
+   "date": "2026-08-10",
+   "params_b": 30,
+   "active_b": null,
+   "index": 6.3,
+   "hf_repo": "meta-models/Muse-Glimmer-30B",
+   "url": "https://artificialanalysis.ai/models/muse-glimmer"
+  },
+  {
+   "name": "Gemma 4 31B",
+   "variant": "Gemma 4 31B (Reasoning)",
+   "org": "Google",
+   "date": "2026-04-02",
+   "params_b": 30.7,
+   "active_b": null,
+   "index": 4.4,
+   "hf_repo": "google/gemma-4-31B-it",
+   "url": "https://artificialanalysis.ai/models/gemma-4-31b"
+  }
+ ]
+}

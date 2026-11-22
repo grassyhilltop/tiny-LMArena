@@ -1,0 +1,2 @@
+name,org,hf_repo,release_date,params_b,active_b,note
+Flint,Recursive,RecursiveSI/flint,2026-10-21,39.8,2.5,"Coding model. The official int4 build is about 23 GB, so it fits a 32 GB card."
