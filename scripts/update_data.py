@@ -105,6 +105,16 @@ def from_year_frac(y):
     return start + dt.timedelta(days=round((y - yr) * days))
 
 
+def region_of(country):
+    """US, China or Other (anything else, including multi-country labs and unknown)."""
+    us, cn = "United States" in country, "China" in country
+    if us and not cn:
+        return "US"
+    if cn and not us:
+        return "China"
+    return "Other"
+
+
 def slugify(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
@@ -273,10 +283,12 @@ def main():
             open_w = False
         else:
             open_w = group == "Open weights"
+        country = ov.get("country") or r.get("Country (of organization)", "") or ""
         rec = {"model": name, "date": d.isoformat(), "eci": eci,
                "lo": to_float(r["eci_ci_low"]), "hi": to_float(r["eci_ci_high"]),
-               "org": r.get("Organization", ""), "open": open_w,
-               "access": r.get("Model accessibility", "")}
+               "org": ov.get("org") or r.get("Organization", ""), "open": open_w,
+               "access": r.get("Model accessibility", ""),
+               "country": country, "region": region_of(country)}
         all_models.append(rec)
         if not open_w:
             continue

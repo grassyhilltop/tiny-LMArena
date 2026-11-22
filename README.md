@@ -23,6 +23,9 @@ By Joel Sadler, University of Virginia, School of Data Science. This repository 
 * **Awaiting an ECI score**: new single-GPU models Epoch has not scored yet (from `config/watchlist.csv` and the
   Artificial Analysis snapshot).
 * **Second opinion**: the Artificial Analysis Intelligence Index for small open models.
+* **Filters and views**: models from all labs, US, China or the rest of the world (refits the trend per group);
+  a state-of-the-art overlay (best ECI of any model, with its own trend); and a projection horizon out to 2027,
+  2028 or 2030, with a hover readout of the projected ECI at any date.
 
 ## Definition of a single-GPU model (SLM)
 
@@ -56,9 +59,9 @@ python3 scripts/update_data.py && python3 scripts/build_page.py
 
 * **GitHub**: every alert is published as a release. Anyone can follow with *Watch → Custom → Releases*, or the feed
   at `/releases.atom`. Works now, no setup.
-* **Email (Buttondown)**: create a free account at buttondown.com, put the username in
-  `config/site.json` → `newsletter.username` (this turns on the sign-up form), then add the API key as the repository
-  secret `BUTTONDOWN_API_KEY` and set `newsletter.send_alerts` to `true`. Use **Actions → Daily update → Run workflow →
+* **Email (Buttondown, list `tinylm`)**: the sign-up form posts to Buttondown. Alert emails are sent by whichever
+  repository has the secret `BUTTONDOWN_API_KEY` (Settings → Secrets and variables → Actions); add it to one of the
+  two mirrors only, or subscribers get each alert twice. Use **Actions → Daily update → Run workflow →
   Test alert** to check: it creates a pre-release here and a draft (not a send) in Buttondown.
 
 ## Curating models

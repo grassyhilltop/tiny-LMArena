@@ -12,25 +12,39 @@
   },
   "anthropic_class_max_b": 31,
   "fit": {
-    "interval": 0.90,
-    "windows": {"since2023": "2023-07-01", "last24": "-730"}
+    "interval": 0.9,
+    "windows": {
+      "since2023": "2023-07-01",
+      "last24": "-730"
+    }
   },
   "thresholds": [
-    {"key": "selfrep", "kind": "model", "model": "GLM-5.2",
-     "label": "Self-replication floor",
-     "short": "self-replication floor",
-     "anthropic_value": 151.8,
-     "source": "https://www.anthropic.com/research/self-replicating-ai"},
-    {"key": "frontier1y", "kind": "frontier_ago", "days": 365,
-     "label": "Frontier one year ago",
-     "short": "frontier of a year ago"},
-    {"key": "frontier", "kind": "frontier_now",
-     "label": "Today's frontier",
-     "short": "today's frontier"}
+    {
+      "key": "selfrep",
+      "kind": "model",
+      "model": "GLM-5.2",
+      "label": "Self-replication floor",
+      "short": "self-replication floor",
+      "anthropic_value": 151.8,
+      "source": "https://www.anthropic.com/research/self-replicating-ai"
+    },
+    {
+      "key": "frontier1y",
+      "kind": "frontier_ago",
+      "days": 365,
+      "label": "Frontier one year ago",
+      "short": "frontier of a year ago"
+    },
+    {
+      "key": "frontier",
+      "kind": "frontier_now",
+      "label": "Today's frontier",
+      "short": "today's frontier"
+    }
   ],
   "newsletter": {
     "provider": "buttondown",
-    "username": "",
-    "send_alerts": false
+    "username": "tinylm",
+    "send_alerts": true
   }
 }
