@@ -22,22 +22,31 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }} # the branch tip, not the commit that queued this run
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
       - name: Refresh Artificial Analysis snapshot (only if AA_API_KEY is set)
         env:
           AA_API_KEY: ${{ secrets.AA_API_KEY }}
-        run: python scripts/aa_snapshot.py || echo "AA refresh skipped; keeping the committed snapshot"
+        run: python scripts/aa_snapshot.py || echo "::warning::AA refresh failed; keeping the committed snapshot"
 
       - name: Fetch Epoch ECI data and recompute
         run: python scripts/update_data.py
 
       - name: Build page
         run: python scripts/build_page.py
+
+      # Announce before committing: if the release fails, nothing is committed and tomorrow's run retries.
+      - name: Announce events
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+        run: python scripts/send_alerts.py
 
       - name: Commit changes
         run: |
@@ -50,12 +59,6 @@ jobs:
             git commit -m "Daily data update $(date -u +%F)"
             git push
           fi
-
-      - name: Announce events
-        env:
-          GH_TOKEN: ${{ github.token }}
-          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
-        run: python scripts/send_alerts.py
 
       - name: Test alert
         if: ${{ inputs.test_alert }}

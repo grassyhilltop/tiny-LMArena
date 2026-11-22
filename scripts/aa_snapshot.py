@@ -85,7 +85,8 @@ def normalise_page(models):
 
 def normalise_api(payload):
     rows = []
-    for m in payload.get("data", payload if isinstance(payload, list) else []):
+    items = payload if isinstance(payload, list) else (payload.get("data") or [])
+    for m in items:
         ev = m.get("evaluations") or {}
         idx = ev.get("artificial_analysis_intelligence_index") or m.get("intelligence_index")
         if idx is None or idx <= 0:
@@ -138,9 +139,15 @@ def main():
         if not rows:
             sys.exit("API returned no usable rows; keeping the existing snapshot.")
         snap = build(rows, "Artificial Analysis API (free tier)")
-    with open(OUT, "w", encoding="utf-8") as f:
+        if not snap["models"]:
+            sys.exit("API rows carry no parameter counts or Hugging Face links; keeping the existing snapshot.")
+        old = json.load(open(OUT, encoding="utf-8")) if os.path.exists(OUT) else {}
+        if len(snap["models"]) < 0.5 * len(old.get("models", [])):
+            sys.exit("AA snapshot shrank by more than half; keeping the existing one.")
+    with open(OUT + ".tmp", "w", encoding="utf-8") as f:
         json.dump(snap, f, indent=1, ensure_ascii=False)
         f.write("\n")
+    os.replace(OUT + ".tmp", OUT)
     print(f"Wrote {len(snap['models'])} small models; frontier {snap['frontier']}")
 
 

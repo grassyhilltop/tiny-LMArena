@@ -26,8 +26,10 @@ By Joel Sadler, University of Virginia, School of Data Science. This repository 
 
 ## Definition of a single-GPU model (SLM)
 
-Open weights, an ECI score, and 4-bit weights that fill at most 75% of a 32 GB GPU (RTX 5090, or a 32 GB MacBook Pro):
-0.5 GB per billion parameters, so **at most 48B total parameters** (mixture-of-experts models count all experts). The
+Open weights, an ECI score, and 4-bit weights that fill at most 75% of a 32 GB GPU such as an RTX 5090: at an idealized
+0.5 GB per billion parameters, **at most 48B total parameters** (mixture-of-experts models count all experts). Real
+4-bit files run 5–20% larger, and on a 32 GB Mac the GPU gets about two-thirds of memory by default, so the practical
+cap there is lower. The
 same rule gives the GPU filter: max parameters = 1.5 × GPU memory in GB (8 GB → 12B, 16 GB → 24B, 24 GB → 36B).
 The rule lives in `config/site.json`.
 
@@ -41,6 +43,8 @@ The rule lives in `config/site.json`.
    lags, and writes `data/leaderboard.json`, `data/slm_leaderboard.csv` and a daily top-10 log in `data/history.csv`.
 3. `scripts/build_page.py` embeds the data in `index.html` (served by GitHub Pages from `main`).
 4. `scripts/send_alerts.py` announces events: a new #1, a new top-3 entry, a newly scored model, or a threshold crossed.
+   Each fires once (`data/alert_state.json` remembers what was announced). Announcing runs before the data commit, so a
+   failed release leaves nothing committed and the next run retries.
 
 Run locally with Python 3.9+ and no dependencies:
 

@@ -49,7 +49,10 @@ def fetch(url, timeout=60, tries=3):
                 return r.read()
         except Exception as e:  # network hiccup: back off and retry
             last = e
-            time.sleep(2 * (i + 1))
+            if getattr(e, "code", None) in (401, 403, 404):
+                break  # missing or private: retrying will not help
+            if i < tries - 1:
+                time.sleep(2 * (i + 1))
     raise last
 
 
@@ -147,26 +150,31 @@ def pred_half_width(fit, x):
 
 
 def crossing(fit, value):
-    """Date the trend line reaches value, plus the range where the prediction band does."""
-    b = fit["b"]
+    """Date the trend line reaches value, plus the range where the prediction band does.
+
+    The band edges meet the value where (value - a - b x)^2 = t^2 s^2 (1 + 1/n + (x - xm)^2 / sxx),
+    a quadratic in x. If the slope is too uncertain the band never closes around the value; then
+    there is no range (early and late are None)."""
+    a, b = fit["a"], fit["b"]
     if b <= 0:
         return None
-    x0 = (value - fit["a"]) / b
-    # early: upper band reaches value; late: lower band reaches value. Scan in 1-day steps.
-    def first_x(sign):
-        lo = x0 - 15
-        step = 1 / 365.25
-        x = lo
-        while x < x0 + 15:
-            yv = fit["a"] + b * x + sign * pred_half_width(fit, x)
-            if yv >= value:
-                return x
-            x += step
-        return None
-    early, late = first_x(+1), first_x(-1)
+    x0 = (value - a) / b
+    k = (fit["t"] * fit["s"]) ** 2
+    c0 = 1 + 1 / fit["n"]
+    v = value - a
+    qa = b * b - k / fit["sxx"]
+    qb = -2 * b * v + 2 * k * fit["xm"] / fit["sxx"]
+    qc = v * v - k * c0 - k * fit["xm"] ** 2 / fit["sxx"]
+    early = late = None
+    disc = qb * qb - 4 * qa * qc
+    if qa > 0 and disc > 0:
+        r1 = (-qb - math.sqrt(disc)) / (2 * qa)
+        r2 = (-qb + math.sqrt(disc)) / (2 * qa)
+        if r1 <= x0 <= r2:
+            early, late = r1, r2
     return {"date": from_year_frac(x0).isoformat(),
-            "early": from_year_frac(early).isoformat() if early else None,
-            "late": from_year_frac(late).isoformat() if late else None}
+            "early": from_year_frac(early).isoformat() if early is not None else None,
+            "late": from_year_frac(late).isoformat() if late is not None else None}
 
 
 # ---------------------------------------------------------------- main build
@@ -215,22 +223,35 @@ def main():
     hf_cache_path = os.path.join(DATA, "hf_cache.json")
     hf_cache = read_json(hf_cache_path, {})
 
+    # Refresh an entry at most weekly; stop calling HF for this run after 3 failures or 3 minutes.
+    hf_state = {"fails": 0, "deadline": time.monotonic() + 180}
+
     def hf_info(repo):
         if not repo:
             return {}
+        old = hf_cache.get(repo, {})
         if args.offline:
-            return hf_cache.get(repo, {})
+            return old
+        fresh = old.get("fetched") and (today - parse_date(old["fetched"])).days < 7
+        if fresh or hf_state["fails"] >= 3 or time.monotonic() > hf_state["deadline"]:
+            return old
         try:
-            d = json.loads(fetch(HF_API.format(repo=urllib.parse.quote(repo, safe="/")), timeout=30, tries=2))
-            info = {"id": d.get("id", repo),
-                    "params_b": round(d["safetensors"]["total"] / 1e9, 2) if d.get("safetensors", {}).get("total") else None,
-                    "downloads": d.get("downloads"), "likes": d.get("likes"),
+            d = json.loads(fetch(HF_API.format(repo=urllib.parse.quote(repo, safe="/")), timeout=15, tries=2))
+            total = (d.get("safetensors") or {}).get("total")
+            info = {"id": d.get("id") or old.get("id", repo),
+                    "params_b": round(total / 1e9, 2) if total else old.get("params_b"),
+                    "downloads": d.get("downloads", old.get("downloads")), "likes": d.get("likes", old.get("likes")),
                     "fetched": today.isoformat()}
             hf_cache[repo] = info
+            hf_state["fails"] = 0
             return info
         except Exception as e:
+            if getattr(e, "code", None) in (401, 404):  # repo gone or renamed: no link
+                hf_cache[repo] = {"missing": True, "fetched": today.isoformat()}
+                return hf_cache[repo]
+            hf_state["fails"] += 1
             print(f"  HF lookup failed for {repo}: {e}", file=sys.stderr)
-            return hf_cache.get(repo, {})
+            return old
 
     # 3. Classify every Epoch model ---------------------------------------------
     rule = site["slm_rule"]
@@ -263,7 +284,8 @@ def main():
         hf_repo = ov.get("hf_repo") or ""
         if not hf_repo and name in epoch_links:
             m = re.search(r"huggingface\.co/([^/\s]+/[^/\s?#]+)", epoch_links[name])
-            hf_repo = m.group(1) if m else ""
+            reserved = {"blog", "papers", "spaces", "datasets", "collections", "docs", "organizations", "models", "posts", "learn"}
+            hf_repo = m.group(1) if m and m.group(1).split("/")[0].lower() not in reserved else ""
         if params is None and name in epoch_params:
             params, psrc = epoch_params[name], "Epoch AI"
         info = {}
@@ -289,7 +311,7 @@ def main():
             "active_b": active, "vram4_gb": round(params * rule["bytes_per_param_4bit"], 1),
             "min_gpu_gb": next((g for g in GPU_TIERS if params <= g * rule["weights_share_of_vram"] / rule["bytes_per_param_4bit"]), None),
             "anthropic_class": params <= anth_max,
-            "hf_repo": info.get("id") if info.get("id") else None,
+            "hf_repo": None if info.get("missing") else (info.get("id") or hf_repo or None),
             "source_url": epoch_src.get(name),
             "downloads": info.get("downloads"), "likes": info.get("likes"),
             "note": ov.get("note") or "",
@@ -340,6 +362,7 @@ def main():
         return None
 
     # 6. Thresholds ----------------------------------------------------------------
+    prev = read_json(os.path.join(DATA, "leaderboard.json"), {})
     by_model = {m["model"]: m for m in all_models}
     thresholds = []
     for t in site["thresholds"]:
@@ -347,9 +370,15 @@ def main():
         if t["kind"] == "model":
             ref = by_model.get(t["model"])
             if not ref:
-                print(f"  threshold model {t['model']} missing from Epoch data", file=sys.stderr)
-                continue
-            th.update({"value": ref["eci"], "lo": ref["lo"], "hi": ref["hi"], "ref_model": ref["model"], "ref_date": ref["date"]})
+                old = next((x for x in prev.get("thresholds", []) if x.get("key") == t["key"]), None)
+                if not old:
+                    sys.exit(f"Threshold model {t['model']} is missing from Epoch data and has no previous value; "
+                             "update config/site.json")
+                print(f"::warning::Threshold model {t['model']} is missing from Epoch data; reusing its last value",
+                      file=sys.stderr)
+                th.update({k: old.get(k) for k in ("value", "lo", "hi", "ref_model", "ref_date")}, stale=True)
+            else:
+                th.update({"value": ref["eci"], "lo": ref["lo"], "hi": ref["hi"], "ref_model": ref["model"], "ref_date": ref["date"]})
         elif t["kind"] == "frontier_ago":
             ref = frontier_at(today - dt.timedelta(days=t["days"]))
             th.update({"value": ref["eci"], "ref_model": ref["model"], "ref_date": ref["date"],
@@ -456,7 +485,6 @@ def main():
     eci_updated = None
     if not args.offline:
         eci_updated = today.isoformat()
-    prev = read_json(os.path.join(DATA, "leaderboard.json"), {})
     out = {
         "generated": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "today": today.isoformat(),
@@ -478,32 +506,41 @@ def main():
         "unclassified": unclassified,
     }
 
-    # 11. Events for alerts (compare with the previous run) ---------------------------
+    # 11. Events for alerts. Each event fires once: data/alert_state.json remembers every model that has
+    # been #1, in the top 3 or scored, and every threshold crossed (per reference model). Keys are Epoch's
+    # model names, so display-name edits and day-to-day wobbles in the estimates do not re-announce anything.
+    state_path = os.path.join(DATA, "alert_state.json")
+    ast = read_json(state_path, None)
+    seeding = ast is None
+    if seeding:
+        ast = {"leaders": [], "top3": [], "scored": [], "crossed": []}
     events = []
-    if prev.get("slms"):
-        p_top = prev["slms"][0]["name"]
-        if slms[0]["name"] != p_top:
-            events.append({"type": "new_leader", "title": f"New #1 SLM: {slms[0]['name']} (ECI {slms[0]['eci']:.1f})",
-                           "detail": f"{slms[0]['name']} replaces {p_top} at the top of the single-GPU leaderboard."})
-        p_top3 = {m["name"] for m in prev["slms"][:3]}
-        for m in slms[:3]:
-            if m["name"] not in p_top3 and m["name"] != slms[0]["name"]:
-                events.append({"type": "top3", "title": f"{m['name']} enters the top 3 (ECI {m['eci']:.1f})",
-                               "detail": f"Ranked #{m['rank']} among {len(slms)} single-GPU models."})
-        p_names = {m["name"] for m in prev["slms"]}
-        for m in slms:
-            if m["name"] not in p_names:
-                events.append({"type": "new_model", "title": f"New SLM scored: {m['name']} (ECI {m['eci']:.1f}, #{m['rank']})",
-                               "detail": f"{m['params_b']}B parameters, released {m['date']}."})
-        p_fit = (prev.get("fits") or {}).get("fit32|since2023", {}).get("thresholds", {})
-        n_fit = fits.get("fit32|since2023", {}).get("thresholds", {})
-        for th in thresholds:
-            was = (p_fit.get(th["key"]) or {}).get("crossed_by")
-            now = (n_fit.get(th["key"]) or {}).get("crossed_by")
-            if now and not was:
-                events.append({"type": "threshold", "key": th["key"],
-                               "title": f"Threshold crossed: an SLM reached the {th['short']} ({th['value']:.1f} ECI)",
-                               "detail": f"{now['name']} scores {now['eci']:.1f} on the ECI, at or above {th.get('ref_model', '')}."})
+
+    def note(kind, key, event):
+        if key in ast[kind]:
+            return
+        ast[kind].append(key)
+        if not seeding:
+            events.append(dict(event, key=key))
+
+    lead = slms[0]
+    note("leaders", lead["model"], {"type": "new_leader", "title": f"New No. 1 single-GPU model: {lead['name']} (ECI {lead['eci']:.1f})",
+                                    "detail": f"{lead['name']} ({lead['org']}, {lead['params_b']}B) now tops the leaderboard."})
+    for m in slms[1:3]:
+        note("top3", m["model"], {"type": "top3", "title": f"{m['name']} enters the top 3 (ECI {m['eci']:.1f})",
+                                  "detail": f"Rank {m['rank']} of {len(slms)} single-GPU models."})
+    for m in slms:
+        note("scored", m["model"], {"type": "new_model", "title": f"New single-GPU model scored: {m['name']} (ECI {m['eci']:.1f}, rank {m['rank']})",
+                                    "detail": f"{m['params_b']}B parameters, released {m['date']}."})
+    for th in thresholds:
+        if th.get("stale"):
+            continue
+        hit = next((m for m in sorted(slms, key=lambda m: m["date"]) if m["eci"] >= th["value"]), None)
+        if hit:
+            note("crossed", f"{th['key']}:{th.get('ref_model')}",
+                 {"type": "threshold", "title": f"Threshold crossed: a single-GPU model reached the {th['short']} ({th['value']:.1f} ECI)",
+                  "detail": f"{hit['name']} scores {hit['eci']:.1f} on the ECI, at or above {th.get('ref_model', '')}."})
+    write_json(state_path, ast)
     out["events"] = events
 
     write_json(os.path.join(DATA, "leaderboard.json"), out)
@@ -533,8 +570,8 @@ def main():
             for m in slms[:10]:
                 w.writerow([today.isoformat(), m["rank"], m["name"], m["eci"], m["lo"], m["hi"]])
 
+    write_json(os.path.join(DATA, "events_pending.json"), events)
     if events:
-        write_json(os.path.join(DATA, "events_pending.json"), events)
         log = read_json(os.path.join(DATA, "events_log.json"), [])
         log.extend(dict(e, date=today.isoformat()) for e in events)
         write_json(os.path.join(DATA, "events_log.json"), log)

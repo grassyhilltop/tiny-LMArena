@@ -13,13 +13,13 @@
   --surface: #fdfdfb;
   --ink: #1a1a18;
   --ink-2: #56554e;
-  --ink-3: #85847a;
+  --ink-3: #6f6e65;
   --rule: #e2e0d6;
   --grid: #ebe9e1;
   --slm: #3567a6;
   --slm-soft: #a8bfde;
   --band: rgba(53, 103, 166, 0.11);
-  --clay: #c2573a;
+  --clay: #a84a30;
   --green: #2f7d4a;
   --tint-green: rgba(47, 125, 74, 0.065);
   --tint-clay: rgba(194, 87, 58, 0.07);
@@ -97,7 +97,8 @@ nav.top a:hover { color: var(--ink); }
 .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; padding: 2px; background: var(--surface); flex-wrap: wrap; }
 .seg button { font: 500 13px/1 var(--sans); color: var(--ink-2); background: transparent; border: 0; border-radius: 6px; padding: 7px 11px; cursor: pointer; }
 .seg button:hover { color: var(--ink); background: var(--bg); }
-.seg button[aria-pressed="true"] { color: var(--ink); background: var(--bg); box-shadow: inset 0 0 0 1px var(--rule); }
+.seg button[aria-pressed="true"] { color: var(--ink); background: var(--bg); box-shadow: inset 0 0 0 1px var(--ink-3); }
+[hidden] { display: none !important; }
 
 /* indicator readouts */
 .readouts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 14px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
@@ -263,10 +264,10 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     <section class="podium" id="podium" aria-label="Top three small language models"></section>
 
     <div class="controls" role="group" aria-label="Chart settings">
-      <div class="ctl"><span>Threshold</span><div class="seg" id="ctl-threshold"></div></div>
-      <div class="ctl"><span>Models</span><div class="seg" id="ctl-def"></div></div>
-      <div class="ctl"><span>Trend fit</span><div class="seg" id="ctl-window"></div></div>
-      <div class="ctl"><span>From</span><div class="seg" id="ctl-view"></div></div>
+      <div class="ctl"><span id="lbl-threshold">Threshold</span><div class="seg" id="ctl-threshold" role="group" aria-labelledby="lbl-threshold"></div></div>
+      <div class="ctl"><span id="lbl-def">Models</span><div class="seg" id="ctl-def" role="group" aria-labelledby="lbl-def"></div></div>
+      <div class="ctl"><span id="lbl-window">Trend fit</span><div class="seg" id="ctl-window" role="group" aria-labelledby="lbl-window"></div></div>
+      <div class="ctl"><span id="lbl-view">From</span><div class="seg" id="ctl-view" role="group" aria-labelledby="lbl-view"></div></div>
     </div>
 
     <div class="readouts" id="readouts"></div>
@@ -295,11 +296,11 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       <div class="sec-head">
         <span class="eyebrow">Leaderboard</span>
         <h2>Every scored model that fits your GPU</h2>
-        <p class="soft">Ranked by ECI. Pick your card's memory to see what runs on it at 4-bit. Rank (UB) counts only models that are better with no overlap in Epoch's intervals, so tied models share a rank.</p>
+        <p class="soft">Ranked by ECI. Pick your card's memory to see what runs on it at 4-bit. Rank (UB) is 1 plus the number of models whose whole interval lies above this model's, so close models often share a rank.</p>
       </div>
       <div class="controls" style="padding-top:0" role="group" aria-label="Leaderboard filters">
-        <div class="ctl"><span>GPU memory</span><div class="seg" id="ctl-vram"></div></div>
-        <div class="ctl"><span>Released</span><div class="seg" id="ctl-recent"></div></div>
+        <div class="ctl"><span id="lbl-vram">GPU memory</span><div class="seg" id="ctl-vram" role="group" aria-labelledby="lbl-vram"></div></div>
+        <div class="ctl"><span id="lbl-recent">Released</span><div class="seg" id="ctl-recent" role="group" aria-labelledby="lbl-recent"></div></div>
         <div class="ctl"><label for="q" class="eyebrow">Search</label><input id="q" type="search" placeholder="Model or lab" style="font:400 13.5px var(--sans);padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--surface);color:var(--ink);width:170px"></div>
       </div>
       <div class="tbl-wrap"><table class="lb" id="lb"></table></div>
@@ -313,7 +314,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       <div class="sec-head">
         <span class="eyebrow">Awaiting an ECI score</span>
         <h2>New single-GPU models Epoch has not scored yet</h2>
-        <p class="soft">These fit a 32&nbsp;GB card but have no ECI yet, so they are not ranked. Each one joins the leaderboard automatically once Epoch publishes its score.</p>
+        <p class="soft">These fit a 32&nbsp;GB card but have no ECI yet, so they are not ranked. Each one joins the leaderboard once Epoch publishes its score (models Epoch lists without a size are added by hand).</p>
       </div>
       <div class="watch" id="watch"></div>
     </section>
@@ -356,9 +357,9 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       </div>
       <div class="cols2">
         <div class="prose">
-          <p>The <a href="https://epoch.ai/eci" target="_blank" rel="noopener"><strong>Epoch Capabilities Index</strong></a>, built by Epoch AI, combines results from more than 50 benchmarks into a single scale of general capability. It stitches benchmarks together wherever models were tested on more than one, which sets each benchmark's difficulty. A model scores higher when it does better on harder benchmarks. Because old and new benchmarks are linked, a 2023 model and a 2026 model sit on the same scale even after individual benchmarks saturate. The <a href="https://epoch.ai/data/eci-documentation" target="_blank" rel="noopener">methodology</a> is public, and every score comes with an uncertainty interval.</p>
-          <p>That makes it the right yardstick for a long-run trend. A single benchmark can be saturated, leaked into training data or tuned for. A composite that weights many benchmarks by difficulty is much harder to game, and it lets us compare like with like across years.</p>
-          <p>It is also the index forecasters already use. Anthropic's Frontier Red Team, in <a href="https://www.anthropic.com/research/self-replicating-ai" target="_blank" rel="noopener">“AI models may be capable of self-replicating without access to a datacenter”</a> by <strong>William Zhou</strong> and <strong>Daniel Freeman</strong> (12 October 2026), plotted open models of about 30B parameters or fewer on the ECI. They took GLM-5.2 as the capability floor for end-to-end replication and projected when small models reach it. The hero chart on this page extends their figure and updates it every day.</p>
+          <p>The <a href="https://epoch.ai/eci" target="_blank" rel="noopener"><strong>Epoch Capabilities Index</strong></a>, built by Epoch AI, combines results from more than 50 benchmarks into a single scale of general capability. It stitches benchmarks together wherever models were tested on more than one, which sets each benchmark's difficulty. A model scores higher when it does better on harder benchmarks. Because old and new benchmarks are linked, a 2023 model and a 2026 model sit on the same scale even after individual benchmarks saturate. The <a href="https://epoch.ai/data/eci-documentation" target="_blank" rel="noopener">methodology</a> is public, and each score comes with a credible interval, except the two models that anchor the scale (Claude 3.5 Sonnet = 130, GPT-5 = 150).</p>
+          <p>That makes it a good yardstick for a long-run trend. A single benchmark can be saturated, leaked into training data or tuned for. A composite of many benchmarks dilutes any one benchmark's quirks, and Epoch runs many evaluations itself rather than relying on developers' own reports. It does not remove tuning: Epoch notes that developers can still optimize for the benchmarks it uses, and that open-weight models may do so more aggressively, so the gap to the frontier shown here may be understated.</p>
+          <p>It is also the index forecasters already use. Anthropic's Frontier Red Team, in <a href="https://www.anthropic.com/research/self-replicating-ai" target="_blank" rel="noopener">“AI models may be capable of self-replicating without access to a datacenter”</a> by <strong>William Zhou</strong> and <strong>Daniel Freeman</strong> (12 October 2026), plotted notable open-weight models of 30B total parameters or fewer on the ECI. In their simplified evaluation GLM-5.2 completed end-to-end replication, so they took it as a rough capability floor and projected when small models reach it, noting that the ECI is only a proxy for replication ability. The hero chart on this page extends their figure and updates it every day.</p>
         </div>
         <div class="prose">
           <p><strong>Think in thresholds and trend lines.</strong> Pick a capability bar that matters, draw the trend of the best models in a class, and read off when the trend crosses the bar, with an honest range. When new models arrive, the forecast updates. Labs, policymakers and builders can then plan for a capability before it shows up.</p>
@@ -375,12 +376,12 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       </div>
       <div class="cols2">
         <div class="prose">
-          <p><strong>Definition.</strong> A model qualifies if its weights are open and, quantized to 4 bits, fill at most 75% of a 32&nbsp;GB GPU (an RTX 5090 or a 32&nbsp;GB MacBook Pro), leaving the rest for context. At half a byte per parameter that is <strong>at most 48B total parameters</strong>; mixture-of-experts models count all experts. Any quantization is allowed in practice; 4-bit is the reference because quality holds up there and quantization-aware releases target it. So Flint (39.8B) counts, and a 120B model squeezed to 2 bits does not. It must also have an ECI score.</p>
+          <p><strong>Definition.</strong> A model qualifies if its weights are open and, quantized to 4 bits, fill at most 75% of a 32&nbsp;GB GPU such as an RTX 5090, leaving the rest for context. At an idealized half a byte per parameter that is <strong>at most 48B total parameters</strong>; mixture-of-experts models count all experts. Real 4-bit files run 5–20% larger, so models near the cap leave less room for context. On a 32&nbsp;GB Mac, macOS lets the GPU use only about two-thirds of memory by default, so the practical cap there is lower. Any quantization is allowed in practice; 4-bit is the reference because quality holds up there and quantization-aware releases target it. So Flint (39.8B) counts, and a 120B model squeezed to 2 bits does not. It must also have an ECI score.</p>
           <table class="t15" style="max-width:420px" aria-label="GPU memory and largest model">
             <thead><tr><th style="text-align:left">GPU memory</th><th>Largest model</th><th>4-bit weights</th></tr></thead>
             <tbody id="gpu-tiers"></tbody>
           </table>
-          <p><strong>Anthropic's class.</strong> The “Models” switch reproduces the narrower ~30B class from Anthropic's chart (≤ <span id="anth-max"></span>B), so you can compare with their numbers. Their published fit was 13.7 ECI per year; with today's re-estimated scores the same class gives <span id="anth-slope"></span>.</p>
+          <p><strong>Anthropic's class.</strong> The “Models” switch approximates the narrower class in Anthropic's chart. They used 30B total parameters or fewer; this page uses ≤ <span id="anth-max"></span>B so that Gemma 4 31B, which their chart shows, is included. Their published fit was 13.7 ECI per year (R² 0.95), and the post does not state the fit window. With today's scores this class gives <span id="anth-slope"></span> fitted from July 2023 and <span id="anth-slope24"></span> over the last 24 months, so the window matters at least as much as Epoch's re-estimates.</p>
         </div>
         <div class="prose">
           <p><strong>Trend.</strong> A model is <em>best at its release</em> if it beat every earlier single-GPU model on the day it came out. The line is an ordinary least-squares fit of ECI against release date over those models, from the start of the chosen window. The shaded band is the 90% prediction interval for a new best-at-release model.</p>
@@ -398,7 +399,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       </div>
       <div class="card sub">
         <div class="prose" style="gap:10px">
-          <p>One short email when a single-GPU model crosses a tracked threshold, takes the #1 spot or enters the top 3. Nothing else.</p>
+          <p>One short email when a single-GPU model crosses a tracked threshold, takes the #1 spot, enters the top 3 or gets its first ECI score. Nothing else.</p>
           <div id="sub-form-slot"></div>
           <p class="muted" style="font-size:12.5px" id="sub-fine"></p>
         </div>
@@ -452,7 +453,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   }
   function pd(s) { return new Date(s + "T00:00:00Z"); }
   function fDate(s) { var d = pd(s); return MON[d.getUTCMonth()] + " " + d.getUTCDate() + ", " + d.getUTCFullYear(); }
-  function fMon(s) { var d = typeof s === "string" ? pd(s) : s; return MON[d.getUTCMonth()] + " " + d.getUTCFullYear(); }
+  function fMon(s) { if (s == null) return "–"; var d = typeof s === "string" ? pd(s) : s; return MON[d.getUTCMonth()] + " " + d.getUTCFullYear(); }
   function f1(v) { return (Math.round(v * 10) / 10).toFixed(1); }
   function yf(d) { var y = d.getUTCFullYear(); var a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return y + (d - a) / (b - a); }
   function fromYf(v) { var y = Math.floor(v); var a = Date.UTC(y, 0, 1), b = Date.UTC(y + 1, 0, 1); return new Date(a + (v - y) * (b - a)); }
@@ -468,18 +469,25 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   var state = { threshold: "selfrep", def: "fit32", window: "since2023", view: "2023", vram: 32, recent: "all", q: "", showAll: false, sort: { key: "eci", dir: -1 }, hl: null };
   try { var saved = JSON.parse(localStorage.getItem("slm-state") || "{}"); ["threshold", "def", "window", "view", "vram"].forEach(function (k) { if (saved[k] !== undefined) state[k] = saved[k]; }); } catch (e) {}
   try { if (window.innerWidth < 620 && !JSON.parse(localStorage.getItem("slm-state") || "{}").view) state.view = "2025"; } catch (e) { if (window.innerWidth < 620) state.view = "2025"; }
-  if (["selfrep", "frontier1y", "frontier"].indexOf(location.hash.slice(1)) >= 0) state.threshold = location.hash.slice(1);
+  var TK = D.thresholds.map(function (t) { return t.key; });
+  if (TK.indexOf(location.hash.slice(1)) >= 0) state.threshold = location.hash.slice(1);
+  if (TK.indexOf(state.threshold) < 0) state.threshold = TK[0];
+  if (["fit32", "anthropic"].indexOf(state.def) < 0 || !D.lag[state.def]) state.def = "fit32";
+  if (["since2023", "last24"].indexOf(state.window) < 0) state.window = "since2023";
+  if (["2023", "2025"].indexOf(state.view) < 0) state.view = "2023";
+  state.vram = GPU.indexOf(+state.vram) < 0 ? 32 : +state.vram;
   function save() { try { localStorage.setItem("slm-state", JSON.stringify({ threshold: state.threshold, def: state.def, window: state.window, view: state.view, vram: state.vram })); } catch (e) {} }
 
   function slms() { return state.def === "anthropic" ? D.slms.filter(function (m) { return m.anthropic_class; }) : D.slms; }
-  function fit() { return D.fits[state.def + "|" + state.window] || D.fits["fit32|since2023"]; }
+  function fit() { return D.fits[state.def + "|" + state.window] || D.fits[state.def + "|since2023"] || D.fits["fit32|since2023"]; }
   function th(key) { return D.thresholds.filter(function (t) { return t.key === key; })[0]; }
   function thColor(key) { return key === "selfrep" ? "var(--green)" : "var(--clay)"; }
   function thColorRaw(key) { return key === "selfrep" ? css("--green") : css("--clay"); }
   function refLabel(t) { return t.ref_model + (t.ref_params_b ? " (" + Math.round(t.ref_params_b) + "B)" : ""); }
 
   function status(key) {
-    var t = th(key), F = fit(), ft = F.thresholds[key];
+    var t = th(key), F = fit(), ft = t && F.thresholds[key];
+    if (!t || !ft) return null;
     var s = { t: t, ft: ft, best: F.best };
     if (ft.crossed_by) s.kind = "crossed";
     else if (!ft.trend) s.kind = "flat";
@@ -491,13 +499,15 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
   function seg(id, opts, key, after) {
     var box = document.getElementById(id); box.textContent = "";
     opts.forEach(function (o) {
-      box.appendChild(h("button", { type: "button", "aria-pressed": String(state[key] === o[0]), onclick: function () {
+      box.appendChild(h("button", { type: "button", "data-v": String(o[0]), "aria-pressed": String(state[key] === o[0]), onclick: function () {
         state[key] = o[0]; save(); seg(id, opts, key, after); after();
+        var nb = document.querySelector("#" + id + " button[data-v='" + String(o[0]) + "']"); if (nb) nb.focus();
       } }, o[1]));
     });
   }
   function renderControls() {
-    seg("ctl-threshold", [["selfrep", "Self-replication floor"], ["frontier1y", "Frontier 1 yr ago"], ["frontier", "Today's frontier"]], "threshold", renderForecast);
+    var short = { selfrep: "Self-replication floor", frontier1y: "Frontier 1 yr ago", frontier: "Today's frontier" };
+    seg("ctl-threshold", D.thresholds.map(function (t) { return [t.key, short[t.key] || t.label]; }), "threshold", renderForecast);
     seg("ctl-def", [["fit32", "Fits 32 GB (≤ " + D.rule.max_params_b + "B)"], ["anthropic", "Anthropic class (≤ " + D.rule.anthropic_max_b + "B)"]], "def", renderForecast);
     seg("ctl-window", [["since2023", "Since Jul 2023"], ["last24", "Last 24 months"]], "window", renderForecast);
     seg("ctl-view", [["2023", "2023"], ["2025", "2025"]], "view", renderForecast);
@@ -510,8 +520,8 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     var top = D.slms.slice(0, 3);
     top.forEach(function (m, i) {
       var next = D.slms[i + 1];
-      var tied = D.slms.filter(function (o) { return o !== m && o.rank_ub === m.rank_ub; }).length;
-      var note = i === 0 ? "+" + f1(m.eci - next.eci) + " ECI ahead of #2" : (tied ? "Statistically tied with " + tied + " other model" + (tied > 1 ? "s" : "") + " (overlapping intervals)" : "+" + f1(m.eci - next.eci) + " ECI ahead of #" + (i + 2));
+      var tied = D.slms.filter(function (o) { return o !== m && o.lo != null && o.hi != null && m.lo != null && m.hi != null && o.lo <= m.hi && o.hi >= m.lo; }).length;
+      var note = i === 0 ? "+" + f1(m.eci - next.eci) + " ECI ahead of #2" : (tied ? "Interval overlaps " + tied + " other model" + (tied > 1 ? "s" : "") + ", so the order is not certain" : "+" + f1(m.eci - next.eci) + " ECI ahead of #" + (i + 2));
       var link = hf(m);
       pod.appendChild(h("div", { cls: "pod" },
         h("div", { cls: "pod-top" }, h("span", { cls: "chip r" + (i + 1), "aria-label": "Rank " + (i + 1) }, String(i + 1)), h("span", { cls: "eyebrow" }, i === 0 ? "Top single-GPU model" : "Rank " + (i + 1))),
@@ -527,24 +537,30 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     var box = $("#readouts"); box.textContent = "";
     var F = fit();
     function tile(key, eyebrow, big, why) {
-      return h("button", { type: "button", cls: "readout", "aria-pressed": String(state.threshold === key), onclick: function () { state.threshold = key; save(); renderControls(); renderForecast(); } },
+      return h("button", { type: "button", cls: "readout", "data-k": key, "aria-pressed": String(state.threshold === key), onclick: function () { state.threshold = key; save(); renderControls(); renderForecast(); var nt = document.querySelector("#readouts [data-k='" + key + "']"); if (nt) nt.focus(); } },
         h("span", { cls: "key eyebrow", style: "color:" + (state.threshold === key ? "var(--ink)" : "") }, h("i", { style: "color:" + thColor(key) }), eyebrow), big, h("span", { cls: "why" }, why));
     }
     // 1. self-replication floor
-    var s = status("selfrep"), t = s.t;
+    var s = status("selfrep"), t = s && s.t;
+    if (s) {
     var big1 = s.kind === "crossed" ? h("span", { cls: "big" }, "Crossed") : h("span", { cls: "big num" }, f1(s.ft.gap), h("small", null, " ECI to go"));
     var why1 = s.kind === "crossed" ? s.ft.crossed_by.name + " reached " + f1(s.ft.crossed_by.eci) + " on " + fDate(s.ft.crossed_by.date) + "."
       : "Best: " + s.best.name + " at " + f1(s.best.eci) + ". " + (s.kind === "due" ? "The trend line passed this floor in " + fMon(s.ft.trend.date) + ", so the next strong release is likely to cross." : "On trend: " + fMon(s.ft.trend.date) + ".");
     box.appendChild(tile("selfrep", "Self-replication floor · " + t.ref_model + " · " + f1(t.value), big1, why1));
+    }
     // 2. lag
-    var L = D.lag[state.def].now;
+    var L = D.lag[state.def] && D.lag[state.def].now;
+    if (L && th("frontier1y")) {
     var big2 = h("span", { cls: "big num" }, String(Math.round(L.months)), h("small", null, " months behind"));
     box.appendChild(tile("frontier1y", "Lag behind the frontier", big2, L.name + " (" + f1(L.eci) + ") matches " + L.frontier_model + ", the best model in " + fMon(L.frontier_date) + "."));
+    }
     // 3. today's frontier
-    var s3 = status("frontier"), t3 = s3.t;
+    var s3 = status("frontier"), t3 = s3 && s3.t;
+    if (s3) {
     var big3 = s3.kind === "crossed" ? h("span", { cls: "big" }, "Crossed") : h("span", { cls: "big" }, s3.ft.trend ? fMon(s3.ft.trend.date) : "–");
-    var why3 = s3.kind === "crossed" ? s3.ft.crossed_by.name + " matches today's frontier." : "When the trend reaches " + t3.ref_model + " (" + f1(t3.value) + ")" + (s3.ft.trend && s3.ft.trend.early ? "; 90% range " + fMon(s3.ft.trend.early) + " – " + fMon(s3.ft.trend.late) : "") + ". " + f1(s3.ft.gap) + " ECI to go.";
+    var why3 = s3.kind === "crossed" ? s3.ft.crossed_by.name + " matches today's frontier." : "When the trend reaches " + t3.ref_model + " (" + f1(t3.value) + ")" + (s3.ft.trend && s3.ft.trend.early && s3.ft.trend.late ? "; 90% range " + fMon(s3.ft.trend.early) + " – " + fMon(s3.ft.trend.late) : "") + ". " + f1(s3.ft.gap) + " ECI to go.";
     box.appendChild(tile("frontier", "Today's frontier · " + t3.ref_model + " · " + f1(t3.value), big3, why3));
+    }
   }
 
   // ---------- hero chart
@@ -680,7 +696,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
         var ys = [44, 80, 120, 160, 200].map(function (d) { return ty + d; }).filter(function (yy) { return yy < H - M.b - 24; }).concat([H - M.b - 34, H - M.b - 70]);
         var cands2 = [];
         ys.forEach(function (yy) { cands2.push([cx + 6, yy, "start"], [cx - 6, yy, "end"]); });
-        var cw = textW(ct, F12), rt = ft.trend.early ? "90% range " + fMon(ft.trend.early) + " – " + fMon(ft.trend.late) : null;
+        var cw = textW(ct, F12), rt = ft.trend.early && ft.trend.late ? "90% range " + fMon(ft.trend.early) + " – " + fMon(ft.trend.late) : null;
         var done = false;
         [true, false].forEach(function (withRange) {
           if (done) return;
@@ -789,7 +805,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     { key: "ci", label: "Interval", sort: function (m) { return m.hi - m.lo; } },
     { key: "ub", label: "Rank (UB)", sort: function (m) { return m._ub; } },
     { key: "params", label: "Params", sort: function (m) { return m.params_b; } },
-    { key: "vram", label: "4-bit weights", sort: function (m) { return m.vram4_gb; } },
+    { key: "vram", label: "4-bit weights (est.)", sort: function (m) { return m.vram4_gb; } },
     { key: "gpu", label: "Smallest GPU", sort: function (m) { return m.min_gpu_gb; } },
     { key: "date", label: "Released", sort: function (m) { return m.date; } },
     { key: "dl", label: "HF downloads", sort: function (m) { return m.downloads || 0; } }
@@ -799,12 +815,11 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     seg("ctl-recent", [["all", "All time"], ["12m", "Last 12 months"]], "recent", renderBoard);
     var cut = addMonths(pd(D.today), -12).toISOString().slice(0, 10);
     var q = state.q.trim().toLowerCase();
-    var rows = D.slms.filter(function (m) {
-      return m.min_gpu_gb && m.min_gpu_gb <= state.vram && (state.recent === "all" || m.date >= cut) && (!q || (m.name + " " + m.org).toLowerCase().indexOf(q) >= 0);
-    });
-    rows.sort(function (a, b) { return b.eci - a.eci; });
-    rows.forEach(function (m, i) { m._rank = i > 0 && rows[i - 1].eci === m.eci ? rows[i - 1]._rank : i + 1; });
-    rows.forEach(function (m) { m._ub = 1 + rows.filter(function (o) { return o.lo > m.hi; }).length; });
+    var base = D.slms.filter(function (m) { return m.min_gpu_gb && m.min_gpu_gb <= state.vram && (state.recent === "all" || m.date >= cut); });
+    base.sort(function (a, b) { return b.eci - a.eci; });
+    base.forEach(function (m, i) { m._rank = i > 0 && base[i - 1].eci === m.eci ? base[i - 1]._rank : i + 1; });
+    base.forEach(function (m) { m._ub = 1 + base.filter(function (o) { return o.lo != null && m.hi != null && o.lo > m.hi; }).length; });
+    var rows = q ? base.filter(function (m) { return (m.name + " " + m.org).toLowerCase().indexOf(q) >= 0; }) : base.slice();
     var col = COLS.filter(function (c) { return c.key === state.sort.key; })[0] || COLS[3];
     rows.sort(function (a, b) { var x = col.sort(a), y = col.sort(b); return (x < y ? -1 : x > y ? 1 : 0) * state.sort.dir; });
     var shown = state.showAll ? rows : rows.slice(0, 25);
@@ -814,7 +829,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     COLS.forEach(function (c) {
       var sorted = state.sort.key === c.key;
       trh.appendChild(h("th", { scope: "col", cls: c.l ? "l" : null, "aria-sort": sorted ? (state.sort.dir < 0 ? "descending" : "ascending") : null },
-        h("button", { type: "button", onclick: function () { if (state.sort.key === c.key) state.sort.dir *= -1; else { state.sort.key = c.key; state.sort.dir = (c.key === "name" || c.key === "rank" || c.key === "ub" || c.key === "vram" || c.key === "params" || c.key === "gpu") ? 1 : -1; } renderBoard(); } }, c.label)));
+        h("button", { type: "button", onclick: function () { if (state.sort.key === c.key) state.sort.dir *= -1; else { state.sort.key = c.key; state.sort.dir = (c.key === "name" || c.key === "rank" || c.key === "ub" || c.key === "vram" || c.key === "params" || c.key === "gpu") ? 1 : -1; } renderBoard(); var nb = document.querySelector("#lb th button[data-col='" + c.key + "']"); if (nb) nb.focus(); }, "data-col": c.key }, c.label)));
     });
     tb.appendChild(h("thead", null, trh));
     var body = h("tbody");
@@ -845,11 +860,12 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
         h("td", { cls: "num soft" }, compact(m.downloads))));
     });
     tb.appendChild(body);
+    if (!shown.length) body.appendChild(h("tr", null, h("td", { colspan: String(COLS.length), cls: "l" }, "No models match.")));
     var more = $("#lb-more");
     more.hidden = rows.length <= 25;
     more.textContent = state.showAll ? "Show top 25" : "Show all " + rows.length;
     more.onclick = function () { state.showAll = !state.showAll; renderBoard(); };
-    $("#lb-note").textContent = rows.length + " of " + D.slms.length + " scored models fit " + state.vram + " GB at 4-bit" + (state.recent === "12m" ? " and came out in the last 12 months" : "") + ". Interval = Epoch's uncertainty range for the ECI. HF downloads = last 30 days.";
+    $("#lb-note").textContent = base.length + " of " + D.slms.length + " scored models fit " + state.vram + " GB at 4-bit" + (state.recent === "12m" ? " and came out in the last 12 months" : "") + (q ? "; " + rows.length + " match “" + state.q.trim() + "”" : "") + ". Interval = Epoch's credible interval for the ECI. 4-bit weights estimated at 0.5 GB per billion parameters. HF downloads = last 30 days.";
   }
 
   // ---------- watchlist
@@ -868,7 +884,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
 
   // ---------- frontier gap
   function renderGap() {
-    var dk = state.def === "anthropic" ? "anthropic" : "fit32";
+    var dk = "fit32";
     var L = D.lag[dk], recs = L.records.filter(function (r) { return r.date >= "2023-07-01"; });
     var avg = d3.mean(recs, function (r) { return r.lag_months; });
     var F = D.fits[dk + "|since2023"], FF = D.frontier_fit;
@@ -910,7 +926,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
       tip.appendChild(h("div", { cls: "row num" }, h("i", { style: "border-color:" + C.slm }), h("b", null, f1(p.s)), " single-GPU"));
       tip.appendChild(h("div", { cls: "num" }, "Gap " + f1(p.f - p.s) + " ECI"));
       tip.hidden = false;
-      var sc = box.clientWidth / W, tx = x(p.d) * sc + 12; if (tx + 190 > box.clientWidth) tx = x(p.d) * sc - 12 - tip.offsetWidth;
+      var sc = box.clientWidth / W, tw = tip.offsetWidth, tx = x(p.d) * sc + 12; if (tx + tw > box.clientWidth) tx = x(p.d) * sc - 12 - tw; tx = Math.max(0, Math.min(tx, box.clientWidth - tw));
       tip.style.left = tx + "px"; tip.style.top = "10px";
     }).on("pointerleave", function () { tip.hidden = true; cross.style("display", "none"); });
 
@@ -980,6 +996,7 @@ footer h4 { font: 500 11px/1 var(--mono); letter-spacing: 0.08em; text-transform
     $("#glm-now").textContent = sel ? f1(sel.value) : "–";
     $("#anth-max").textContent = D.rule.anthropic_max_b;
     var af = D.fits["anthropic|since2023"]; $("#anth-slope").textContent = af ? f1(af.slope_per_year) + " ECI per year" : "–";
+    var af24 = D.fits["anthropic|last24"]; $("#anth-slope24").textContent = af24 ? f1(af24.slope_per_year) + " ECI per year" : "–";
     var tiers = $("#gpu-tiers"); tiers.textContent = "";
     GPU.forEach(function (g) { var p = g * D.rule.weights_share / D.rule.bytes_per_param_4bit; tiers.appendChild(h("tr", null, h("td", { style: "text-align:left" }, g + " GB"), h("td", { cls: "num" }, "≤ " + p + "B"), h("td", { cls: "num soft" }, "≤ " + (p * D.rule.bytes_per_param_4bit) + " GB"))); });
     var repo = "https://github.com/" + (SITE.repo || "");

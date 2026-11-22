@@ -12,6 +12,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.request
@@ -25,7 +26,8 @@ def body_text(events, site, test):
     if test:
         lines += ["This is a test of the alert pipeline. Nothing has changed on the leaderboard.", ""]
     for e in events:
-        lines += [f"## {e['title']}", e.get("detail", ""), ""]
+        # GitHub turns "#<digits>" into issue links, so never write it.
+        lines += ["## " + re.sub(r"#(?=\d)", "No. ", e["title"]), re.sub(r"#(?=\d)", "No. ", e.get("detail", "")), ""]
     lines += [f"Live leaderboard and forecast: {site['site_url']}",
               "Scores: Epoch Capabilities Index (Epoch AI, CC BY 4.0)."]
     return "\n".join(lines)
@@ -38,6 +40,9 @@ def github_release(title, body, test):
         cmd.append("--prerelease")
     r = subprocess.run(cmd, capture_output=True, text=True)
     print("release:", r.stdout.strip() or r.stderr.strip())
+    if r.returncode != 0:
+        # Fail the job before the data commit, so the next run computes the same events and retries.
+        sys.exit(f"GitHub release failed (exit {r.returncode}); events kept in {PENDING}")
 
 
 def buttondown(subject, body, test, site):
@@ -54,7 +59,7 @@ def buttondown(subject, body, test, site):
         with urllib.request.urlopen(req, timeout=60) as r:
             print("Buttondown:", r.status, "(draft)" if test else "")
     except Exception as e:  # never fail the daily job over email
-        print("Buttondown error:", e, file=sys.stderr)
+        print(f"::warning::Buttondown failed: {e}")
 
 
 def main():

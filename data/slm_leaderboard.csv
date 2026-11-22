@@ -46,7 +46,7 @@ rank,rank_ub,model,eci,eci_ci_low,eci_ci_high,release_date,organization,params_b
 45,29,Qwen-7B,89.14,77.89,98.74,2023-09-28,Alibaba,7.0,,3.5,8,https://huggingface.co/Qwen/Qwen-7B,Epoch AI
 46,29,Qwen2.5-Coder-1.5B,89.12,76.04,100.07,2024-09-18,Alibaba,1.5,,0.8,8,https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct,Epoch AI
 47,30,LLaMA-13B,85.23,73.38,95.44,2023-02-24,Meta AI,13.0,,6.5,12,,Epoch AI
-48,31,MPT-30B,85.19,73.29,95.33,2023-06-22,MosaicML,30.0,,15.0,24,,Epoch AI
+48,31,MPT-30B,85.19,73.29,95.33,2023-06-22,MosaicML,30.0,,15.0,24,https://huggingface.co/mosaicml/mpt-30b,Epoch AI
 49,32,InternLM-7B,84.56,72.54,94.82,2023-07-05,,7.0,,3.5,8,https://huggingface.co/internlm/internlm-7b,curated
 50,32,Baichuan2-7B,83.6,70.51,94.45,2023-09-20,Baichuan,7.0,,3.5,8,https://huggingface.co/baichuan-inc/Baichuan2-7B-Base,Epoch AI
 51,32,INTELLECT-1,83.35,70.76,94.04,2024-11-29,"Prime Intellect,Hugging Face,Arcee AI",10.0,,5.0,8,https://huggingface.co/PrimeIntellect/INTELLECT-1,Epoch AI
@@ -57,7 +57,7 @@ rank,rank_ub,model,eci,eci_ci_low,eci_ci_high,release_date,organization,params_b
 56,37,Gemma 2B,75.71,61.05,87.59,2024-02-21,Google DeepMind,2.5,,1.3,8,https://huggingface.co/google/gemma-2b,Epoch AI
 57,36,CodeQwen1.5-7B,74.81,57.5,88.58,2024-04-15,,7.2,,3.6,8,https://huggingface.co/Qwen/CodeQwen1.5-7B,Hugging Face safetensors
 58,40,ChatGLM2-6B,73.74,58.37,86.79,2023-06-24,,6.2,,3.1,8,https://huggingface.co/zai-org/chatglm2-6b,curated
-59,40,MPT-7B,73.39,58.17,86.19,2023-05-05,MosaicML,7.0,,3.5,8,,Epoch AI
+59,40,MPT-7B,73.39,58.17,86.19,2023-05-05,MosaicML,7.0,,3.5,8,https://huggingface.co/mosaicml/mpt-7b,Epoch AI
 60,40,Falcon-7B,73.09,58.18,85.44,2023-04-24,Technology Innovation Institute,7.0,,3.5,8,https://huggingface.co/tiiuae/falcon-7b,Epoch AI
 61,40,StarCoder2-7B,72.4,54.87,86.59,2024-02-20,"Hugging Face,ServiceNow,Nvidia,BigCode",7.0,,3.5,8,https://huggingface.co/bigcode/starcoder2-7b,Epoch AI
 62,40,XGen-7B,70.29,54.26,84.19,2023-06-27,Salesforce,6.7,,3.4,8,https://huggingface.co/Salesforce/xgen-7b-8k-base,Epoch AI
@@ -68,5 +68,5 @@ rank,rank_ub,model,eci,eci_ci_low,eci_ci_high,release_date,organization,params_b
 67,45,OpenLLaMA 7B,64.37,46.03,79.52,2023-06-07,,7.0,,3.5,8,https://huggingface.co/openlm-research/open_llama_7b,curated
 68,47,Qwen-1.8B,59.62,40.23,75.72,2023-11-30,,1.8,,0.9,8,https://huggingface.co/Qwen/Qwen-1_8B,Hugging Face safetensors
 69,47,RedPajama-INCITE-7B,57.7,37.89,74.36,2023-05-04,,6.9,,3.5,8,https://huggingface.co/togethercomputer/RedPajama-INCITE-7B-Base,curated
-70,49,Dolly 2.0 12B,55.52,34.51,72.61,2023-04-11,Databricks,12.0,,6.0,8,,Epoch AI
-71,53,Cerebras-GPT-13B,48.88,26.25,67.1,2023-03-20,Cerebras Systems,13.0,,6.5,12,,Epoch AI
+70,49,Dolly 2.0 12B,55.52,34.51,72.61,2023-04-11,Databricks,12.0,,6.0,8,https://huggingface.co/databricks/dolly-v2-12b,Epoch AI
+71,53,Cerebras-GPT-13B,48.88,26.25,67.1,2023-03-20,Cerebras Systems,13.0,,6.5,12,https://huggingface.co/cerebras/Cerebras-GPT-13B,Epoch AI

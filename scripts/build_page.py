@@ -17,7 +17,9 @@ def main():
     data["site"] = {k: site[k] for k in ("site_name", "repo", "site_url", "author", "affiliation", "newsletter")}
     data.pop("unclassified", None)
     data.pop("events", None)
-    blob = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    # Escape every "<" (and > and &) so no third-party string can end or confuse the <script> block.
+    blob = (json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+            .replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026"))
 
     tpl = tpl.replace("__SITE_NAME__", site["site_name"]).replace("/*__DATA__*/", blob)
     head, body = tpl.split("<!--BODY-->", 1)

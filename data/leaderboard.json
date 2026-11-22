@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-22T00:32:58+00:00",
+ "generated": "2026-11-22T01:03:37+00:00",
  "today": "2026-11-22",
  "epoch_fetched": "2026-11-22",
  "rule": {
@@ -1395,7 +1395,7 @@
    "vram4_gb": 15.0,
    "min_gpu_gb": 24,
    "anthropic_class": true,
-   "hf_repo": null,
+   "hf_repo": "mosaicml/mpt-30b",
    "source_url": "https://huggingface.co/mosaicml/mpt-30b",
    "downloads": null,
    "likes": null,
@@ -1714,7 +1714,7 @@
    "vram4_gb": 3.5,
    "min_gpu_gb": 8,
    "anthropic_class": true,
-   "hf_repo": null,
+   "hf_repo": "mosaicml/mpt-7b",
    "source_url": "https://www.mosaicml.com/blog/mpt-7b",
    "downloads": null,
    "likes": null,
@@ -2033,7 +2033,7 @@
    "vram4_gb": 6.0,
    "min_gpu_gb": 8,
    "anthropic_class": true,
-   "hf_repo": null,
+   "hf_repo": "databricks/dolly-v2-12b",
    "source_url": "https://www.databricks.com/blog/2023/04/12/dolly-first-open-commercially-viable-instruction-tuned-llm",
    "downloads": null,
    "likes": null,
@@ -2062,7 +2062,7 @@
    "vram4_gb": 6.5,
    "min_gpu_gb": 12,
    "anthropic_class": true,
-   "hf_repo": null,
+   "hf_repo": "cerebras/Cerebras-GPT-13B",
    "source_url": "https://arxiv.org/abs/2304.03208",
    "downloads": null,
    "likes": null,
@@ -2293,7 +2293,7 @@
      "gap": 0.41,
      "trend": {
       "date": "2026-07-20",
-      "early": "2026-02-14",
+      "early": "2026-02-13",
       "late": "2027-01-06"
      },
      "crossed_by": null
@@ -2335,7 +2335,7 @@
      "gap": 0.44,
      "trend": {
       "date": "2026-11-04",
-      "early": "2026-06-21",
+      "early": "2026-06-20",
       "late": "2027-04-22"
      },
      "crossed_by": null
@@ -2344,8 +2344,8 @@
      "gap": 0.41,
      "trend": {
       "date": "2026-11-03",
-      "early": "2026-06-20",
-      "late": "2027-04-21"
+      "early": "2026-06-19",
+      "late": "2027-04-20"
      },
      "crossed_by": null
     },
@@ -2354,7 +2354,7 @@
      "trend": {
       "date": "2028-08-12",
       "early": "2028-01-16",
-      "late": "2029-06-06"
+      "late": "2029-06-05"
      },
      "crossed_by": null
     }
@@ -2386,8 +2386,8 @@
      "gap": 0.44,
      "trend": {
       "date": "2026-08-06",
-      "early": "2026-03-11",
-      "late": "2027-01-13"
+      "early": "2026-03-10",
+      "late": "2027-01-12"
      },
      "crossed_by": null
     },
@@ -2395,8 +2395,8 @@
      "gap": 0.41,
      "trend": {
       "date": "2026-08-05",
-      "early": "2026-03-11",
-      "late": "2027-01-12"
+      "early": "2026-03-10",
+      "late": "2027-01-11"
      },
      "crossed_by": null
     },
@@ -2404,8 +2404,8 @@
      "gap": 20.77,
      "trend": {
       "date": "2027-09-25",
-      "early": "2027-04-16",
-      "late": "2028-03-26"
+      "early": "2027-04-15",
+      "late": "2028-03-25"
      },
      "crossed_by": null
     }
@@ -2455,8 +2455,8 @@
      "gap": 20.77,
      "trend": {
       "date": "2028-07-12",
-      "early": "2027-11-07",
-      "late": "2029-08-08"
+      "early": "2027-11-06",
+      "late": "2029-08-07"
      },
      "crossed_by": null
     }
